@@ -1,0 +1,101 @@
+<style type="text/css">
+	.appeal-abstent-student {
+		display: inline-block;
+		font-size: 1.6em;
+		width: 100%;
+		color: crimson
+	}
+
+	.appeal-abstent-student span {
+		display: inline-block;
+		padding: 12px 4px 6px 0px;
+		margin: 4px;
+	}
+
+	#hdr-cnt-checkbox {
+		height: 50px;
+		margin: 8px 0 8px 0;
+	}
+
+	#hdr-session-time>div{
+		float: left;
+	}
+
+	.hdr-parity-classroom {}
+</style>
+
+
+<div class="appeal-abstent-student" style="border: 1px solid lightgray;;padding: 8px;padding-top: 0px">
+	<div ng-show="choiceIndexOfFastCase==-1">
+		<span ng-repeat="student in absentStudents|orderBy:'queuing_number'" ng-show="absentStudents.length>0 && classroom.students.length>absentStudents.length">
+			<b>{{student.queuing_number | hdrnumber}}</b>
+			<i ng-show="!$last">, </i>
+			<i ng-show="$last">.</i>
+		</span>
+		<span ng-show="0==absentStudents.length" style="float: right">حضر جميع التلاميذ</span>
+		<span ng-show="classroom.students.length==absentStudents.length" style="float: right">تغيب جميع التلاميذ</span>
+
+	</div>
+	<span ng-show="choiceIndexOfFastCase==0" style="float: right">حضر جميع التلاميذ</span>
+	<!-- 	<span ng-show="choiceIndexOfFastCase==1" style="float: right">أدخل أرقام التلاميذ الذين تغيبوا</span> -->
+	<span ng-show="choiceIndexOfFastCase==1" style="float: right">تغيب جميع التلاميذ</span>
+	<!-- 	<span ng-show="choiceIndexOfFastCase==3" style="float: right">أدخل أرقام التلاميذ الذين حضروا</span> -->
+</div>
+<div dir="rtl" ng-show="choiceIndexOfFastCase==0 || choiceIndexOfFastCase==1">
+	<div>حصة تتعلق ب: ؟</div>
+	<div class="hdr-parity-classroom">
+		<table>
+			<tr>
+				<td on-tap="selectSessionParity('all')" id="hdr-parity-all">جميع</td>
+				<td on-tap="selectSessionParity('odd')" id="hdr-parity-odd">فرديين</td>
+				<td on-tap="selectSessionParity('even')" id="hdr-parity-even">زوجيين</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div dir="rtl" style="margin-top: 10px;">حدد الحصة الزمنية المناسية. </div>
+<div style="background: none;margin: auto;margin-top: 10px;width: 100%;border: 1px solid red">
+
+
+	<div style="width: inherit;height: 114px;background-color: lightgreen" id="hdr-session-time">
+
+		<div style="width: 40%;height:inherit ;background-color: lightseagreen">
+			<table style="height: 100%;width: 100%;border: 1px solid rgb(17, 0, 255)">
+				<tr>
+					<td style="width: 100%">up</td>
+				</tr>
+				<tr>
+					<td>15</td>
+				</tr>
+				<tr>
+					<td>daon</td>
+				</tr>
+			</table>
+		</div>
+		<div style="font-size: 2em;width: 60%;height: inherit;background-color: lightcoral">
+			<table>
+				<tr>
+					<td>
+							<ion-list style="width: 60px">
+									<ion-radio on-swipe="swipeCathedSession()" ng-model="data.choice" ng-value="catchedSessions[0]">
+										<!-- <i class="icon ion-android-time"> {{catchedSessions[0]}}</i> -->
+										<span class="hdr-second-txt">ساعة</span>
+									</ion-radio>
+									<ion-radio ng-model="data.choice" ng-value="catchedSessions[1]">
+										<!-- <i class="icon ion-android-time"> {{catchedSessions[1]}}</i> -->
+										<span class="hdr-second-txt">ساعتين</span>
+									</ion-radio>
+					
+								</ion-list>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+</div>
+<div id="hdr-cnt-checkbox" dir="rtl">
+
+	<ion-checkbox ng-model="data.isExamSession" ng-change="teeeest()" class="checkbox-dark" style="padding-right: 46px;background-color: transparent;border: 1px solid lightgray;">حصة اختبار</ion-checkbox>
+</div>

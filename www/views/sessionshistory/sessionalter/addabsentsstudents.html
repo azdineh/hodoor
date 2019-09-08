@@ -1,0 +1,35 @@
+<style>
+    #hdr-updatesession {
+        width: 100%;
+        border-radius: 20px;
+        background-color: lightgreen;
+    }
+
+    #hdr-updatesession td {
+        /* border: 1px solid green; */
+        font-size: 1.5em;
+        padding: 4px;
+        text-align: center;
+        vertical-align: middle
+    }
+</style>
+
+<div dir="rtl" class="hdr-help-popup">
+    <div style="min-height: 150px">
+        <div class="bar bar-header item-input-inset" style="padding: 0px">
+            <label class="item-input-wrapper">
+                <i class="icon ion-ios-search placeholder-icon" style="font-size: 20px;padding: 8px"></i>
+                <input type="search" placeholder="أكتب هنا،اسم أو رقم التلميذ(ة)" style="height: 80px;width: 100%;font-size: 15px;color: rgba(128, 128, 128, 0.523)"
+                    autocomplete="off" ng-model="textToSearch" ng-change="searchIt(textToSearch)" id="hdr-search-text" style="margin-right: 6px"
+                    ng-disabled="">
+            </label>
+            <!--             <button class="button button-clear" ng-click="clearText()" style="text-align: center">
+                إلغاء
+            </button> -->
+        </div>
+        <div style="margin-top: 4px">
+            <hdr-student ng-repeat="student in foundStudents" ng-init="showborder=true;showtitle=false;mode='simple';showmore=false;shomeqn=true"
+                id="hdr-student-item{{student.id}}" on-double-tap="selectElement(student)"></hdr-student>
+        </div>
+    </div>
+</div>

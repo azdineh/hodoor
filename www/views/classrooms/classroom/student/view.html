@@ -1,0 +1,198 @@
+<style>
+  .hdr-standard-table,
+  .hdr-student2-tabel {
+    width: 100%;
+    margin-bottom: 4px;
+
+  }
+
+  .hdr-standard-table,
+  .hdr-student2-tabel td {
+    /*   border: 1px solid rgb(18, 50, 18);  */
+    vertical-align: middle;
+    padding: 4px;
+
+  }
+
+  .hdr-standard-table tr:nth-child(1hdr) td {
+    background-color: rgba(214, 220, 226, 0.563);
+    padding-right: 2px;
+  }
+
+  .hdr-standard-table td {
+    border-bottom: 1px solid rgba(128, 128, 128, 0.186);
+    padding-right: 2px;
+    font-size: 0.9em;
+    vertical-align: middle;
+  }
+
+  .hdr-student2-tabel tr:nth-child(2) td {
+    background-image: linear-gradient(to left, rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0));
+    /*  border-left: 1px solid rgba(68, 63, 63, 0.227); */
+  }
+
+  .hdr-student-table-marks tr:nth-child(1) td {
+    width: 33%;
+    padding: 20px;
+    font-size: 3.5em;
+    text-align: center;
+    vertical-align: middle;
+    background-image: none;
+  }
+
+  .hdr-student-table-marks tr:nth-child(2) td {
+    text-align: center;
+    background-image: none;
+  }
+</style>
+<ion-view view-title="تفاصيل حول : {{student.full_name}}">
+
+  <ion-content dir="rtl" padding="true">
+
+    <table class="hdr-student2-tabel" style="">
+      <tr>
+        <!-- <td style="width: 25%">
+          <img src="img/user-alt-128.png" style="width: 100%">
+        </td> -->
+        <td style="width: 75%">
+          <div>
+            <h3 style="margin-bottom: 3hèèbpx">{{student.full_name}}</h3>
+            <p class="hdr-second-txt" style="font-size: 1.2em">
+              <img src="img/bron.png" height="14" alt="">
+              <span>{{student.birth_date|hdrFullDate}}</span>
+              <br/>
+              <span>{{student.birth_date|hdrage}}</span>
+            </p>
+
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div ng-show="observationUpdateMode==false">
+      <table class="hdr-student2-tabel">
+        <tr>
+          <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">رقم مسار</td>
+        </tr>
+        <tr>
+          <td style="font-size: 2em;text-align: right">{{student.massar_number|hdrmassarnumber}}</td>
+        </tr>
+      </table>
+      <table class="hdr-student2-tabel">
+        <tr>
+          <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">القسم</td>
+          <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">الرقم الترتيبي</td>
+        </tr>
+        <tr>
+          <td style="font-size: 2em;text-align: right">{{classroom.title}}</td>
+          <td style="font-size: 2em;text-align: right">{{student.queuing_number}}</td>
+        </tr>
+      </table>
+
+      <table class="hdr-student2-tabel">
+        <tr>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+        </tr>
+      </table>
+
+      <table class="hdr-student2-tabel hdr-student-table-marks">
+        <tr>
+          <td class="assertive" ng-if="absences.length>0">{{absences.length}}</td>
+          <td class="positive" ng-if="delays.length>0">{{delays.length}}</td>
+          <!--  <td>3</td> -->
+        </tr>
+        <tr>
+          <td class="assertive" ng-if="absences.length>0">عدد التغيبات</td>
+          <td class="positive" ng-if="delays.length>0">عدد التأخرات</td>
+          <!--  <td>مج النقاط</td> -->
+        </tr>
+      </table>
+
+      <table class="hdr-standard-table" ng-if="absences.length>0">
+        <tr class="assertive-bg">
+          <td style="text-align: center">#</td>
+          <td>الحصة</td>
+          <td>التاريخ</td>
+        </tr>
+        <tr ng-repeat="abs in absences track by $index">
+          <td style="text-align: center">{{$index+1}}</td>
+          <td>{{abs.title}}</td>
+          <td>{{abs.unix_time|date:'shortDate'}}</td>
+        </tr>
+      </table>
+
+      <table class="hdr-standard-table" ng-if="delays.length>0">
+        <tr class="positive-bg">
+          <td style="text-align: center">#</td>
+          <td>الحصة</td>
+          <td>التاريخ</td>
+        </tr>
+        <tr ng-repeat="abs in delays track by $index">
+          <td style="text-align: center">{{$index+1}}</td>
+          <td>{{abs.title}}</td>
+          <td>{{abs.unix_time|date:'shortDate'}}</td>
+        </tr>
+      </table>
+
+      <table class="hdr-student2-tabel">
+        <tr>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <table style="width: 100%">
+      <tr>
+        <td style="width: 80%;vertical-align: middle">
+          
+        </td>
+        <td style="vertical-align: middle" ng-show="observationUpdateMode==false">
+          <!--  <button class="button button-small" ng-click=""
+               style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">تعديل</button> -->
+        </td>
+        <td style="vertical-align: middle" ng-show="observationUpdateMode==true">
+          <button class="button button-small" ng-click="updateStudent()" style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">حفظ</button>
+        </td>
+        <td style="vertical-align: middle" ng-show="observationUpdateMode==true">
+          <button class="button button-small" ng-click="switchObservationUpateMode()" style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">إلغاء</button>
+        </td>
+      </tr>
+    </table>
+    <table class="hdr-student2-tabel">
+      <tr>
+        <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">ملاحظات</td>
+      </tr>
+      <tr>
+        <td ng-show="observationUpdateMode==false" on-tap="switchObservationUpateMode()" style="font-size: 1em;text-align: right;vertical-align: top;height: 20vmax"
+          class="lined-paper-pattern">{{student.observation}}</td>
+
+        <td ng-show="observationUpdateMode==true" style="text-align: right;vertical-align: top;height: 20vmax" class="lined-paper-pattern">
+
+          <textarea ng-model="student.observation" id="hdr-textarea-observation" style="width: 100%;font-family: hdrFont;font-size: 1em;line-height: 1.4em;background-color: transparent"
+            rows="10">
+          </textarea>
+
+        </td>
+        </td>
+      </tr>
+    </table>
+
+
+    <table class="hdr-student2-tabel">
+      <tr>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+      </tr>
+    </table>
+
+
+
+  </ion-content>
+
+  </ion-veiw>

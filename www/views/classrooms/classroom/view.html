@@ -1,0 +1,210 @@
+<style>
+  /*   #ggh td {
+    border: 1px solid red
+  }
+ */
+
+  #hdr-absent-symbol {
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap-reverse;
+    /*     border: 1px solid lightslategray;
+    background-color: chartreuse; */
+    justify-content: center;
+    align-content: flex-start;
+  }
+
+  .hdr-absent-symbol-item {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(228, 23, 23, 0.434);
+    margin: 1px;
+  }
+
+  #hdr-table-006 td {
+    border: 1px solid rgba(114, 98, 98, 0.071);
+    text-align: center;
+    vertical-align: middle;
+    width: 14.29%
+  }
+</style>
+
+
+<ion-view view-title="({{classroom.students.length}}) {{classroom.title}} ">
+
+  <div class="bar bar-subheader" style="height: 45px;padding: 0px;border: 0px;background-color: rgba(211, 224, 228, 0.5) ">
+    <table id="hdr-table-006" dir="ltr" style="width: 100%;height: 100%">
+      <tr>
+        <td>
+
+          <button class="button button-clear" style="zoom: 0.8;width: 45px;height: 45px" ng-click="showHelpPopup()">
+            <i class="icon ion-help" style="font-size: 12px;color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
+          </button>
+
+        </td>
+        <td style="border: 0px">
+
+        </td>
+        <td style="border: 0px">
+
+        </td>
+
+        <td>
+          <button class="button button-clear" ng-click="openModal()" style="width: 45px;height: 45px" ng-disabled="">
+            <i class="icon ion-android-add-circle" style="color: rgba(50, 100, 218, 0.9);filter: saturate(0.3)"></i>
+          </button>
+        </td>
+
+        <td>
+          <button class="button button-clear" ng-click="showConfirm(selectedStudent)" style="width: 45px;height: 45px" ng-disabled="!itemSelected">
+            <i class="icon ion-android-remove-circle" style="color: rgba(234, 75, 72, 0.9);filter: saturate(0.3)"></i>
+          </button>
+        </td>
+        <td>
+          <button class="button button-clear" ng-click="downStudentinList(selectedStudent)" style="width: 45px;height: 45px" ng-disabled="!itemSelected || isLastStudent">
+            <i class="icon ion-arrow-down-a" style="color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
+          </button>
+        </td>
+        <td>
+          <button class="button button-clear" ng-click="upStudentinList(selectedStudent)" style="width: 45px;height: 45px" ng-disabled="!itemSelected || isFirstStudent">
+            <i class="icon ion-arrow-up-a" style="color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+
+
+  <ion-content dir="rtl" style="margin-top: 43px;padding-top: 10px">
+
+
+    <!--     <ul class="list" ui-sref="" ng-repeat="student in students_view">
+      <hdr-student ng-repeat="student in students_view"></hdr-student>
+    </ul> -->
+
+    <div ng-show="classroom.students.length==0" style="text-align: center">
+      <div style="padding-top:20vh;" dir="rtl" class="h3 title dark" style="opacity: 0.7">لائحة فارغة</div>
+      <!-- <ion-spinner icon="lines" class="spinner-assertive" style="font-size: 4vh"></ion-spinner> -->
+    </div>
+
+    <div ng-show="classroom.students.length>0">
+
+
+
+      <!--    <div class="item item-divider dark title hdr-sub-title" style="font-size: 13px;">
+        عدد التلاميذ : {{classroom.students.length}}
+      </div>
+ -->
+      <hdr-student ng-repeat="student in classroom.students|orderBy:'queuing_number'" ng-init="showborder=true;showtitle=false;mode='simple';student.title=classroom.title" id="hdr-student-item{{student.id}}"
+        on-double-tap="selectElement(student)"></hdr-student>
+
+
+
+    </div>
+
+  </ion-content>
+</ion-view>
+
+
+<script id="addstudentmodal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="balanced-bg">
+      <h1 class="title"> {{classroom.title}} إضافة تلميذ الى</h1>
+    </ion-header-bar>
+    <ion-content dir="rtl" style="padding:16px">
+
+      <div  style="font-size:20px;padding:8px;background-color: rgba(150,150,150,0.2);color: red" on-tap="changeOption(true)">
+
+        
+      
+       <table>
+        <tr><td style="width:26px"> 
+            <div class="icon ion-chevron-down" ng-if="isNewStudent"> </div>
+            <div class="icon ion-chevron-left" ng-if="!isNewStudent"> </div>  
+        </td><td>
+            <div>تلميذ جديد</div>
+            
+        </td></tr>
+       </table>
+      </div>
+
+    <div id="hdr-new-student" ng-if="isNewStudent">
+
+      <div class="hdr-parag" style="padding:16px;font-size:12px" dir="rtl">
+        أدخل الإسم الكامل للتلميذ الجديد ثم أنقر على الزر إضافة.
+      </div>
+      <div class="list" dir="rtl">
+        <label class="item item-input">
+          <input type="text" ng-model="student.full_name" style="fontt-size:22px" id="hdr-add-student-name" placeholder="الإسم الكامل">
+         <!--  <span style="font-size:18px;color:red">*</span> -->
+        </label>
+<!--         <label class="item item-input">
+          <input type="text" placeholder="رقم مسار">
+        </label> -->
+<!--         <label class="item item-input">
+          <div style="padding-right:25px;opacity:0.5;font-size:15px">تاريخ الازدياد</div>
+          <input type="date" placeholder="تاريخ الازدياد" ng-model="student.birth_date" value="">
+       
+        </label>
+        <label class="item item-input">
+          <textarea placeholder="ملاحظات" ng-model="student.observation" style="padding-right:25px;height:50px"></textarea>
+        </label>
+        <div style="padding-right:25px;padding-top:10px">      
+          <span style="font-size:18px;color:red">*</span>
+          <span> حقل ضروري</span>
+        </div> -->
+      </div>
+
+
+     <div style="text-align:center;width:100%"> 
+       <button class="button icon-right ion-person-add button-positive" ng-click="addStudent(false)" style="width:40%">إضافة</button>
+       <button class="button button-outline " ng-click="closeModal()">رجوع</button>
+      </div>
+
+
+    </div>
+
+    <br/>
+    <div  style="font-size:20px;padding:8px;background-color: rgba(150,150,150,0.2);color: red" on-tap="changeOption(false)">        
+        <table>
+            <tr><td style="width:26px"> 
+                <div class="icon ion-chevron-down" ng-if="!isNewStudent"> </div>
+                <div class="icon ion-chevron-left" ng-if="isNewStudent"> </div>  
+            </td><td>
+                <div>تلميذ عائد</div>
+                
+            </td></tr>
+           </table>
+      </div>
+    <div id="hdr-student-back" ng-if="!isNewStudent">
+
+        <div class="hdr-parag" style="padding:16px" dir="rtl">
+            إذا تعلق الأمر بتلميذ حُذف سابقا من لائحة القسم ثم قام بعد ذلك بالعودة الى أحد الأقسام الخاصة بك، قم بتحديده (بالنقر عليه مرتين) من خلال اللائحة أسفله ثم أنقر على الزر إضافة.
+            <br/>
+          </div>
+
+          <br/>
+          <div style="padding-bottom:4px"> لائحة التلاميذ الذي سبق حذفهم :</div>
+          <div>
+            <div>
+                <hdr-student ng-repeat="student in removedStudents" ng-init="showborder=true;showtitle=false;mode='simple';showmore=false;shomeqn=false" id="hdr-student-item{{student.id}}"
+                on-double-tap="selectElement(student)"></hdr-student>
+          </div>
+          </div>
+
+          <br/>
+
+     <div style="text-align:center;width:100%"> 
+        <button class="button icon-right ion-person-add button-positive" ng-click="addStudent(true)" ng-disabled="itemSelected==false" style="width:40%">إضافة</button>
+        <button class="button button-outline " ng-click="closeModal()">رجوع</button>
+       </div>
+
+    </div>
+
+      
+    </ion-content>
+  </ion-modal-view>
+</script>

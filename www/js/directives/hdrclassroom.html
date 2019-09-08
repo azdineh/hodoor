@@ -1,0 +1,32 @@
+<style type="text/css">
+            #hdr-classroomname-container{
+                display: inline-block;
+               
+                /*background-color: #CCE43A;*/
+                padding-top: 5px;
+            }
+             #hdr-classroomname-container div:first-child{
+                font-size: 1.2em;
+                letter-spacing: 2px;
+
+             }
+             #hdr-classroomname-container div:last-child {
+                font-size: 0.8em;
+                padding-right: 2px;
+                color:gray;
+             }
+</style>
+
+         
+               <div dir="rtl">
+                    <div id="hdr-classroomname-container" >
+                        <div class="assertive"><b>{{classroom.issm}}</b></div>
+                        <div class="dark">{{classroom.talaamiid.length}} تلميذا</div>
+                    
+                    </div>
+
+                <span class="item-note" style="float:left!important" >
+                    <a class="button icon ion-eye" ui-sref="tab.appeal({classroomid:classroom.issm})"></a>
+                    <a class="button icon ion-ios-list-outline" ui-sref="tab.classroom({classroomid:classroom.issm})"></a>
+                </span>
+               </div>

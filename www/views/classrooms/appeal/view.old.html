@@ -1,0 +1,87 @@
+<ion-view view-title="{{pagename}} : {{classroom.title}}">
+
+  <ion-content scroll="false" id="content-appeal">
+
+    <div ng-show="choiceIndexOfFastCase=='-1'" style="height: 100%">
+
+      <div style="height: 100%">
+
+
+        <div dir="rtl" id="hdr-appeal-subheader">
+          <div>
+            <button ng-show="currentGroup=='odd'" ng-click="nextGroup()" ng-disabled="!isLastSlide" class="button button-balanced" style="min-width: 50px;">
+              <b style="font-size: 1em">فردي</b>
+            </button>
+            <button ng-show="currentGroup=='even'" ng-click="nextGroup()" ng-disabled="!isLastSlide" class="button button-balanced" style="min-width: 50px;">
+              <b style="font-size: 1em">زوجي </b>
+            </button>
+            <button ng-show="currentGroup=='all'" ng-click="nextGroup()" ng-disabled="!isLastSlide" class="button button-balanced" style="min-width: 50px;">
+              <b style="font-size: 1em">جميع</b>
+            </button>
+          </div>
+          <div>
+            <div>
+
+              <div style="width: 100%">
+                <b>{{today|date:'fullDate'}} </b>
+              </div>
+              <div style="width: 100%">
+                <span style="font-size: 0.8em !important;" ng-show="absentStudents[0]">أرقام المتغيبين </span>
+                <span ng-repeat="student in absentStudents|orderBy:'queuing_number'" style="font-size: 0.8em !important;">
+                  <b> {{student.queuing_number| hdrnumber}}</b>,</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button class="button button-light" ng-show="isFirstSlide" ng-click="showPopup(-1)">
+              <i class="icon ion-ios-bookmarks positive"></i>
+            </button>
+
+            <button class="button button-clear" ng-show="isLastSlide" ng-click="showHelpPopup()">
+              <i class="icon ion-help button-stable"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="hdr-slide-box" style="height:90%">
+          <ion-slide-box on-slide-changed="slideHasChanged($index)" style="height: 100%">
+
+            <ion-slide ng-repeat="subArray in studentsDistribuedBy5InArray" style="height: inherit">
+              <div class="hdr-slider-container">
+                <div ng-repeat="student in subArray " class="hdr-slider-item">
+                  <hdr-student-card-appeal></hdr-student-card-appeal>
+
+                </div>
+                <div dir="rtl" ng-if="$first" class="hdr-slider-item" style="font-size: 12px;padding-right: 3vmax;position: relative;top:-2vh"
+                  class="dark">
+                  <i class="ion-record"></i> نهاية اللائحة
+                </div>
+              </div>
+
+
+            </ion-slide>
+            <!--             <ion-slide ng-repeat="t in slideTimes" style="height: inherit">
+              <div class="hdr-slider-container">
+                <div ng-repeat="student in subArray " class="hdr-slider-item" >
+                  <hdr-student-card-appeal></hdr-student-card-appeal>
+
+                </div>
+                <div dir="rtl" ng-if="$first" class="hdr-slider-item" style="font-size: 12px;padding-right: 3vmax;position: relative;top:-2vh"
+                  class="dark">
+                  <i class="ion-record"></i> نهاية اللائحة
+                </div>
+              </div> -->
+
+
+            </ion-slide>
+
+          </ion-slide-box>
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </ion-content>
+</ion-view>

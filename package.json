@@ -1,0 +1,64 @@
+{
+  "name": "hdrApp",
+  "version": "1.1.0",
+  "description": "hdrApp: An Ionic project",
+  "dependencies": {
+    "angular-animate": "^1.6.7",
+    "cordova-android": "^6.4.0",
+    "cordova-browser": "^4.1.0",
+    "cordova-filepath-resolver": "^1.0.5",
+    "cordova-plugin-app-version": "^0.1.9",
+    "cordova-plugin-file": "^6.0.2",
+    "cordova-plugin-filechooser": "^1.2.0",
+    "cordova-plugin-inappbrowser": "^3.1.0",
+    "cordova-plugin-ionic-keyboard": "^2.2.0",
+    "cordova-plugin-ionic-webview": "^2.5.1",
+    "cordova-plugin-splashscreen": "^5.0.3",
+    "cordova-plugin-whitelist": "^1.3.4",
+    "cordova-plugin-zip": "^3.1.0",
+    "es6-promise-plugin": "^4.2.2",
+    "gulp": "^3.5.6",
+    "gulp-concat": "^2.2.0",
+    "gulp-minify-css": "^0.3.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^0.7.1"
+  },
+  "devDependencies": {
+    "bower": "^1.3.3",
+    "gulp-util": "^2.2.14",
+    "jquery": "^3.2.1",
+    "shelljs": "^0.3.0"
+  },
+  "cordovaPlugins": [
+    "cordova-plugin-whitelist",
+    "cordova-plugin-filechooser",
+    "cordova-plugin-zip",
+    "cordova-filepath-resolver",
+    "cordova-plugin-ionic-keyboard",
+    "cordova-plugin-inappbrowser",
+    "cordova-plugin-ionic-webview@latest",
+    "cordova-plugin-ionic-webview"
+  ],
+  "cordovaPlatforms": [
+    "android"
+  ],
+  "cordova": {
+    "platforms": [
+      "browser",
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-filechooser": {},
+      "cordova-plugin-zip": {},
+      "cordova-filepath-resolver": {},
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+      },
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-app-version": {}
+    }
+  }
+}

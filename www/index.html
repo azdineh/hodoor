@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" viewport-fit="cover" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title></title>
+
+  <!--  <link href="fontawesome/css/font-awesome.min.css" rel="stylesheet"> -->
+  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/hdrstyle.css" rel="stylesheet">
+
+  <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+
+  <!-- ionic/angularjs js -->
+  <script src="lib/jquery/dist/jquery.min.js"></script>
+  <script src="lib/ionic/js/ionic.bundle.js"></script>
+  <script src="lib/angular/angular-local_ar-ma.js"></script>
+  <script src="lib/js-xlsx/dist/xlsx.full.min.js"></script>
+  <script src="lib/moment/min/moment.min.js"></script>
+  <script src="lib/moment/locale/ar-ma.js"></script>
+
+
+  <!-- cordova script (this will be a 404 during development) -->
+  <script src="cordova.js"></script>
+  <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
+  <!-- your app's js -->
+  <!-- Filters -->
+  <script src="js/app.js"></script>
+
+  <!-- Controllers -->
+  <script src="js/controllers/home.js"></script>
+  <script src="js/controllers/classrooms.js"></script>
+  <script src="js/controllers/classroom.js"></script>
+  <script src="js/controllers/student.js"></script>
+  <script src="js/controllers/user.js"></script>
+  <script src="js/controllers/appeal.js"></script>
+  <script src="js/controllers/sessionshistory.js"></script>
+  <script src="js/controllers/sessionalter.js"></script>
+  <script src="js/controllers/search.js"></script>
+  <script src="js/controllers/teacher.js"></script>
+
+  <!-- Services -->
+  <script src="js/services/hdrfilesystem.js"></script>
+  <script src="js/services/hdrkissm.js"></script>
+  <script src="js/services/azdutils.js"></script>
+  <script src="js/services/hdrdbx.js"></script>
+  <!-- Directives -->
+  <script src="js/directives/hdrclassroom.js"></script>
+  <script src="js/directives/hdrstudentcardappeal.js"></script>
+  <script src="js/directives/hdrstudent.js"></script>
+  <script src="js/directives/hdrabsencehistory-item.js"></script>
+
+
+</head>
+
+<body ng-app="hdrApp" class="platform-android platform-cordova platform-webview">
+  <ion-nav-bar class="bar-positive" dir="rtl">
+
+    <ion-nav-back-button class="button-clear">
+      <i class="ion-chevron-right"></i> رجوع
+    </ion-nav-back-button>
+
+  </ion-nav-bar>
+  <ion-nav-view style="height: inherit;width: inherit;"></ion-nav-view>
+
+</body>
+
+</html>

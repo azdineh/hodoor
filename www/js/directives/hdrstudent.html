@@ -1,0 +1,161 @@
+<style>
+  #ggh td {
+    /* border: 1px solid rgb(163, 104, 104) */
+  }
+
+  #hdr-absent-symbol {
+    position: relative;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    /*   border: 1px solid green;  */
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: center;
+  }
+
+  .hdr_sessionalter_fix0 {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba(228, 23, 23, 0.434);
+    margin: 1px;
+  }
+
+  .hdr_sessionalter_fix1 {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba(23, 57, 228, 0.434);
+    margin: 1px;
+  }
+
+  .hdr-student-mode_m3 div {
+    margin-right: 2px
+  }
+</style>
+
+<div ng-show="mode=='m3'" dir="rtl">
+
+  <div>
+
+    <div style="font-size: 1em" class="hdr-student-mode_m3">
+      <div class="assertive" ng-if="student.queuing_number>0">{{student.queuing_number|hdrnumber}}</div>
+      <div ng-style="student.is_student_fix_problem==0?{}:{'text-decoration': 'line-through','opacity': '0.6'}"> {{student.full_name}} </div>
+      <div class="assertive" ng-if="student.queuing_number==0">حذف من القسم</div>
+    </div>
+
+  </div>
+
+</div>
+
+<div style="background-color:inherit;width: 100%;height: 100%" ng-show="mode=='simple'">
+
+  <table class="classroom_item" style="width:inherit" id="ggh">
+    <tr>
+      <td style="text-align: center;height: 6vh;font-size: 18px;width: 10%;" ng-show="shomeqn">
+        <div class="assertive">{{student.queuing_number|hdrnumber}} </div>
+      </td>
+      <td style="padding-right: 14px;width: 50%;">
+        <div>
+          <div style="font-size: 16px" class="hdr-main-text positive" ng-style="student.is_student_fix_problem==true && page!='search'?{'text-decoration': 'line-through','opacity':'0.6'}:{'text-decoration': 'none'}">
+            {{student.full_name}}</div>
+          <div class="hdr-sub-text">
+            <i class="ion-android-bookmark"></i>
+            <span ng-if="student.birth_date">{{student.birth_date|hdrage}}</span>
+            <!-- <span ng-if="!student.birth_date"> 16 عام و نصف</span> -->
+          </div>
+
+        </div>
+      </td>
+
+      <td style="">
+        <div id="hdr-absent-symbol">
+          <!-- <div class="hdr-absent-symbol-item" ng-repeat="t in student.times track by $index"></div> -->
+
+          <div ng-repeat="absenceline in student_absences" class="hdr_sessionalter_fix{{absenceline.is_student_fix_problem}}"></div>
+
+          <!-- <div class="hdr-absent-symbol-item-blu" ng-repeat="absenceline in student_absences" ng-show="absenceline.is_student_fix_problem==1"></div> -->
+
+          <div class="hdr-absent-symbol-item" ng-show="tapped"></div>
+
+        </div>
+        <!--             <div class="hdr-absent-symbol-item"></div>
+            <div class="hdr-absent-symbol-item"></div>
+            <div class="hdr-absent-symbol-item"></div> -->
+
+      </td>
+
+      <td style="text-align: left" ng-hide="showtitle || !showmore">
+        <button class="button button-outline button-dark" style="text-align: left;border:0px" ng-click="goToStudentView(student,{title:student.title})">
+          <span></span>
+          <i class="ion-chevron-left"></i>
+        </button>
+      </td>
+
+      <td style="text-align: left;font-size: 14px;width: 24%" ng-show="showtitle">
+        <div style="padding-left: 10px;margin: 2px"> {{student.title}}
+        </div>
+      </td>
+
+    </tr>
+  </table>
+
+</div>
+<div style="background-color:inherit;width: 100%;height: 100%" ng-show="mode=='m2'">
+  <button class="button button-small button-outline" style="width:inherit;height: inherit;text-align: right;border:0;padding:4px"
+    ng-click="goToStudentView(student,{title:student.title})">
+
+    <table class="classroom_item" style="width:inherit" id="ggh">
+      <tr>
+        <td style="text-align: center;height: 6vh;font-size: 18px;width: 10%;">
+          <div class="assertive">{{student.queuing_number|hdrnumber}} </div>
+        </td>
+        <td style="padding-right: 14px;width: 50%">
+          <div>
+            <div class="hdr-main-text positive" ng-style="student.is_student_fix_problem==true && page!='search'?{'text-decoration': 'line-through','opacity':'0.6'}:{'text-decoration': 'none'}">{{student.full_name}}</div>
+            <div class="hdr-sub-text">
+              <i class="ion-android-bookmark"></i>
+              <span ng-if="student.birth_date">{{student.birth_date|hdrage}}</span>
+              <!-- <span ng-if="!student.birth_date"> 16 عام و نصف</span> -->
+            </div>
+
+          </div>
+        </td>
+
+        <td style="">
+          <div id="hdr-absent-symbol">
+            <!-- <div class="hdr-absent-symbol-item" ng-repeat="t in student.times track by $index"></div> -->
+
+            <div ng-repeat="absenceline in student_absences" class="hdr_sessionalter_fix{{absenceline.is_student_fix_problem}}"></div>
+
+            <!-- <div class="hdr-absent-symbol-item-blu" ng-repeat="absenceline in student_absences" ng-show="absenceline.is_student_fix_problem==1"></div> -->
+
+            <div class="hdr-absent-symbol-item" ng-show="tapped"></div>
+
+          </div>
+          <!--             <div class="hdr-absent-symbol-item"></div>
+            <div class="hdr-absent-symbol-item"></div>
+            <div class="hdr-absent-symbol-item"></div> -->
+
+        </td>
+
+        <td style="text-align: left;font-size: 14px;width: 24%" ng-show="showtitle">
+          <div style="padding-left: 10px;margin: 2px"> {{student.title}}
+          </div>
+        </td>
+      </tr>
+      <tr ng-if="student.observation.length>0">
+        <td colspan="4" style="padding-right: 4px">
+          <span class="icon ion-compose"></span>
+          <span style="color: rgb(36, 33, 33)">
+            {{student.observation}}
+
+          </span>
+        </td>
+      </tr>
+    </table>
+
+  </button>
+</div>
+<div style="border-bottom: 1px solid rgba(128, 128, 128, 0.25)" ng-show="showborder"></div>

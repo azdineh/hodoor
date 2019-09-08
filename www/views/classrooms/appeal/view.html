@@ -1,0 +1,176 @@
+<ion-view view-title="{{pagename}} : {{classroom.title}}">
+
+  <ion-content scroll="false" id="" on-swipe-right="swipeRight()" on-swipe-left="swipeLeft()">
+
+    <div ng-show="choiceIndexOfFastCase=='-1'" style="height: 100%">
+
+      <div dir="rtl" id="hdr-appeal-subheader">
+        <div>
+          <button ng-show="currentGroup=='odd'" ng-click="nextGroup()" ng-disabled="!isFirstSlide" class="button button-balanced" style="min-width: 50px;">
+            <b style="font-size: 1.5em">ف</b>
+          </button>
+          <button ng-show="currentGroup=='even'" ng-click="nextGroup()" ng-disabled="!isFirstSlide" class="button button-balanced"
+            style="min-width: 50px;">
+            <b style="font-size: 1.5em">ز</b>
+          </button>
+          <button ng-show="currentGroup=='all'" ng-click="nextGroup()" ng-disabled="!isFirstSlide" class="button button-balanced" style="min-width: 50px;">
+            <b style="font-size: 1em">جميع</b>
+          </button>
+        </div>
+        <div>
+          <div>
+
+            <div style="width: 100%">
+              <b>{{today|date:'fullDate'}} </b>
+            </div>
+            <div style="width: 100%">
+              <span style="font-size: 0.8em !important;" ng-show="absentStudents[0]">أرقام المتغيبين </span>
+              <span ng-repeat="student in absentStudents|orderBy:'queuing_number'" style="font-size: 0.8em !important;">
+                <b> {{student.queuing_number| hdrnumber}}</b>,</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button class="button button-light" ng-show="isLastSlide" ng-click="showPopup(-1)">
+            <i class="icon ion-ios-bookmarks positive"></i>
+          </button>
+
+          <button class="button button-clear" ng-show="isFirstSlide" ng-click="showHelpPopup()">
+            <i class="icon ion-help button-stable"></i>
+          </button>
+        </div>
+      </div>
+
+
+
+      <div dir="rtl" id="hdr-slider-container">
+
+        <div ng-repeat="student in classroom.students|filter:byGroupfilter" class="hdr-slider-item">
+          <hdr-student-card-appeal class="student-item-card"></hdr-student-card-appeal>
+        </div>
+
+        <div dir="rtl" class="hdr-slider-item" style="font-size: 12px;padding-right: 3vmax;position: relative;top:2vh" class="dark">
+          <i class="ion-record"></i> نهاية اللائحة
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="hdr-updown-control" ng-if="updownControlshwon" style="position: fixed; bottom: 100px;z-index: 5000;width: 100%;text-align: center">
+      <div class="button-bar">
+        <a class="button" on-tap="hideUpDwonControll()">
+          <span class="icon ion-close"></span>
+        </a>
+        <div ng-if="currentGroup!='all'" style="background-color: yellow;padding: 16px">لا يمكن تغيير الترتيب في حالة نداء بالأفواج، غير الى : جميع القسم</div>
+        <a class="button" ng-if="currentGroup=='all'" ng-class="isLastStudent?'disabled':''" on-tap="downStudentinList()">
+          <span class="icon ion-arrow-down-a"></span>
+        </a>
+        <a class="button" ng-if="currentGroup=='all'" ng-class="isFirstStudent?'disabled':''" on-tap="upStudentinList()">
+          <span class="icon ion-arrow-up-a"></span>
+        </a>
+      </div>
+    </div>
+
+
+  </ion-content>
+</ion-view>
+
+
+
+
+
+<script id="addstudentmodal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="balanced-bg">
+      <h1 class="title"> {{classroom.title}} إضافة تلميذ الى</h1>
+    </ion-header-bar>
+    <ion-content dir="rtl" style="padding:16px">
+
+      <div  style="font-size:20px;padding:8px;background-color: rgba(150,150,150,0.2);color: red" on-tap="changeOption(true)">
+
+        
+      
+       <table>
+        <tr><td style="width:26px"> 
+            <div class="icon ion-chevron-down" ng-if="isNewStudent"> </div>
+            <div class="icon ion-chevron-left" ng-if="!isNewStudent"> </div>  
+        </td><td>
+            <div>تلميذ جديد</div>
+            
+        </td></tr>
+       </table>
+      </div>
+
+    <div id="hdr-new-student" ng-if="isNewStudent">
+
+      <div class="hdr-parag" style="padding:16px;font-size:12px" dir="rtl">
+        أدخل الإسم الكامل للتلميذ الجديد ثم أنقر على الزر إضافة.
+      </div>
+      <div class="list" dir="rtl">
+        <label class="item item-input">
+          <input type="text" ng-model="student.full_name" style="fontt-size:22px" id="hdr-add-student-name" placeholder="الإسم الكامل">
+         <!--  <span style="font-size:18px;color:red">*</span> -->
+        </label>
+<!--         <label class="item item-input">
+          <input type="text" placeholder="رقم مسار">
+        </label> -->
+<!--         <label class="item item-input">
+          <div style="padding-right:25px;opacity:0.5;font-size:15px">تاريخ الازدياد</div>
+          <input type="date" placeholder="تاريخ الازدياد" ng-model="student.birth_date" value="">
+       
+        </label>
+        <label class="item item-input">
+          <textarea placeholder="ملاحظات" ng-model="student.observation" style="padding-right:25px;height:50px"></textarea>
+        </label>
+        <div style="padding-right:25px;padding-top:10px">      
+          <span style="font-size:18px;color:red">*</span>
+          <span> حقل ضروري</span>
+        </div> -->
+      </div>
+
+
+     <div style="text-align:center;width:100%"> 
+       <button class="button icon-right ion-person-add button-positive" ng-click="addStudent(false,'after')" style="width:40%">إضافة</button>
+       <button class="button button-outline " ng-click="closeModal()">رجوع</button>
+      </div>
+
+
+    </div>
+
+    <br/>
+    <div  style="font-size:20px;padding:8px;background-color: rgba(150,150,150,0.2);color: red" on-tap="changeOption(false)">        
+        <table>
+            <tr><td style="width:26px"> 
+                <div class="icon ion-chevron-down" ng-if="!isNewStudent"> </div>
+                <div class="icon ion-chevron-left" ng-if="isNewStudent"> </div>  
+            </td><td>
+                <div>إختر تلميذ من الذين سبق حذفهم</div>
+                
+            </td></tr>
+           </table>
+      </div>
+    <div id="hdr-student-back" ng-if="!isNewStudent">
+
+          <br/>
+          <div style="padding-bottom:4px"> لائحة التلاميذ الذي سبق حذفهم :</div>
+          <div>
+            <div>
+                <hdr-student ng-repeat="student in removedStudents" ng-init="showborder=true;showtitle=false;mode='simple';showmore=false;shomeqn=false" id="hdr-student-item{{student.id}}"
+                on-double-tap="selectElement(student)"></hdr-student>
+          </div>
+          </div>
+
+          <br/>
+
+     <div style="text-align:center;width:100%"> 
+        <button class="button icon-right ion-person-add button-positive" ng-click="addStudent(true,'after')" ng-disabled="itemSelected==false" style="width:40%">إضافة</button>
+        <button class="button button-outline " ng-click="closeModal()">رجوع</button>
+       </div>
+
+    </div>
+
+      
+    </ion-content>
+  </ion-modal-view>
+</script>

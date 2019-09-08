@@ -1,0 +1,131 @@
+<ion-view view-title="لائحة الأقسام" cache-view="false">
+
+    <ion-content dir="rtl">
+        <div ng-show="classrooms_view.length>0">
+
+
+            <!--  <ion-spinner ng-if="tapped" icon="lines" class="spinner-assertive" style="position: absolute;top: 35%;left: 35%;z-index: 500"></ion-spinner> -->
+
+            <div class="item item-divider dark title hdr-sub-title" style="font-size: 13px;">
+
+
+                <table style="width: 105%">
+                    <tr>
+                        <td> هناك {{students_count_global}} تلميذ وتلميذة موزعين على {{classrooms_view.length}} أقسام.
+                            <br/> بمعدل {{(students_count_global/classrooms_view.length)|number:1}} تلميذ في القسم.
+                        </td>
+                        <td style="text-align: left;vertical-align: middle">
+                            <button class="button button-clear ion-help" style="font-size: 30px;" ng-click="showHelpPopup()"></button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <ul class="list">
+                <div class="dark padding">
+                    <i class="ion-information-circled assertive"></i>
+                    <span class="assertive"> لبدء عملية النداء، قم بنقر القسم المراد.</span>
+                </div>
+                <li class="item hdr-list-item" style="padding:0;height: auto" ng-repeat="classroom in classrooms_view track by $index" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
+
+                    <div class="hdr-classroom-container">
+                        <div id="hdr-item0" class="hdr-item">
+                            <button class="button button-outline" ng-disabled="classroom.students.length==0" ng-click="showActionSheet(classroom)">
+                                <i class="ion-android-more-vertical" ng-hide="clicked" style="zoom: 1.5"></i>
+                            </button>
+                        </div>
+                        <div id="hdr-item1" class="hdr-item" style="position: relative;margin: 4px;">
+
+                            <button ng-disabled="classroom.students.length==0" ng-style="{'background-color': classroom.color }" style="text-align: center;border-radius: 16px"
+                                class="button button-outline" id="{{classroom.id}}" ng-click="startAttendanceCall(classroom,'-1')">
+
+                                <div style="margin-right: 10px;">
+                                    <div class="hdr-main-text">
+                                        <span class="dark">
+                                            <span> {{classroom.title}}</span>
+                                        </span>
+                                    </div>
+                                    <div class="hdr-sub-text dark">{{classroom.level}}</div>
+                                </div>
+
+
+
+
+                            </button>
+
+
+                        </div>
+                        <div id="hdr-item2" class="hdr-item">
+                            <button class="button button-outline button-dark" ng-disabled="classroom.students.length==0" ng-click="goToStudentsView(classroom)">
+                                <span ng-if="classroom.students.length>=0"> {{classroom.students.length}} تلميذ</span>
+                                <i class="ion-chevron-left"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
+        </div>
+        <div ng-show="classrooms_view.length==0 && isDataFileExist==true">
+            <!--             <div dir="rtl" style="padding: 18px" class="hrd-parag">
+
+                <div class="hdr-parag">
+                    يخزن التطبيق مختلف البيانات على مستوى الجهاز، حتى يتسنى للأستاذ(ة) الإطلاع عليها حتى عند عدم وجود ربط بالأنترنت.
+                </div>
+                <div class="hdr-parag">
+                    لذلك، فهو يحتاج موافقتك لتخزين البيانات على المستوى الجهاز.
+                </div>
+
+            </div>
+            <div style="text-align: center;width: 100%">
+                <button class="button icon-right button-large button-positive" style="width:60%;;border-radius: 100px" ng-click="checkFile()">
+                    موافقة
+                </button>
+            </div> -->
+        </div>
+        <div ng-show="classrooms_view.length==0 && isDataFileExist==false">
+            <div dir="rtl" style="padding: 18px" class="hrd-parag">
+                <span class="icon ion-alert-circled assertive" style="font-size: 8vmax"></span>
+                <p class="hdr-title">لا يتوفر التطبيق على بيانات التلاميذ بعد.</p>
+                <br/>
+
+                <div class="hdr-parag">
+                    يحب أن يتوفر هاتفك على ملف الأقسام المُحمّل من موقع مسار، حيث يقوم التطبيق بتغذية قاعدة بياناته من لوائح التلاميذ المتواجدة
+                    داخله.
+                </div>
+                <div class="hdr-parag">
+                    لتحقيق ذلك، قم بإنجاز الخطوتين التاليتين :
+                </div>
+                <div class="hdr-parag">
+                    1) عن طريق هاتفك، قم بتصدير لوائح الأقسام من موقع منظومة مسار ( قم باختيار التصدير حسب الأستاذ).
+                </div>
+                <div class="hdr-parag">
+                    2) بعد ذلك، عد الى التطبيق ثم إضغط على الزر الأزرق الموالي لتحديد الملف المُحمل .
+                </div>
+            </div>
+
+            <div style="text-align: center;display:table-cell;vertical-align: middle">
+                <br/>
+
+                <button class="button icon-right ion-plus button-large button-positive" style="width:60%;;border-radius: 100px" ng-click="zipFilesAndImportClassrooms()">
+                    حدد ملف الأقسام
+                </button>
+
+                <br/>
+                <br/>
+                <p dir="rtl" style="padding: 18px;" class="hdr-parag hdr-second-txt">يمكن كذلك استعمال بيانات محاكاتية مدمجة مع التطبيق، هذه البيانات تمكن من أخذ فكرة عملية قبل استخدام معلومات
+                    الأقسام الخاصة بالأستاذ.
+                </p>
+
+                <button class="button" style="width:60%" ng-click="importSimulatedClassrooms()">
+                    استعمال بيانات محاكاتية
+                </button>
+
+                <br/>
+                <br/>
+                <br/>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

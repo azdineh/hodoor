@@ -1,0 +1,129 @@
+<style>
+    #gg td {
+        /* border: 1px solid red; */
+        text-align: right;
+        vertical-align: top;
+        font-size: 0.9em;
+    }
+
+    #gg td div {
+        float: right
+    }
+</style>
+
+
+
+
+
+<div class="item item-text-wrap" style="padding: 8px;border:0;padding-top: 0px;background-color:inherit;margin: auto;
+                                            border-right: 2px solid rgba(0, 0, 0, 0.3);margin-right:9px;padding-top: 6px;">
+
+
+    <div class="card hdr-card" style="color:rgba(0, 0, 0, 0.6) ;padding: 0px;padding-bottom: 8px;border: 1px solid rgba(3, 15, 54, 0.45);margin: 0px;"
+        id="hdr-session-card{{session_view.session.id}}" on-double-tap="selectElement(session_view)">
+        <div style="font-weight: bold;margin:1px;border-radius: 1px;height: 6vh;" ng-style="session_view.session.isExamSession==1?{'background-color':'rgba(124, 66, 57, 0.267)'}:{'background-color':'rgba(59, 101, 107, 0.14)'}">
+            <table id="gg" style="height: 100%;margin: auto">
+                <tr>
+
+                    <td style="padding: 4px;vertical-align: middle">
+                        <span>
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                        </span>
+                        <span ng-show="session_view.session.isExamSession==1">
+                            <span >حصة اختبار</span>
+                            <span>:</span>
+                        </span>
+                        <span ng-show="session_view.session.isExamSession==0">حصة :</span>
+                        <span dir="rtl">{{session_view.session.title}} </span>
+                        <i class="icon ion-android-arrow-dropleft"></i>
+
+
+                    </td>
+                    <td style="padding: 4px;vertical-align: middle">
+                        <span style="">
+                            {{session_view.classroom.title}}
+
+                        </span>
+                        <i class="icon ion-android-arrow-dropleft" ng-show="session_view.session.parity!='all'"></i>
+                        <span style="padding-right: 2px;position: relative;top:-2px" ng-show="session_view.session.parity!='all'">
+                            {{session_view.session.parity|hdrparity}}
+                        </span>
+
+
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+
+        <table id="gg" style="width: 100%; border-collapse:separate;padding-right: 8px;padding-top: 4px;font-size: 0.8em">
+            <tr>
+                <td ng-show="session_view.session.observation!='' || session_view.session.students_count==session_view.students.length || session_view.students.length==0 ">
+                    <div style="width: 100%">
+                        <b>ملاحظات</b> :
+                    </div>
+                    <div class="assertive">
+                        <div style="width: 100%" ng-show="session_view.session.students_count==session_view.students.length">
+                            <div>غياب جماعي</div>
+                        </div>
+                        <div style="width: 100%" ng-show="session_view.students.length==0">
+                            <div>حضور كلي</div>
+                        </div>
+                        <div dir="rtl" style="line-height: 1.3em;width: 100%" ng-show="session_view.session.observation!=''" ng-bind-html="session_view.session.observation">
+
+                        </div>
+                        <br/>
+
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td ng-show="session_view.students.length>0 && session_view.session.students_count > session_view.students.length" style="width: 42%">
+                    <table style="width: 100%">
+                        <tr>
+                            <td>
+                                <div style="width: 100%;margin-top: 4px">
+                                    <b>المتغيبون</b> :
+                                </div>
+                            </td>
+                           <!--  <td ng-show="session_view.students_not_absents.length<10">
+                                <div style="width: 100%;margin-top: 4px">
+                                    <b>الحضور</b> :
+                                </div>
+                            </td> -->
+                        </tr>
+                        <tr>
+                            <td style="width: 50%">
+                                <div style="width: fit-content;" ng-show="session_view.students.length>0 && session_view.session.students_count > session_view.students.length">
+                                    <div style="display: block;padding-right:0px ;list-style-type:none" ng-show="session_view.session.students_count > session_view.students.length">
+                                        <div ng-repeat="student in session_view.students|limitTo:limitstudent:0 track by $index" style="width: 100%">
+
+                                            <hdr-student ng-init="mode='m3'"></hdr-student>
+
+                                        </div>
+                                        <button class="button button-clear button-positive" style="font-size: 0.8em;padding: 0px;" ng-click="moreStudent()" ng-hide="limitstudent>=session_view.students.length">إظهار المزيد..</button>
+                                    </div>
+                                </div>
+                            </td>
+                          <!--   <td style="width: 50%" ng-show="session_view.students_not_absents.length<10">
+                                <div style="width: fit-content;" ng-show="session_view.students.length>0 && session_view.session.students_count > session_view.students.length">
+                                    <div style="display: block;padding-right:0px ;list-style-type:none" ng-show="session_view.session.students_count > session_view.students.length">
+                                        <div ng-repeat="student in session_view.students_not_absents track by $index" style="width: 100%">
+
+                                            <hdr-student ng-init="mode='m3'"></hdr-student>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </td> -->
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+</div>

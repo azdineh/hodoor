@@ -1,0 +1,69 @@
+<style>
+    #hdr-updatesession {
+        width: 100%;
+        border-radius: 20px;
+        background-color: lightgreen;
+    }
+
+    #hdr-updatesession td {
+       /*  border: 1px solid green; */
+        font-size: 1.5em;
+        padding: 4px;
+        text-align: center;
+        vertical-align: middle
+    }
+</style>
+
+<div dir="rtl" class="hdr-help-popup">
+    <table id="hdr-updatesession">
+        <tr>
+            <td style="width: 45%" colspan="3">من</td>
+            <td></td>
+            <td style="width: 45%" colspan="3">الى</td>
+        </tr>
+        <tr style="height: 50px">
+            <td style="padding: 0;background-color: rgba(6, 36, 6, 0.044);border-bottom-right-radius:20px">
+                <input type="number" maxlength="2" on-tap="selectAll('hdr-input-minute1')" id="hdr-input-minute1" style="background-color: transparent;text-align: center;height: 100%;font-size: 1em"
+                    ng-model="$parent.mStart" required />
+            </td>
+            <td style="padding: 0;background-color: rgba(6, 36, 6, 0.044);border-bottom-right-radius:20px">
+                :
+            </td>
+            <td style="padding: 0;background-color: rgba(6, 36, 6, 0.044);border-bottom-right-radius:20px">
+                <input type="number" maxlength="3" on-tap="selectAll('hdr-input-1')" id="hdr-input-1" style="background-color: transparent;text-align: center;height: 100%;font-size: 1.5em"
+                    ng-model="$parent.hStart" required />
+            </td>
+            <td style="font-size: 3em">-</td>
+            <td style="padding: 0;background-color: rgba(6, 36, 6, 0.044);border-bottom-left-radius:20px ">
+                <input type="number" maxlength="3" on-tap="selectAll('hdr-input-minute2')" id='hdr-input-minute2' style="background-color:transparent;text-align: center;height: 100%;font-size: 1em"
+                    ng-model="$parent.mEnd" required />
+            </td>
+            <td style="padding: 0;background-color: rgba(6, 36, 6, 0.044);border-bottom-left-radius:20px ">
+                :
+            </td>
+            <td style="padding: 0;background-color: rgba(6, 36, 6, 0.044);border-bottom-left-radius:20px ">
+                <input type="number" maxlength="3" on-tap="selectAll('hdr-input-2')" id='hdr-input-2' style="background-color:transparent;text-align: center;height: 100%;font-size: 1.5em"
+                    ng-model="$parent.hEnd" required />
+            </td>
+        </tr>
+    </table>
+
+    <div dir="rtl">
+        <div style="padding-top:20px">حصة تتعلق ب: ؟</div>
+        <div class="hdr-parity-classroom">
+            <table>
+                <tr>
+                    <td on-tap="selectSessionParity('all')" id="hdr-parity-all">جميع</td>
+                    <td on-tap="selectSessionParity('odd')" id="hdr-parity-odd">فرديين</td>
+                    <td on-tap="selectSessionParity('even')" id="hdr-parity-even">زوجيين</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+    <divdir="rtl">
+        <ion-checkbox ng-model="data.isExamSession" ng-change="updateIsExaemInSession()" class="checkbox-assertive" style="zoom: 1.2;padding-right: 46px;background-color: transparent;">حصة اختبار</ion-checkbox>
+</div>
+
+
+</div>

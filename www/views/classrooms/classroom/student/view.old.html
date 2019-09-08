@@ -1,0 +1,142 @@
+<style>
+    #hdr-student-table td {
+      border: 1px solid black;
+    }
+  
+    #hdr-student-cont {
+      display: flex;
+      border: 1px solid rgb(0, 89, 255)
+    }
+  
+    #hdr-student-cont>div {
+       border: 1px solid red;
+      width: 20vmax;
+      height: 20vmax
+    }
+  
+    #hdr-student-div1 {
+      background: rgba(245, 245, 245, 1);
+      background: -moz-linear-gradient(top, rgba(245, 245, 245, 1) 0%, rgba(207, 207, 207, 1) 100%);
+      background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(245, 245, 245, 1)), color-stop(100%, rgba(207, 207, 207, 1)));
+      background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1) 0%, rgba(207, 207, 207, 1) 100%);
+      background: -o-linear-gradient(top, rgba(245, 245, 245, 1) 0%, rgba(207, 207, 207, 1) 100%);
+      background: -ms-linear-gradient(top, rgba(245, 245, 245, 1) 0%, rgba(207, 207, 207, 1) 100%);
+      background: linear-gradient(to bottom, rgba(245, 245, 245, 1) 0%, rgba(207, 207, 207, 1) 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#cfcfcf', GradientType=0);
+    }
+  
+    #hdr-student-absence-cntr table td {
+      height: 20px;
+      vertical-align: middle;
+      padding-top: 4px;
+      border: 1px dashed red;
+    }
+  
+    #hdr-student-absence-cntr table td span {
+      padding-right: 4px
+    }
+  
+     #fffs td{
+      border: 1px solid rgb(5, 101, 93);
+    } 
+  </style>
+  
+  
+  <ion-view view-title="تفاصيل حول : {{student.full_name}}">
+    <ion-content dir="rtl">
+  
+  
+  
+      <div>
+        <div id="hdr-student-div1" style="background-color: lightgreen;height: 30vmax"></div>
+        <div style="position:absolute;top:18vmax;width: 100%;padding: 2vmax" id="hdr-student-cont">
+  <!--         <div style="background-color: white;border: 1px solid rgb(126, 126, 126)">
+            <img src="img/user-alt-128.png" alt="" style="margin: auto;opacity: 0.1;width: inherit">
+          </div> -->
+          <div style="flex-grow: 2;margin-right: 1vmax">
+            <table id="fffs" style="width: 100%;height: 100%">
+              <tr>
+                <td style="height: 50%;text-align: right;vertical-align: bottom;font-size: 18px;padding-bottom: 0px">
+                  <div style="font-size: 22px">
+                    {{student.full_name}}
+                  </div>
+                  <div style="font-size: 12px">{{student.birth_date|hdrage}}</div>
+                </td>
+              </tr>
+              <tr>
+                <td style="height: 50%;">
+                  <div style="font-size: 16px;padding-top: 2px">{{student.massar_number}}</div>
+  
+                  <div style="margin-top:1vmax;font-size: 16px;" class="badge badge-royal">{{classroom.title}}</div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div style="position: relative;top:11vmax;padding: 2vmax">
+  
+            <div ng-show="student_absences.length>0">
+              <div style="font-size: 18px;;padding:8px;border-bottom:  1px solid lightgrey">
+                <span class="icon ion-record assertive"></span>
+                <span>تغيبات</span> /
+                <span class="icon ion-record positive"></span>
+                <span>تأخرات</span>
+  
+              </div>
+              <div id="hdr-student-absence-cntr">
+                <table>
+                  <tr ng-repeat="absenceline in student_absences">
+                    <td ng-show="absenceline.is_student_fix_problem==0">
+                      <span class="icon ion-record assertive" style="zoom: 1.56"></span>
+                    </td>
+                    <td ng-show="absenceline.is_student_fix_problem==1">
+                      <span class="icon ion-record positive" style="zoom: 1.56"></span>
+                    </td>
+                    <td>
+                      <span>{{absenceline.unix_time|date:'fullDate'}}</span>
+                      <span class="icon ion-arrow-left-b"></span>
+                      <span>حصة :{{absenceline.title}}</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div ng-show="student_absences.length==0"> لم يتم تسجيل أية حالة تغيب لحد الساعة.</div>
+            <!--             <table>
+                <tr>
+                  <td>
+                    <span class="icon ion-record assertive" style="zoom: 1.56"></span>
+                  </td>
+                  <td>
+                    <span>الأربعاء 5 دجنبر 2000</span>
+                    <span class="icon ion-arrow-left-b"></span>
+                    <span>حصة 8-10</span>
+                  </td>
+                </tr>
+              </table> -->
+            <!--  <div style="font-size: 18px;;padding:8px;margin-top:10px;;border-bottom:  1px solid lightgrey">ملاحظات خاصة</div>
+            <div style="min-height: 80px;width: 100%;background-color:rgba(233, 237, 242, 0.612);padding: 8px;margin-bottom:4px ">
+              <p> لم يتم إضافة أية ملاحظة حتى الآن.</p>
+              <br/>
+              <div style="text-align: left">
+                <button class="button button-dark  button-outline ion-edit" style="border: 0px;zoom: 1.2"></button>
+              </div>
+            </div>
+            <textarea name="" id="" cols="30" style="background-color: cadetblue;width: 100%;font-size: 18px;padding: 8px;min-height: 80px">
+            </textarea> -->
+  
+            <!--  <textarea name="" id="" rows="7" style="background-color: rgb(222, 227, 233);width: 100%;font-size: 14pt" autocomplete="false"></textarea> -->
+            <!--  <div style="font-size: 18px;;padding:8px;border-bottom:  1px solid lightgrey">نقاط المشاركة الصفية</div> -->
+          </div>
+        </div>
+      </div>
+  
+  
+  
+  
+  
+  
+  
+    </ion-content>
+  </ion-view>

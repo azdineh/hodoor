@@ -1,0 +1,143 @@
+<!-- <style>
+  /*          #ggh td {
+          border: 1px solid red
+        }
+        */
+
+  #hdr-absent-symbol {
+    height: 40px;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap-reverse;
+    /*           border: 1px solid lightslategray;
+          background-color: chartreuse;  */
+    justify-content: center;
+    align-content: flex-start;
+  }
+
+  .hdr-absent-symbol-item {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(228, 23, 23, 0.434);
+    margin: 1px;
+  }
+</style> -->
+
+<style>
+  /*     #ggh td {
+      border: 1px solid red
+    }  */
+
+  #hdr-absent-symbol {
+    position: relative;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    /*   border: 1px solid green; */
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: center;
+  }
+
+  .hdr_sessionalter_fix0 {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba(228, 23, 23, 0.434);
+    margin: 1px;
+  }
+
+  .hdr_sessionalter_fix1 {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: rgba(23, 57, 228, 0.434);
+    margin: 1px;
+  }
+</style>
+<div style="position: relative;min-height: 10vh" id="student-item-card-{{student.id}}">
+
+
+
+
+  <div dir="rtl" class="card" on-double-tap="onDoubleTap(student)" ng-class="cardInRed" ng-class-even="cardInGray" style="min-height: inherit;padding: 0;margin:0px;">
+    <div class="item item-text-wrap" style="padding: 0;min-height: 10vh;padding-top: 2px;">
+
+
+      <table class="classroom_item" style="width:100%;min-height: inherit" id="ggh">
+        <tr>
+          <td style="text-align: center;height: 6vh;font-size: 18px;width: 12%">
+            <button class="button button-clear" ng-disabled="" ng-click="showActionSheet(student)">
+              <i class="ion-android-more-vertical" ng-hide="clicked" style="zoom: 1.5"></i>
+            </button>
+          </td>
+          <td style="text-align: center;height: 6vh;font-size: 18px;width: 12%;transition: filter 1s"  ng-style="student.isBarred==1?{'filter':'blur(2px)'}:{}">
+            <div>{{student.queuing_number|hdrnumber}} </div>
+          </td>
+          <td style="padding-right: 10px;width: 50%;transition: filter 1s"  ng-style="student.isBarred==1?{'filter':'blur(2px)'}:{}">
+            <div>
+              <div class="hdr-main-text positive">{{student.full_name}}</div>
+              <div class="hdr-sub-text">
+                <i class="ion-android-bookmark"></i>
+                <span ng-if="student.birth_date">{{student.birth_date|hdrage}}</span>
+                <!-- <span ng-if="!student.birth_date"> 16 عام و نصف</span> -->
+              </div>
+
+            </div>
+          </td>
+
+          <td style="width: 30%">
+            <div id="hdr-absent-symbol">
+              <!-- <div class="hdr-absent-symbol-item" ng-repeat="t in student.times track by $index"></div> -->
+
+              <div ng-repeat="absenceline in student_absences" class="hdr_sessionalter_fix{{absenceline.is_student_fix_problem}}"></div>
+
+              <div class="hdr_sessionalter_fix0" ng-show="tapped"></div>
+
+            </div>
+            <!--             <div class="hdr-absent-symbol-item"></div>
+                      <div class="hdr-absent-symbol-item"></div>
+                      <div class="hdr-absent-symbol-item"></div> -->
+            <!--             <div class="hdr-absent-symbol-item"></div>
+                      <div class="hdr-absent-symbol-item"></div>
+                      <div class="hdr-absent-symbol-item"></div>
+                      <div class="hdr-absent-symbol-item"></div> -->
+
+
+          </td>
+
+          <!--         <td style="text-align: left;font-size: 14px;">
+          <div style="padding-left: 10px;margin: 2px"> {{student.title}}</div>
+        </td> -->
+        </tr>
+        <tr ng-if="student.observation.length>0" class="lined-paper-pattern">
+          <td colspan="4"  ng-style="student.isBarred==1?{'opacity':'0.7'}:{}" style="padding: 10px;font-size: 0.75em;background-image:linear-gradient(to bottom, rgba(249, 234, 185, 0.344),rgba(247, 242, 201, 0.296))">
+            <span class="icon ion-compose" style="margin-right: 12px;"></span>
+            <span style="color:rgb(187, 34, 34)">
+              {{student.observation}}
+            </span>
+          </td>
+        </tr>
+      </table>
+
+
+    </div>
+
+  </div>
+
+  <div ng-if="student.isBarred==1" style="height:100%;width:86%;position:absolute;top: 0px;left: 0px;z-index: 5000;opacity: 0.7;
+  background-image: linear-gradient(to right,rgba(158, 156, 182, 0.135),rgba(122, 123, 143, 0.268),rgba(100, 100, 100, 0));">
+    <table style="width:100%;height: inherit;overflow: hidden">
+      <tr>
+        <td dir="ltr" style="width: 100%;height: inherit;text-align: left;padding-left: 20px;vertical-align: middle;font-size: 3.2em">
+
+        <span class="icon ion-close assertive"></span>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+
+</div>
