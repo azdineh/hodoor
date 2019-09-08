@@ -1,0 +1,15 @@
+{
+  "name": "hodoor",
+  "private": "true",
+  "devDependencies": {
+    "ionic": "driftyco/ionic-bower#1.0.0-rc.0"
+  },
+  "dependencies": {
+    "highcharts-release": "~4.0.4",
+    "highcharts-ng": "~0.0.7",
+    "js-xlsx": "^0.8.0",
+    "angular-route": "1.5.0",
+    "ngCordova": "^0.1.24-alpha",
+    "moment": "^2.13.0"
+  }
+}

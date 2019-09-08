@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget android-versionCode="20006" id="com.ionicframework.chapter5978610" version="1.6.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>hodoor</name>
+    <name>Hodoor</name>
     <description>
-        تطبيق حضور 7odoor يمثل أداة من أدوات المدرس داخل الفصل و خارجه.
+       Application pour les enseignants aidant à marquer et garder l'historique des absences des élèves. 
     </description>
     <author email="azdineh@gmail.com" href="www.hodoor.com">
       فريق حضور

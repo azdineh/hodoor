@@ -1,0 +1,7 @@
+{
+  "name": "hodoor",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic1"
+}
