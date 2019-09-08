@@ -4,6 +4,7 @@ angular.module('hdrApp')
         $ionicPlatform, hdrdbx) {
 
         $scope.page = "home";
+
         /*       $rootScope.deviceWidth = $window.innerWidth;
                 $rootScope.deviceHeight = $window.innerHeight; */
 
@@ -123,27 +124,6 @@ angular.module('hdrApp')
                     else {
                         $scope.isthereNewVersion = false;
                     }
-                });
-
-                window.FirebasePlugin.getToken(function (token) {
-                    // save this server-side and use it to push notifications to this device
-                    //console.log(token);
-                }, function (error) {
-                    console.error(error);
-                });
-                window.FirebasePlugin.onTokenRefresh(function (token) {
-                    // save this server-side and use it to push notifications to this device
-                    //console.log(token);
-                }, function (error) {
-                    console.error(error);
-                });
-
-                window.FirebasePlugin.onNotificationOpen(function (notification) {
-                    //console.log(notification);
-                    $scope.isthereNewVersion = true;
-                    $window.localStorage['hdr.nextVersionCode'] = angular.toJson(notification.versioncode);
-                }, function (error) {
-                    console.error(error);
                 });
 
 

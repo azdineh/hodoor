@@ -4,7 +4,7 @@
   "description": "hdrApp: An Ionic project",
   "dependencies": {
     "angular-animate": "^1.6.7",
-    "cordova-android": "^6.4.0",
+    "cordova-android": "^8.0.0",
     "cordova-browser": "^4.1.0",
     "cordova-filepath-resolver": "^1.0.5",
     "cordova-plugin-app-version": "^0.1.9",
@@ -15,6 +15,7 @@
     "cordova-plugin-ionic-webview": "^2.5.1",
     "cordova-plugin-splashscreen": "^5.0.3",
     "cordova-plugin-whitelist": "^1.3.4",
+    "cordova-plugin-x-socialsharing": "^5.6.0",
     "cordova-plugin-zip": "^3.1.0",
     "cordova-sqlite-storage": "^3.3.0",
     "es6-promise-plugin": "^4.2.2",
@@ -26,6 +27,7 @@
     "uk.co.workingedge.cordova.plugin.sqliteporter": "^1.1.1"
   },
   "devDependencies": {
+    "@ionic/v1-toolkit": "2.0.10",
     "bower": "^1.3.3",
     "gulp-util": "^2.2.14",
     "jquery": "^3.2.1",
@@ -62,7 +64,10 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-app-version": {},
       "uk.co.workingedge.cordova.plugin.sqliteporter": {},
-      "cordova-sqlite-storage": {}
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-x-socialsharing": {
+        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
+      }
     }
   }
 }

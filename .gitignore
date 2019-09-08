@@ -6,3 +6,4 @@ platforms/
 plugins/
 hooks/
 bower_components/
+node_modules

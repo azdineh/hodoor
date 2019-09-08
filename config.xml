@@ -17,6 +17,7 @@
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,assets,root" />
     <preference name="KeyboardResize" value="false" />
+    <preference name="orientation" value="portrait" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
