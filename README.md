@@ -24,6 +24,7 @@ https://codeburst.io/configuring-cordova-for-android-development-on-linux-6ee4a2
 ### Documentation
 classrooms_view is an array of classroom_view object ==>  [{classroom_view},...]
 classroom_view object ==> 
+``` javascript
     {
         id: number,     //classroom id
         title: string,  //classroom name like : TCS4, 1BacSM...
@@ -31,3 +32,4 @@ classroom_view object ==>
         color : string, //hexadecimal value present the color of classroom label
         students: []    // array of classroom students
     }
+```
