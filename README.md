@@ -31,6 +31,15 @@ classroom object
         title: string,  //classroom name like : TCS4, 1BacSM...
         level: string,  //classroom level
         color : string, //hexadecimal value presents the color of classroom label
+        school: {
+            name: kissm.school,
+            rd: kissm.rd,
+            academy:kissm.academy
+        },
+        teacher: {
+            name: kissm.teachername,
+            subject: kissm.teachersubject
+        },
         students: []    // array of classroom students object
     }
 ```
@@ -52,16 +61,21 @@ student object
 Les ensignants peuvent enregistrer des sessions in sessions[{session},...].
 <br>
 l'objet session contient :
-``` javascript
-session:{
-    id: number,
-    classroom_title:string, // classroom title used as an identifcator of the classroom instead od classroom.id
-    unix_time: number, //time when the session was added = Date.now()
-    title: string, // session duration like 10-12
-    absents_students: [] // array of absents students 
-    parity: string, // session parity is all classroom attend or just by group, tree values are possibles : all,odd or even .
-    isExamSession: numbre, // is a isExamSession session : 0 non, 1 yes.
-    observation: ""
 
+``` javascript
+    session:{
+        id: number,
+        classroom_title:string, // classroom title used as an identifcator of the classroom instead od classroom.id
+        unix_time: number, //time when the session was added = Date.now()
+        title: string, // session duration like 10-12
+        absents_students: [] // array of absents students
+        students_count : number  // le nombre des élèves peut changer,ce champ permet de garder le nombre total à l'instant d'enregistrment d'une session 
+        parity: string, // session parity is all classroom attend or just by group, tree values are possibles : all,odd or even .
+        isExamSession: numbre, // is a isExamSession session : 0 non, 1 yes.
+        observation: ""
 }
 ``` 
+Pour chaque élève absent, on ajoute un champs suplémentaire (is_student_fix_problem) pour désigner si il a justifié son absnece et être accepté par le prof(élève entre dans la salle, et le prof le marquer comme en retard)
+<br>
+
+removed_students est un array où on garde les élèves supprimés pour une éventuelle utilisation ultérieure..

@@ -1,5 +1,5 @@
 angular.module('hdrApp')
-	.directive('hdrStudentCardAppeal', function (hdrdbx, $rootScope,$timeout) {
+	.directive('hdrStudentCardAppeal', function ($rootScope,$timeout) {
 		return {
 			restrict: 'E',
 			templateUrl: "js/directives/hdrstudentcardappeal.html",
@@ -12,14 +12,6 @@ angular.module('hdrApp')
 				$timeout(function () {
 
 					if (ionic.Platform.isWebView()) {
-						hdrdbx.selectStudentAbsences($scope.student.massar_number)
-							.then(function (arr) {
-								$scope.student_absences = arr;
-
-							}, function (err) {
-								console.log('Error while getting student absences');
-								console.log(err);
-							});
 
 					} else {
 

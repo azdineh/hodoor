@@ -1,10 +1,7 @@
 angular.module('hdrApp').controller('ClassroomsController',
-    function ($scope, $rootScope, hdrFileSystem, $filter, $window, $state, $ionicLoading, hdrdbx, $ionicActionSheet, $interval, $cordovaFile, $ionicPopup) {
+    function ($scope, $rootScope, hdrFileSystem, $filter, $window, $state, $ionicLoading, $ionicScrollDelegate, hdrlocalstorage, $ionicActionSheet, $interval, $cordovaFile, $ionicPopup) {
 
         $scope.page = "Classrooms";
-        $rootScope.classrooms_view = $window.localStorage['hdr.classrooms_view'] ? angular.fromJson($window.localStorage['hdr.classrooms_view']) : [];
-        $rootScope.students_count_global = $window.localStorage['hdr.students_count_global'] ? angular.fromJson($window.localStorage['hdr.students_count_global']) : 0;
-
         var classrooms_colors = ['#66d9e8', '#ffd43b', '#e66824', '#a9e34b', '#b197fc', '#c7bfb0', '#faa2c1', '#57e69a', '#e6a857', '#bfb4a6'];
         // see http://linkbroker.hu/stuff/kolorwheel.js/
         //$scope.tapped = false;
@@ -42,67 +39,20 @@ angular.module('hdrApp').controller('ClassroomsController',
 
         var importDataFromFile = function () {
             $scope.show();
-            if (!$window.localStorage['hdr.classrooms_view']) {
+            if (!$window.localStorage['hdr.classrooms']) {
                 window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function (dir) {
-                    dir.getFile("data.7dr", { create: false }, function (fileEntry) {
+                    dir.getFile(hdrlocalstorage.filename, { create: false }, function (fileEntry) {
                         //data.7dr exist
+
                         fileEntry.file(function (file) {
                             var reader = new FileReader();
 
                             reader.onloadend = function () {
                                 //console.log("Successful file read: " + this.result);
-                                console.log("Successful read loca file data.7dr");
-                                hdrdbx.importSqlToDb(this.result)
-                                    .then(function (res) {
-                                        //save in localStorage
-                                        hdrdbx.selectClassrooms()
-                                            .then(function (classrooms) {
-                                                hdrdbx.addStudentsToClassrooms(classrooms, 0, function () {
-
-                                                    var itecolor = 0;
-                                                    //$rootScope.classrooms_view = hdrdbx.classrooms_view;
-                                                    $interval(function () {
-                                                        var shifted = hdrdbx.classrooms_view.shift();
-
-
-                                                        if (shifted.students.length > 0) {
-
-                                                            shifted.color = classrooms_colors[itecolor];
-
-                                                            //for garanty colors for all classrooms
-                                                            if (itecolor == 9) {
-                                                                itecolor = 0;
-                                                            }
-                                                            else {
-                                                                itecolor++;
-                                                            }
-
-                                                            $rootScope.classrooms_view.push(shifted);
-                                                            $rootScope.students_count_global += shifted.students.length;
-                                                        }
-
-                                                        if (hdrdbx.classrooms_view.length == 0) {
-
-                                                            $window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
-                                                            $window.localStorage['hdr.students_count_global'] = angular.toJson($rootScope.students_count_global);
-                                                            $scope.hide();
-                                                        }
-                                                    }, 450, hdrdbx.classrooms_view.length);
-
-                                                    //hdrdbx.classrooms_view = [];
-
-
-                                                });
-
-                                                $scope.hide();
-                                                hdrFileSystem.classrooms = [];
-                                            }, function (err) {
-                                                console.log(err);
-                                            });
-
-                                    }, function (err) {
-                                        console.log(JSON.stringify(err));
-                                    })
+                                hdrlocalstorage.loadFromJSONText(this.result);
+                                console.log("Successful read loca file " + hdrlocalstorage.filename);
+                                $scope.isDataFileExist = true;
+                                $scope.hide();
                             };
                             reader.readAsText(file);
 
@@ -115,7 +65,7 @@ angular.module('hdrApp').controller('ClassroomsController',
                     }, function (err) {
                         $scope.hide();
                         $scope.isDataFileExist = false;
-                        console.log("data.7dr is not exist.. show menu to import data from excel files");
+                        console.log(hdrlocalstorage.filename + " is not exist.. show menu to import data from excel files");
                     });
 
 
@@ -133,12 +83,14 @@ angular.module('hdrApp').controller('ClassroomsController',
         }
 
         $scope.checkFile = function () {
-            // importDataFromFile();
+            importDataFromFile();
         }
 
         $scope.$on('$ionicView.enter', function () {
-            if ($rootScope.classrooms_view.length == 0) {
-                importDataFromFile();
+            if (ionic.Platform.isWebView()) {
+                if ($rootScope.classrooms_view.length == 0) {
+                    importDataFromFile();
+                }
             }
         })
 
@@ -154,7 +106,6 @@ angular.module('hdrApp').controller('ClassroomsController',
         $scope.importSimulatedClassrooms = function () {
 
             ionic.Platform.ready(function () {
-                hdrdbx.initDB();
                 $scope.show();
                 window.resolveLocalFileSystemURL("file:///android_asset/www/hodoor-classrooms-simulation", function (directoryentry) {
 
@@ -164,52 +115,32 @@ angular.module('hdrApp').controller('ClassroomsController',
                             console.log("call back success..");
                             console.log(hdrFileSystem.classrooms);
 
-                            hdrdbx.fillDB(hdrFileSystem.classrooms, 0, function () {
 
-                                hdrdbx.selectClassrooms()
-                                    .then(function (classrooms) {
-                                        hdrdbx.addStudentsToClassrooms(classrooms, 0, function () {
+                            var itecolor = 0;
+                            //$rootScope.classrooms_view = hdrdbx.classrooms_view;
+                            $interval(function () {
+                                var shifted = hdrFileSystem.classrooms.shift();
+                                shifted.color = classrooms_colors[itecolor];
 
-                                            var itecolor = 0;
-                                            //$rootScope.classrooms_view = hdrdbx.classrooms_view;
-                                            $interval(function () {
-                                                var shifted = hdrdbx.classrooms_view.shift();
+                                //for to garanty colors for all classrooms
+                                if (itecolor == 9) {
+                                    itecolor = 0;
+                                }
+                                else {
+                                    itecolor++;
+                                }
 
-                                                shifted.color = classrooms_colors[itecolor];
-                                                //for garanty colors for all classrooms
-                                                if (itecolor == 9) {
-                                                    itecolor = 0;
-                                                }
-                                                else {
-                                                    itecolor++;
-                                                }
-
-                                                if (shifted.students.length > 0) {
-                                                    $rootScope.classrooms_view.push(shifted);
-                                                    $rootScope.students_count_global += shifted.students.length;
-                                                }
-
-                                                if (hdrdbx.classrooms_view.length == 0) {
-
-                                                    $window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
-                                                    $window.localStorage['hdr.students_count_global'] = angular.toJson($rootScope.students_count_global);
-                                                }
-                                            }, 450, hdrdbx.classrooms_view.length);
-
-                                            //hdrdbx.classrooms_view = [];
+                                hdrlocalstorage.classrooms.push(shifted);
+                                $rootScope.students_count_global += shifted.students.length;
 
 
-                                        });
+                                if (hdrFileSystem.classrooms.length == 0) {
+                                    hdrlocalstorage.save('classrooms', null);
+                                    $ionicScrollDelegate.scrollTop();
+                                    $scope.hide();
 
-                                        $scope.hide();
-                                        hdrFileSystem.classrooms = [];
-                                    }, function (err) {
-                                        console.log(err);
-                                    });
-
-
-                            });
-
+                                }
+                            }, 450, hdrFileSystem.classrooms.length);
 
 
                         })
@@ -218,130 +149,16 @@ angular.module('hdrApp').controller('ClassroomsController',
 
                 }, function (error) {
                     alert("problem with resolve local files system");
+                    $scope.hide();
                 })
 
             });
         };
 
-        $scope.importClassroomsOld = function () {
-
-            if (ionic.Platform.isWebView()) {
-                ionic.Platform.ready(function () {
-                    //var hfs = new hdrFileSystem();
-                    hdrdbx.initDB();
-                    $scope.show();
-                    hdrFileSystem.getFileSystem('0').then(function (fs) {
-                        hdrFileSystem.isHdrDirectoryExist(fs).then(function (directory) {
-                            //alert(" The " + directory.name + " is found in internal storage , now checking out the Masar files..");
-                            hdrFileSystem.readHdrFiles(directory,
-                                function () {
-                                    console.log("call back success..");
-                                    console.log(hdrFileSystem.classrooms);
-
-                                    hdrdbx.fillDB(hdrFileSystem.classrooms, 0, function () {
-
-                                        hdrdbx.selectClassrooms()
-                                            .then(function (classrooms) {
-                                                hdrdbx.addStudentsToClassrooms(classrooms, 0, function () {
-
-
-                                                    //$rootScope.classrooms_view = hdrdbx.classrooms_view;
-                                                    $interval(function () {
-                                                        var shifted = hdrdbx.classrooms_view.shift();
-                                                        $rootScope.classrooms_view.push(shifted);
-                                                        $rootScope.students_count_global += shifted.students.length;
-
-                                                        if (hdrdbx.classrooms_view.length == 0) {
-
-                                                            $window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
-                                                            $window.localStorage['hdr.students_count_global'] = angular.toJson($rootScope.students_count_global);
-                                                        }
-                                                    }, 290, hdrdbx.classrooms_view.length);
-
-                                                    //hdrdbx.classrooms_view = [];
-
-
-
-                                                });
-
-                                                hdrdbx.selectRows('academy')
-                                                    .then(function (res) {
-
-                                                        $rootScope.academy = res.rows.item(0);
-                                                        $window.localStorage['hdr.academy'] = angular.toJson($rootScope.academy);
-                                                    }, function (err) {
-                                                        console.log(err);
-                                                    });
-                                                hdrdbx.selectRows('rd')
-                                                    .then(function (res) {
-                                                        $rootScope.rd = res.rows.item(0);
-                                                        $window.localStorage['hdr.rd'] = angular.toJson($rootScope.rd);
-                                                    }, function (err) {
-                                                        console.log(err);
-                                                    });
-                                                hdrdbx.selectRows('school')
-                                                    .then(function (res) {
-                                                        $rootScope.school = res.rows.item(0);
-                                                        $window.localStorage['hdr.school'] = angular.toJson($rootScope.school);
-                                                    }, function (err) {
-                                                        console.log(err);
-                                                    });
-                                                hdrdbx.selectRows('teacher')
-                                                    .then(function (res) {
-                                                        $rootScope.teacher = res.rows.item(0);
-                                                        $window.localStorage['hdr.teacher'] = angular.toJson($rootScope.teacher);
-                                                    }, function (err) {
-                                                        console.log(err);
-                                                    });
-
-                                                $scope.hide();
-                                                hdrFileSystem.classrooms = [];
-                                            }, function (err) {
-                                                console.log(err);
-                                            });
-
-
-                                    });
-
-
-
-                                })
-
-
-
-                        }, function (error) {
-                            //alert("The hodoor-classrooms Directory doesn't exist..");
-                            alert("الملف hodoor-classrooms غير موجود");
-                        });
-                    }, function (error) {
-                        // error with FileSystem
-                    });
-                });
-            } else {
-                // actions for computer platforms
-                console.log("classrooms page");
-                $rootScope.classrooms_view.push({ id: "1", color: classrooms_colors[1], title: "TCS4", level: "جذع مشترك علمي", 'students': [{ id: '1', full_name: "عمر فيلالي", queuing_number: "10" }, { id: '2', full_name: "كريم زرهوني", queuing_number: "12" }, { id: '3', full_name: "سفياني بدر", queuing_number: "22" }] });
-                $rootScope.classrooms_view.push({ id: "2", color: classrooms_colors[2], title: "TCLSH2", level: "جذع مشترك أداب و علوم إنسانية", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
-                $rootScope.classrooms_view.push({ id: "3", color: classrooms_colors[3], title: "1BacSM4", level: "أولى باك علوم رياضية", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
-                $rootScope.classrooms_view.push({ id: "4", color: classrooms_colors[4], title: "2BacSP3", level: "ثانية علوم فيزيائية", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
-                $rootScope.classrooms_view.push({ id: "5", color: classrooms_colors[5], title: "TCPS1", level: "جذع مشترك خدماتي", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
-                $rootScope.classrooms_view.push({ id: "6", color: classrooms_colors[6], title: "TCSH7", level: "جذع مشترك خدماتي", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
-
-                $rootScope.classrooms_view.forEach(function (classroom) {
-                    $rootScope.students_count_global += classroom.students.length;
-                }, this);
-
-                $window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
-                $window.localStorage['hdr.students_count_global'] = angular.toJson($rootScope.students_count_global);
-            }
-        };
-
-
 
         $scope.importClassrooms = function () {
 
             ionic.Platform.ready(function () {
-                hdrdbx.initDB();
                 $scope.show();
                 var pathDist = cordova.file.cacheDirectory;
                 var path = pathDist + "/hodoor-classrooms";
@@ -364,64 +181,49 @@ angular.module('hdrApp').controller('ClassroomsController',
                     );
                     hdrFileSystem.readHdrFiles(directoryentry,
                         function () {
-                            console.log("call back success..");
-                            console.log(hdrFileSystem.classrooms);
+                            //hdrFileSystem.classrooms are available in this scope
+                            //console.log("call back success..");
+                            //console.log(hdrFileSystem.classrooms);
 
-                            hdrdbx.fillDB(hdrFileSystem.classrooms, 0, function () {
+                            //set classrooms colors
 
-                                hdrdbx.selectClassrooms()
-                                    .then(function (classrooms) {
-                                        hdrdbx.addStudentsToClassrooms(classrooms, 0, function () {
+                            var itecolor = 0;
+                            //$rootScope.classrooms_view = hdrdbx.classrooms_view;
+                            $interval(function () {
+                                var shifted = hdrFileSystem.classrooms.shift();
+                                shifted.color = classrooms_colors[itecolor];
 
-                                            var itecolor = 0;
-                                            //$rootScope.classrooms_view = hdrdbx.classrooms_view;
-                                            $interval(function () {
+                                //for to garanty colors for all classrooms
+                                if (itecolor == 9) {
+                                    itecolor = 0;
+                                }
+                                else {
+                                    itecolor++;
+                                }
 
-                                                var shifted = hdrdbx.classrooms_view.shift();
+                                hdrlocalstorage.classrooms.push(shifted);
+                                $rootScope.students_count_global += shifted.students.length;
 
-                                                shifted.color = classrooms_colors[itecolor];
-                                                //for garanty colors for all classrooms
-                                                if (itecolor == 9) {
-                                                    itecolor = 0;
-                                                }
-                                                else {
-                                                    itecolor++;
-                                                }
+                                if (hdrFileSystem.classrooms.length == 0) {
+                                    hdrlocalstorage.save('classrooms', null);
 
-                                                $rootScope.classrooms_view.push(shifted);
-                                                $rootScope.students_count_global += shifted.students.length;
-
-                                                if (hdrdbx.classrooms_view.length == 0) {
-
-                                                    $window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
-                                                    $window.localStorage['hdr.students_count_global'] = angular.toJson($rootScope.students_count_global);
-                                                }
-                                            }, 290, hdrdbx.classrooms_view.length);
-
-                                            //hdrdbx.classrooms_view = [];
-
+                                    // remove ecxel file imported in cache
+                                    window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + "/hodoor-classrooms",
+                                        function (direntry) {
+                                            direntry.removeRecursively(function () {
+                                                console.log("Remove Recursively Succeeded");
+                                                $scope.hide();
+                                            }, function (err) {
+                                                alert("Failed to remove directory or it's contents: " + error.code);
+                                            });
+                                        }, function (err) {
 
                                         });
-
-                                        window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + "/hodoor-classrooms",
-                                            function (direntry) {
-                                                direntry.removeRecursively(function () {
-                                                    console.log("Remove Recursively Succeeded");
-                                                }, function (err) {
-                                                    alert("Failed to remove directory or it's contents: " + error.code);
-                                                });
-                                            }, function (err) {
-
-                                            });
-
-                                        $scope.hide();
-                                        hdrFileSystem.classrooms = [];
-                                    }, function (err) {
-                                        console.log(err);
-                                    });
+                                }
+                            }, 450, hdrFileSystem.classrooms.length);
 
 
-                            });
+
 
 
 
@@ -431,6 +233,7 @@ angular.module('hdrApp').controller('ClassroomsController',
 
                 }, function (error) {
                     alert("problem with resolve local files system");
+                    $scope.hide();
                 });
 
             });

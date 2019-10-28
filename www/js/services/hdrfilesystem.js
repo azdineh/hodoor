@@ -107,7 +107,7 @@ angular.module('hdrApp')
             /**
              * Reading entries of excel files
              * @param  {DirectoryEntry} directoryentry the directory to read its content
-             * @return {array} array of kissm object.
+             * @return {array} array of classroom object.
              */
             HdrFileSystem.readHdrFiles = function (directoryentry, callBackSuccess) {
                 //var hdrFiles=[];
@@ -150,7 +150,7 @@ angular.module('hdrApp')
                     .then(function (workbook) {
                         //var kissmservice = new hdrKissm();
                         var kissm = hdrKissm.getKissm(workbook);
-                        HdrFileSystem.classrooms.push(kissm);
+                        HdrFileSystem.classrooms.push(hdrKissm.convertToClassroom(kissm));
                         console.log('*****' + index);
 
                         if (index + 1 < entries.length) {

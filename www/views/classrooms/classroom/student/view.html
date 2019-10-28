@@ -27,7 +27,7 @@
   }
 
   .hdr-student2-tabel tr:nth-child(2) td {
-    background-image: linear-gradient(to left, rgba(0, 0, 0, 0.09), rgba(255, 255, 255, 0));
+    background-image: linear-gradient(to left, rgba(160, 160, 160, 0.09), rgba(255, 255, 255, 0));
     /*  border-left: 1px solid rgba(68, 63, 63, 0.227); */
   }
 
@@ -44,97 +44,171 @@
     text-align: center;
     background-image: none;
   }
+
+  #hdr-card-student-container {
+    
+    padding: 6px;
+    background-image: linear-gradient(to top right, rgba(235, 235, 235, 0.15), rgba(215, 228, 238, 0.109));
+    /* border: 5px solid rgba(80, 78, 65, 0.137); */
+  }
 </style>
 <ion-view view-title="تفاصيل حول : {{student.full_name}}">
 
-  <ion-content dir="rtl" padding="true">
+  <ion-content dir="rtl">
 
-    <table class="hdr-student2-tabel" style="">
-      <tr>
-        <!-- <td style="width: 25%">
+    <div id="hdr-card-student-container">
+      <table class="hdr-student2-tabel" style="">
+        <tr>
+          <!-- <td style="width: 25%">
           <img src="img/user-alt-128.png" style="width: 100%">
         </td> -->
-        <td style="width: 75%">
-          <div>
-            <h3 style="margin-bottom: 3hèèbpx">{{student.full_name}}</h3>
-            <p class="hdr-second-txt" style="font-size: 1.2em">
-              <img src="img/bron.png" height="14" alt="">
-              <span>{{student.birth_date|hdrFullDate}}</span>
-              <br/>
-              <span>{{student.birth_date|hdrage}}</span>
-            </p>
+          <td style="width: 75%">
+            <div>
+              <h3
+                style="margin-bottom: 12px;text-align: center;padding:12px 6px 12px 6px;background-color: rgba(133, 162, 180, 0.205)">
+                {{student.full_name}}</h3>
+              <div class="hdr-second-txt" style="font-size: 1.2em;text-align: center">
+                
+                <div>
+                    <span><img src="img/bron.png" height="20" alt=""></span>
+                  <span style="position: relative;top:-6px">{{student.birth_date|hdrFullDate}}</span>
+                </div>
+                <div>
+                    <span><img src="img/studentnow.png" height="30" alt=""></span>
+                  <span style="position: relative;top:-8px">{{student.birth_date|hdrage}}</span>
+                </div>
+              </div>
 
-          </div>
-        </td>
-      </tr>
-    </table>
-    <div ng-show="observationUpdateMode==false">
+            </div>
+          </td>
+        </tr>
+      </table>
       <table class="hdr-student2-tabel">
         <tr>
-          <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">رقم مسار</td>
+          <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">المستوى الدراسي</td>
         </tr>
         <tr>
-          <td style="font-size: 2em;text-align: right">{{student.massar_number|hdrmassarnumber}}</td>
+          <td style="font-size: 1.5em;text-align: right">{{classroom.level}}</td>
+        </tr>
+      </table>
+      <div ng-show="observationUpdateMode==false">
+        <table class="hdr-student2-tabel">
+          <tr>
+            <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">رقم مسار</td>
+          </tr>
+          <tr>
+            <td style="font-size: 1.5em;text-align: right">{{student.massar_number|hdrmassarnumber}}</td>
+          </tr>
+        </table>
+        <table class="hdr-student2-tabel">
+          <tr>
+            <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">القسم</td>
+            <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">الرقم الترتيبي</td>
+          </tr>
+          <tr>
+            <td style="font-size: 1.5em;text-align: right">{{student.id_classroom}}</td>
+            <td style="font-size: 1.5em;text-align: right">{{student.queuing_number}}</td>
+          </tr>
+        </table>
+
+        <table class="hdr-student2-tabel">
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+        </table>
+
+        <table class="hdr-student2-tabel hdr-student-table-marks">
+          <tr>
+            <td class="assertive" ng-if="absences.length>0">{{absences.length}}</td>
+            <td class="positive" ng-if="delays.length>0">{{delays.length}}</td>
+            <!--  <td>3</td> -->
+          </tr>
+          <tr>
+            <td class="assertive" ng-if="absences.length>0">عدد التغيبات</td>
+            <td class="positive" ng-if="delays.length>0">عدد التأخرات</td>
+            <!--  <td>مج النقاط</td> -->
+          </tr>
+        </table>
+
+        <table class="hdr-standard-table" ng-if="absences.length>0">
+          <tr class="assertive-bg">
+            <td style="text-align: center">#</td>
+            <td>الحصة</td>
+            <td>التاريخ</td>
+          </tr>
+          <tr ng-repeat="abs in absences track by $index">
+            <td style="text-align: center">{{$index+1}}</td>
+            <td>{{abs.title}}</td>
+            <td>{{abs.unix_time|date:'shortDate'}}</td>
+          </tr>
+        </table>
+
+        <table class="hdr-standard-table" ng-if="delays.length>0">
+          <tr class="positive-bg">
+            <td style="text-align: center">#</td>
+            <td>الحصة</td>
+            <td>التاريخ</td>
+          </tr>
+          <tr ng-repeat="abs in delays track by $index">
+            <td style="text-align: center">{{$index+1}}</td>
+            <td>{{abs.title}}</td>
+            <td>{{abs.unix_time|date:'shortDate'}}</td>
+          </tr>
+        </table>
+
+        <table class="hdr-student2-tabel">
+          <tr>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+      <table style="width: 100%">
+        <tr>
+          <td style="width: 80%;vertical-align: middle">
+
+          </td>
+          <td style="vertical-align: middle" ng-show="observationUpdateMode==false">
+            <!--  <button class="button button-small" ng-click=""
+               style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">تعديل</button> -->
+          </td>
+          <td style="vertical-align: middle" ng-show="observationUpdateMode==true">
+            <button class="button button-small" ng-click="updateStudent()"
+              style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">حفظ</button>
+          </td>
+          <td style="vertical-align: middle" ng-show="observationUpdateMode==true">
+            <button class="button button-small" ng-click="switchObservationUpateMode()"
+              style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">إلغاء</button>
+          </td>
         </tr>
       </table>
       <table class="hdr-student2-tabel">
         <tr>
-          <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">القسم</td>
-          <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">الرقم الترتيبي</td>
+          <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">ملاحظات</td>
         </tr>
         <tr>
-          <td style="font-size: 2em;text-align: right">{{classroom.title}}</td>
-          <td style="font-size: 2em;text-align: right">{{student.queuing_number}}</td>
+          <td ng-show="observationUpdateMode==false" on-tap="switchObservationUpateMode()"
+            style="font-size: 1em;text-align: right;vertical-align: top;height: 20vmax" class="lined-paper-pattern">
+            {{student.observation}}</td>
+
+          <td ng-show="observationUpdateMode==true" style="text-align: right;vertical-align: top;height: 20vmax"
+            class="lined-paper-pattern">
+
+            <textarea ng-model="student.observation" id="hdr-textarea-observation"
+              style="width: 100%;font-family: hdrFont;font-size: 1em;line-height: 1.4em;background-color: transparent"
+              rows="10">
+          </textarea>
+
+          </td>
+          </td>
         </tr>
       </table>
 
-      <table class="hdr-student2-tabel">
-        <tr>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-        </tr>
-      </table>
-
-      <table class="hdr-student2-tabel hdr-student-table-marks">
-        <tr>
-          <td class="assertive" ng-if="absences.length>0">{{absences.length}}</td>
-          <td class="positive" ng-if="delays.length>0">{{delays.length}}</td>
-          <!--  <td>3</td> -->
-        </tr>
-        <tr>
-          <td class="assertive" ng-if="absences.length>0">عدد التغيبات</td>
-          <td class="positive" ng-if="delays.length>0">عدد التأخرات</td>
-          <!--  <td>مج النقاط</td> -->
-        </tr>
-      </table>
-
-      <table class="hdr-standard-table" ng-if="absences.length>0">
-        <tr class="assertive-bg">
-          <td style="text-align: center">#</td>
-          <td>الحصة</td>
-          <td>التاريخ</td>
-        </tr>
-        <tr ng-repeat="abs in absences track by $index">
-          <td style="text-align: center">{{$index+1}}</td>
-          <td>{{abs.title}}</td>
-          <td>{{abs.unix_time|date:'shortDate'}}</td>
-        </tr>
-      </table>
-
-      <table class="hdr-standard-table" ng-if="delays.length>0">
-        <tr class="positive-bg">
-          <td style="text-align: center">#</td>
-          <td>الحصة</td>
-          <td>التاريخ</td>
-        </tr>
-        <tr ng-repeat="abs in delays track by $index">
-          <td style="text-align: center">{{$index+1}}</td>
-          <td>{{abs.title}}</td>
-          <td>{{abs.unix_time|date:'shortDate'}}</td>
-        </tr>
-      </table>
 
       <table class="hdr-student2-tabel">
         <tr>
@@ -145,51 +219,6 @@
         </tr>
       </table>
     </div>
-    <table style="width: 100%">
-      <tr>
-        <td style="width: 80%;vertical-align: middle">
-          
-        </td>
-        <td style="vertical-align: middle" ng-show="observationUpdateMode==false">
-          <!--  <button class="button button-small" ng-click=""
-               style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">تعديل</button> -->
-        </td>
-        <td style="vertical-align: middle" ng-show="observationUpdateMode==true">
-          <button class="button button-small" ng-click="updateStudent()" style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">حفظ</button>
-        </td>
-        <td style="vertical-align: middle" ng-show="observationUpdateMode==true">
-          <button class="button button-small" ng-click="switchObservationUpateMode()" style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">إلغاء</button>
-        </td>
-      </tr>
-    </table>
-    <table class="hdr-student2-tabel">
-      <tr>
-        <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">ملاحظات</td>
-      </tr>
-      <tr>
-        <td ng-show="observationUpdateMode==false" on-tap="switchObservationUpateMode()" style="font-size: 1em;text-align: right;vertical-align: top;height: 20vmax"
-          class="lined-paper-pattern">{{student.observation}}</td>
-
-        <td ng-show="observationUpdateMode==true" style="text-align: right;vertical-align: top;height: 20vmax" class="lined-paper-pattern">
-
-          <textarea ng-model="student.observation" id="hdr-textarea-observation" style="width: 100%;font-family: hdrFont;font-size: 1em;line-height: 1.4em;background-color: transparent"
-            rows="10">
-          </textarea>
-
-        </td>
-        </td>
-      </tr>
-    </table>
-
-
-    <table class="hdr-student2-tabel">
-      <tr>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-      </tr>
-    </table>
 
 
 

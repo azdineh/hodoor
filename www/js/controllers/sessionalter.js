@@ -1,8 +1,28 @@
 angular.module('hdrApp')
-	.controller('SessionalterController', function ($scope, $filter, $timeout, $rootScope, $state, $ionicLoading, $ionicScrollDelegate, $stateParams, $ionicPopup, hdrdbx) {
+	.controller('SessionalterController', function ($scope, $filter, $timeout, hdrlocalstorage, $rootScope, $state, $ionicLoading, $ionicScrollDelegate, $stateParams, $ionicPopup) {
 
 		$scope.initialobservation = "";
-		$scope.session_view = $stateParams.session_view;
+		$scope.pageReady = false;
+		$ionicLoading.show();
+		$scope.$on('$ionicView.afterEnter', function () {
+
+			$scope.session_view = $stateParams.session_view;
+
+			$scope.session_view.absents_students.forEach(function (student, index, arr) {
+				student = hdrlocalstorage.getRecentStudent_forSessionView(student);
+				arr[index] = student;
+			})
+
+			$scope.data = {
+				isExamSession: $scope.session_view.isExamSession == 0 ? false : true
+			}
+			calculateRestOfStudents();
+
+			$scope.pageReady = true;
+			$ionicLoading.hide();
+		})
+
+
 
 		$scope.test009 = function () {
 			//alert('dfdfdf');
@@ -40,42 +60,21 @@ angular.module('hdrApp')
 					$scope.session_view = $stateParams.session_view;
 				} */
 
-				$scope.session_view.session.observation = $scope.session_view.session.observation.replace(/<br>/g, "\r");
+				//$scope.session_view.observation = $scope.session_view.observation.replace(/<br>/g, "\r");
 				$scope.sessionalterchange = 0;
 			});
 
-			/* 			$scope.initialobservation = $scope.session_view.session.observation;
-			
-			
-						$scope.hidden = true;
-						$scope.$watch('session_view.session.observation', function (newVal, oldval) {
-							if (newVal == $scope.initialobservation) {
-								$scope.hidden = true;
-							}
-							else {
-								$scope.hidden = false;
-							}
-						}); */
 
 			$scope.saveObservation = function (session, observation) {
-				var obsToDB = observation.replace(/\r/g, "\n");
-				hdrdbx.saveObservations(session.id, obsToDB)
-					.then(function (res) {
-						$scope.saved = true;
-						$scope.switchObservationUpateMode();
-					}, function (err) {
+				//var obsToDB = observation.replace(/\r/g, "\n");
 
-					})
+				session.observation = observation;
+				hdrlocalstorage.updateSession(session);
+				$timeout(function () {
+					$scope.saved = true;
+					$scope.switchObservationUpateMode();
+				}, 100)
 			}
-
-			$scope.updateSession = function (session_id) {
-				//var newTitle = $scope.hEnd + "-" + $scope.hStart;
-				var newTitle = $scope.hEnd + ":" + $scope.mEnd + "-" + $scope.hStart + ":" + $scope.mStart;
-				hdrdbx.updateSessionTitle(session_id, newTitle);
-			}
-
-
-
 
 
 
@@ -86,7 +85,7 @@ angular.module('hdrApp')
 				document.getElementById('hdr-session-alter-confirm' + id).classList.add("ng-hide");
 			}
 
-			$scope.removeStudent = function (student, session_id) {
+			$scope.removeStudent = function (student) {
 
 				/* document.getElementById('hdr-session-alter-student' + student.massar_number).classList.add("ng-hide"); */
 				document.getElementById('hdr-session-alter-confirm' + student.massar_number).classList.add("ng-hide");
@@ -94,39 +93,29 @@ angular.module('hdrApp')
 				document.getElementById('hdr-session-alter-spinner' + student.massar_number).classList.remove("ng-hide");
 
 				if (ionic.Platform.isWebView()) {
-					hdrdbx.removeStudentFromAbsenceLine(student.massar_number, session_id)
-						.then(function (count) {
+					document.getElementById('hdr-session-alter-spinner' + student.massar_number).classList.add("ng-hide");
 
-							document.getElementById('hdr-session-alter-spinner' + student.massar_number).classList.add("ng-hide");
+					var index0 = $scope.session_view.absents_students.indexOf(student);
+					//remove item from array with splice
+					$scope.session_view.absents_students.splice(index0, 1);
+					hdrlocalstorage.updateSession($scope.session_view);
 
-							var index0 = $scope.session_view.students.indexOf(student);
-							/* 						//re insert student removed from absence list to classroom.students
-													$scope.classroom.students.splice(student.queuing_number, 0, student); */
-							var newarr = [];
-							$scope.session_view.students.forEach(function (student, index) {
-								if (index != index0) {
-									newarr.push(student);
-								}
-								$scope.session_view.students = newarr;
-								calculateRestOfStudents();
-							}, this);
-						}, function (err) {
+					//remove stuent absence in student absentSessions
+					hdrlocalstorage.removeAbsentSession($scope.session_view, student);
 
-						});
+					calculateRestOfStudents();
 				}
 			}
 
-			/* 			$scope.$on('$ionicView.leave', function () {
-							$stateParams.session_view = $scope.session_view;
-						}); */
 
-			$scope.changeStudentFixProblem = function (student, session_id) {
-				hdrdbx.changeStudentFixProblem(student, session_id)
-					.then(function (count) {
-						$scope.sessionalterchange += 1;
-					}, function (err) {
 
-					});
+			$scope.changeStudentFixProblem = function (session, student) {
+
+				hdrlocalstorage.updateSession(session);
+
+				hdrlocalstorage.updateAbsentSessionInfo('is_student_fix_problem', student, session);
+
+				//$scope.sessionalterchange += 1;
 			}
 		}
 		else {
@@ -137,15 +126,12 @@ angular.module('hdrApp')
 			students.push({ id: "5", full_name: 'Omar zerouali', registration_number: '159986', massar_number: "S123ZI687", birth_date: "12/05/2000", queuing_number: '5' });
 
 			$scope.session_view = {};
-			$scope.session_view.classroom_title = "TCS-8";
-			$scope.session_view.students = students;
-
-			var session = {};
-			session.title = "11-10";
-			session.parity = "odd";
-			session.unix_time = "15478421547";
-
-			$scope.session_view.session = session;
+			$scope.session_view.classroom_title = "TCLH-8";
+			$scope.session_view.title = "11:30-12:30";
+			$scope.session_view.parity = "even";
+			$scope.session_view.unix_time = "15478421547";
+			$scope.session_view.isExamSession = 1;
+			$scope.session_view.absents_students = students;
 		}
 
 
@@ -171,18 +157,18 @@ angular.module('hdrApp')
 		$scope.showUpdateSessionConfirm = function () {
 
 			//session_view.session.title
-			var str = new String($scope.session_view.session.title);
+			var str = new String($scope.session_view.title);
 			// session.title like 10:30-08:30
 			var tiretIndex = str.indexOf('-');
 			var timeStart = str.substring(tiretIndex + 1, str.length);
 			var timeEnd = str.substring(0, tiretIndex);
 
-			var doublepointIndex1 = timeStart.indexOf(':')>=0?timeStart.indexOf(':'): timeStart.length ; // 08:30
+			var doublepointIndex1 = timeStart.indexOf(':') >= 0 ? timeStart.indexOf(':') : timeStart.length; // 08:30
 			$scope.hStart = parseInt(timeStart.substring(0, doublepointIndex1));
 			$scope.mStart = parseInt(timeStart.substring(doublepointIndex1 + 1, timeStart.length)) == '' ? 0 : parseInt(timeStart.substring(doublepointIndex1 + 1, timeStart.length));
 
 
-			var doublepointIndex2 = timeEnd.indexOf(':')>=0?timeEnd.indexOf(':'): timeEnd.length; // 08:30
+			var doublepointIndex2 = timeEnd.indexOf(':') >= 0 ? timeEnd.indexOf(':') : timeEnd.length; // 08:30
 			$scope.hEnd = parseInt(timeEnd.substring(0, doublepointIndex2));
 			$scope.mEnd = parseInt(timeEnd.substring(doublepointIndex2 + 1, timeEnd.length)) == '' ? 0 : parseInt(timeEnd.substring(doublepointIndex2 + 1, timeEnd.length));
 
@@ -196,49 +182,63 @@ angular.module('hdrApp')
 			});
 
 			$timeout(function () {
-				$scope.selectSessionParity($scope.session_view.session.parity);
+				$scope.selectSessionParity($scope.session_view.parity);
 			}, 570);
 
 			confirmPopup.then(function (res) {
 				if (res) {
 					console.log('You are sure');
 
-					if (!$scope.hStart) {
-						$scope.hStart = 0;
-					}
-					if (!$scope.mStart) {
-						$scope.mStart = 0;
-					}
-					if (!$scope.hEnd) {
-						$scope.hEnd = 0;
-					}
-					if (!$scope.mEnd) {
-						$scope.mEnd = 0;
-					}
+					var separa1 = ":";
+					var separa2 = ":";
 
-					$scope.session_view.session.title = $scope.hEnd + ":" + $scope.mEnd + "-" + $scope.hStart + ":" + $scope.mStart;
+					var hs, ms, he, me;
 
-					//$scope.session_view.session.title = $scope.hEnd + "-" + $scope.hStart;
+					if (!$scope.hStart || $scope.hStart == 0) {
+						hs = "24";
+					}
+					else hs = "" + $scope.hStart;
+
+					if (!$scope.mStart || $scope.mStart == 0) {
+						ms = "";
+						separa2 = "";
+					}
+					else ms = "" + $scope.mStart;
+
+					if (!$scope.hEnd || $scope.hEnd == 0) {
+						he = "24";
+					}
+					else he = "" + $scope.hEnd
+
+					if (!$scope.mEnd || $scope.mEnd == 0) {
+						me = "";
+						separa1 = "";
+					}
+					else me = "" + $scope.mEnd;
+
+					$scope.session_view.title = he + separa1 + me + "-" + hs + separa2 + ms;
+
+					//$scope.session_view.title = $scope.hEnd + "-" + $scope.hStart;
 					if (ionic.Platform.isWebView()) {
 
 						var msg = "";
 						if ($scope.userPartity == "even") {
-							if ($scope.session_view.session.parity == "all") {
-								if ($scope.session_view.students.length > 0)
+							if ($scope.session_view.parity == "all") {
+								if ($scope.session_view.absents_students.length > 0)
 									msg = "سيقوم التحول من حصة عامة إلى حصة الزوجيين بحذف التلاميذ الفرديين (إن وجدو) من لائحة المتغيبين";
 							}
-							if ($scope.session_view.session.parity == "odd") {
-								if ($scope.session_view.students.length > 0)
+							if ($scope.session_view.parity == "odd") {
+								if ($scope.session_view.absents_students.length > 0)
 									msg = "سيقوم التحول من حصة الفرديين ال حصة الزوجيين يحذف جميع التلاميذ الفرديين";
 							}
 						}
 						if ($scope.userPartity == "odd") {
-							if ($scope.session_view.session.parity == "all") {
-								if ($scope.session_view.students.length > 0)
+							if ($scope.session_view.parity == "all") {
+								if ($scope.session_view.absents_students.length > 0)
 									msg = "سيقوم التحول من حصة عامة إلى حصة الفرديين بحذف التلاميذ الزوجيين (إن وجدو) من لائحة المتغيبين";
 							}
-							if ($scope.session_view.session.parity == "even") {
-								if ($scope.session_view.students.length > 0)
+							if ($scope.session_view.parity == "even") {
+								if ($scope.session_view.absents_students.length > 0)
 									msg = "سيقوم التحول من حصة الزوجيين إلى حصة الفرديين الى حذف جميع التلاميذ الزوجيين";
 							}
 						}
@@ -247,46 +247,48 @@ angular.module('hdrApp')
 
 							var stdfunc = function () { };
 							if ($scope.userPartity == "even") {
-								//if the session become even so delete all odd absent studnets
-								stdfunc = $scope.odd;
+								stdfunc = $scope.even;
+
+								//on supprime les absentSessions de  odd student
+								var oddAbsentStudent = $scope.session_view.absents_students.filter($scope.odd);
+								oddAbsentStudent.forEach(function (student) {
+									hdrlocalstorage.removeAbsentSession($scope.session_view, student);
+								})
 
 							}
 							if ($scope.userPartity == "odd") {
-								//if the session become odd so delete all even absent studnets
-								stdfunc = $scope.even;
+								stdfunc = $scope.odd;
+
+								//on supprime les absentSessions de even student
+								var evenAbsentStudent = $scope.session_view.absents_students.filter($scope.even);
+								evenAbsentStudent.forEach(function (student) {
+									hdrlocalstorage.removeAbsentSession($scope.session_view, student);
+								})
+
 							}
 							if ($scope.userPartity == "all") {
-								//if the session become all so do nothing
 								stdfunc = function (input, index) { return false };
 							}
 
 							$ionicLoading.show({});
-							hdrdbx.updateSessionAbsentStudents($scope.session_view.session, $scope.session_view.students.filter(stdfunc))
-								.then(function (count) {
-									//update session title
-									$scope.updateSession($scope.session_view.session.id)
 
-									//update session is exame
-									var newFlag = $scope.data.isExamSession == true ? 1 : 0;
-									hdrdbx.updateSessionisExamSession($scope.session_view.session.id, newFlag);
+							if ($scope.userPartity != 'all')
+								$scope.session_view.absents_students = $scope.session_view.absents_students.filter(stdfunc);
 
+							//$scope.session_view.title = $scope.hEnd + ":" + $scope.mEnd + "-" + $scope.hStart + ":" + $scope.mStart;
+							$scope.session_view.isExamSession = $scope.data.isExamSession == true ? 1 : 0;
+							$scope.session_view.parity = $scope.userPartity;
 
-									//update sessio  parity
-									$scope.session_view.session.parity = $scope.userPartity;
-									hdrdbx.updateSessionParity($scope.session_view.session.id, $scope.userPartity);
+							hdrlocalstorage.updateSession($scope.session_view);
 
+							$scope.session_view.absents_students.forEach(function (absentstudent) {
+								hdrlocalstorage.updateAbsentSessionInfo('isExamSession', absentstudent, $scope.session_view);
+								hdrlocalstorage.updateAbsentSessionInfo('parity', absentstudent, $scope.session_view);
+								hdrlocalstorage.updateAbsentSessionInfo('title', absentstudent, $scope.session_view);
+							})
 
-									if ($scope.userPartity == "even")
-										$scope.session_view.students = $scope.session_view.students.filter($scope.even);
-									if ($scope.userPartity == "odd")
-										$scope.session_view.students = $scope.session_view.students.filter($scope.odd);
-
-									console.log("update absent student from all to even(pairs)");
-									$ionicLoading.hide({});
-								},
-								function (err) {
-									console.log(err);
-								})
+							//console.log("update absent student from all to even(pairs)");
+							$ionicLoading.hide({});
 
 						}
 						else {
@@ -367,33 +369,37 @@ angular.module('hdrApp')
 		$scope.odd = function (input, index) { return (input.queuing_number) % 2 === 1 };
 		$scope.all = function (input, index) { return true };
 
+
+
+		//restOfStudents = classroom.students - session.absents_students
 		var calculateRestOfStudents = function () {
 			if (ionic.Platform.isWebView()) {
 				$scope.restOfStudents = [];
 
-				var classroom_tmp = $filter('filter')($rootScope.classrooms_view, $scope.session_view.classroom.title)[0];
+				var classroom_tmp = $filter('filter')($rootScope.classrooms_view, $scope.session_view.classroom_title)[0];
 
 
 				var students_of_classroom = [];
 				$scope.restOfStudents = [];
 
+				//clone the array
 				students_of_classroom = students_of_classroom.concat(classroom_tmp.students);
 
-				console.log(students_of_classroom);
+				//console.log(students_of_classroom);
 
 				var i = 0;
 
-				$scope.session_view.students.forEach(function (student) {
+				$scope.session_view.absents_students.forEach(function (student) {
 					if (student.isMoved != true) {
 						students_of_classroom.splice(student.queuing_number - 1 - i, 1);
 						i += 1;
 					}
 				}, this);
 
-				if ($scope.session_view.session.parity == "even") {
+				if ($scope.session_view.parity == "even") {
 					students_of_classroom = students_of_classroom.filter($scope.even);
 				}
-				if ($scope.session_view.session.parity == "odd") {
+				if ($scope.session_view.parity == "odd") {
 					students_of_classroom = students_of_classroom.filter($scope.odd);
 				}
 
@@ -404,13 +410,13 @@ angular.module('hdrApp')
 			}
 		}
 
-		calculateRestOfStudents();
+		//calculateRestOfStudents();
 		$scope.showAddAbsentsStudentsConfirm = function () {
 
 			//students except absent students												
 			if (!ionic.Platform.isWebView()) {
-				$scope.session_view.classroom = {};
-				$scope.session_view.classroom.title = "TCS4";
+				/* 				$scope.session_view.classroom = {};
+								$scope.session_view.classroom_title = "TCS4"; */
 			}
 
 
@@ -431,18 +437,18 @@ angular.module('hdrApp')
 					if ($scope.selectedStudent.id) {
 						if (ionic.Platform.isWebView()) {
 							//add student in absence line
-							hdrdbx.saveAbsentStudents($scope.session_view.session, [$scope.selectedStudent])
-								.then(function (res) {
-									$scope.selectedStudent.isMoved = false;
-									$scope.selectedStudent.is_student_fix_problem = 0;
-									$scope.session_view.students.push($scope.selectedStudent);
-									$scope.session_view.students.sort(function (a, b) { return a.queuing_number - b.queuing_number });
-									console.log("add new absents student to the session");
-									$scope.selectedStudent = {};
-									calculateRestOfStudents();
-								}, function (err) {
-									console.log(err);
-								});
+							$scope.selectedStudent.isMoved = false;
+							$scope.selectedStudent.is_student_fix_problem = 0;
+							$scope.session_view.absents_students.push($scope.selectedStudent);
+
+							$scope.session_view.absents_students.sort(function (a, b) { return a.queuing_number - b.queuing_number });
+							console.log("add new absents student to the session");
+							
+							hdrlocalstorage.updateSession($scope.session_view);
+							hdrlocalstorage.addAbsentSessionToStudent($scope.session_view, $scope.selectedStudent);
+							
+							$scope.selectedStudent = {};
+							calculateRestOfStudents();
 						}
 
 					}
@@ -469,20 +475,20 @@ angular.module('hdrApp')
 			if (id == "all") {
 				document.getElementById("hdr-parity-odd").style.backgroundColor = "rgb(212, 223, 206)";
 				document.getElementById("hdr-parity-even").style.backgroundColor = "rgb(212, 223, 206)";
-				//$scope.session_view.session.parity = "all";
+				//$scope.session_view.parity = "all";
 				$scope.userPartity = "all";
 
 			}
 			if (id == "odd") {
 				document.getElementById("hdr-parity-all").style.backgroundColor = "rgb(212, 223, 206)";
 				document.getElementById("hdr-parity-even").style.backgroundColor = "rgb(212, 223, 206)";
-				//$scope.session_view.session.parity = "odd";
+				//$scope.session_view.parity = "odd";
 				$scope.userPartity = "odd";
 			}
 			if (id == "even") {
 				document.getElementById("hdr-parity-all").style.backgroundColor = "rgb(212, 223, 206)";
 				document.getElementById("hdr-parity-odd").style.backgroundColor = "rgb(212, 223, 206)";
-				//$scope.session_view.session.parity = "even";
+				//$scope.session_view.parity = "even";
 				$scope.userPartity = "even";
 			}
 
@@ -498,15 +504,7 @@ angular.module('hdrApp')
 
 		}
 
-		$scope.data = {
-			isExamSession: $scope.session_view.session.isExamSession == 0 ? false : true
-		}
 
-
-		$scope.updateIsExaemInSession = function () {
-
-
-		}
 
 
 		$scope.showConfirmForRemoveStudent = function (id) {

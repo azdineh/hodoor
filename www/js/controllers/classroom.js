@@ -1,26 +1,17 @@
 angular.module('hdrApp')
-	.controller('ClassroomController', function ($scope, azdutils, $rootScope, $filter, $window, $ionicPopup, $ionicScrollDelegate, $ionicModal, $stateParams, $timeout, hdrdbx) {
+	.controller('ClassroomController', function ($scope, azdutils, $rootScope, $filter, $window, $ionicPopup, $ionicScrollDelegate,
+		$ionicModal, $stateParams, $timeout, hdrlocalstorage) {
 
 
-
-		/* 		$scope.fct = function (id) {
-					var initial_bg = document.getElementById(id).style.backgroundColor;
-					
-					document.getElementById(id).style.backgroundColor = "lightgray";
-					$timeout(function () {
-						document.getElementById(id).style.backgroundColor = initial_bg;
-					}, 150);
-				} */
-
-		/* 		$scope.goToStudentView = function (student) {
-					$scope.fct(student.id);
-					$state.go('tab.student', { 'student': student, 'classroom': $scope.classroom });
-				} */
 
 		$scope.itemSelected = false;
 		$scope.isFirstStudent = false;
 		$scope.isLastStudent = false;
 		$scope.selectedStudent = {};
+
+		$scope.countStudent = 0;
+
+
 
 		$scope.isNewStudent = true;
 		$scope.changeOption = function () {
@@ -39,7 +30,8 @@ angular.module('hdrApp')
 
 
 
-			var studentIndex = $scope.classroom.students.indexOf(student);
+			//var studentIndex = $scope.classroom.students.indexOf(student);
+			var studentIndex = student.queuing_number - 1;
 			if (studentIndex == 0) {
 				$scope.isFirstStudent = true;
 			} else {
@@ -106,22 +98,11 @@ angular.module('hdrApp')
 			document.getElementById('hdr-student-item' + student.id).classList.add("ng-hide");
 			$scope.itemSelected = false;
 			var studentIndex = $scope.classroom.students.indexOf(student);
-			//remove student from students array
-			$scope.classroom.students.splice(studentIndex, 1);
-			for (var index = 0; index < $scope.classroom.students.length; index++) {
-				$scope.classroom.students[index].queuing_number = index + 1;
 
-			}
-			//update students in localstorage
-			var classroomIndex = $rootScope.classrooms_view.indexOf($scope.classroom);
-			$rootScope.classrooms_view[classroomIndex] = $scope.classroom
-			$window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
+			$scope.countStudent--;
+			$scope.header_title = "<span>قسم</span> : " + "<span>" + $scope.classroom.title + "</span>" + " <sub>" + $scope.countStudent + "</sub>";
 
-			//update students in db
-			hdrdbx.removeStudentFromClassroom(student, $scope.classroom)
-				.then(function () {
-					$rootScope.isDBchanged = true;
-				})
+			hdrlocalstorage.removeStudent($scope.classroom.students[studentIndex]);
 
 		}
 
@@ -129,84 +110,66 @@ angular.module('hdrApp')
 
 		$scope.upStudentinList = function (student) {
 
-			var studentIndex = $scope.classroom.students.indexOf(student);
+			var studentBefore = $scope.classroom.students[$scope.classroom.students.indexOf(student) - 1];
 
-			var studentBefore = $scope.classroom.students[studentIndex - 1];
-			$scope.classroom.students[studentIndex - 1] = $scope.classroom.students[studentIndex];
-			$scope.classroom.students[studentIndex] = studentBefore;
+			var currentStudentIndex = $scope.classroom.students.indexOf(student);
 
-			$scope.classroom.students[studentIndex].queuing_number += 1;
-			$scope.classroom.students[studentIndex - 1].queuing_number -= 1;
+			student.queuing_number--;
+			$scope.classroom.students[currentStudentIndex - 1] = student;
+			hdrlocalstorage.updateStudent(student);
+
+			studentBefore.queuing_number++;
+			$scope.classroom.students[currentStudentIndex] = studentBefore;
+			hdrlocalstorage.updateStudent(studentBefore);
 
 
-			if (studentIndex == 1) {
+			if ($scope.index_of_selected_student == 0) {
 				$scope.isFirstStudent = true;
 			} else {
 				$scope.isFirstStudent = false;
 			}
-			if (studentIndex == $scope.classroom.students.length - 2) {
+			if ($scope.index_of_selected_student == $scope.classroom.students.length - 1) {
 				$scope.isLastStudent = true;
 			}
 			else {
 				$scope.isLastStudent = false;
 			}
-
-			if (ionic.Platform.isWebView()) {
-
-				hdrdbx.updateStudentsQNinStudentof($scope.classroom)
-					.then(function () {
-						$rootScope.isDBchanged = true;
-					})
-			}
-
-			var classroomIndex = $rootScope.classrooms_view.indexOf($scope.classroom);
-			$rootScope.classrooms_view[classroomIndex] = $scope.classroom
-			$window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
-
 
 		}
 
 		$scope.downStudentinList = function (student) {
-			var studentIndex = $scope.classroom.students.indexOf(student);
 
-			var studentAfter = $scope.classroom.students[studentIndex + 1];
-			$scope.classroom.students[studentIndex + 1] = $scope.classroom.students[studentIndex];
-			$scope.classroom.students[studentIndex] = studentAfter;
+			var studentAfter = $scope.classroom.students[$scope.classroom.students.indexOf(student) + 1];
+			var currentStudentIndex = student.queuing_number - 1;
 
-			$scope.classroom.students[studentIndex].queuing_number -= 1;
-			$scope.classroom.students[studentIndex + 1].queuing_number += 1;
+			student.queuing_number++;
+			$scope.classroom.students[currentStudentIndex + 1] = student;
+			hdrlocalstorage.updateStudent(student);
+
+			studentAfter.queuing_number--;
+			$scope.classroom.students[currentStudentIndex] = studentAfter;
+			hdrlocalstorage.updateStudent(studentAfter);
 
 
-			if (studentIndex == 0) {
+			if ($scope.index_of_selected_student == 0) {
 				$scope.isFirstStudent = true;
 			} else {
 				$scope.isFirstStudent = false;
 			}
 
-			if (studentIndex == $scope.classroom.students.length - 2) {
+			if ($scope.index_of_selected_student == $scope.classroom.students.length - 1) {
 				$scope.isLastStudent = true;
 			}
 			else {
 				$scope.isLastStudent = false;
 			}
 
-			if (studentIndex == 1) {
+			if ($scope.index_of_selected_student == 0) {
 				$scope.isFirstStudent = true;
 			} else {
 				$scope.isFirstStudent = false;
 			}
 
-			if (ionic.Platform.isWebView()) {
-
-				hdrdbx.updateStudentsQNinStudentof($scope.classroom)
-					.then(function () {
-						$rootScope.isDBchanged = true;
-					})
-			}
-
-			var classroomIndex = $rootScope.classrooms_view.indexOf($scope.classroom);
-			$rootScope.classrooms_view[classroomIndex] = $scope.classroom
-			$window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
 
 		}
 
@@ -247,63 +210,40 @@ angular.module('hdrApp')
 			//new student
 			if (revenantStudentFlag == false) {
 				var student = {
-					id: null,
+					id: Date.now(),  //use like a unique number
 					full_name: $scope.student.full_name,
 					registration_number: "",
-					massar_number: '',
+					massar_number: 0,
 					birth_date: toMassarFormat($scope.student.birth_date),
-					queuing_number: $scope.classroom.students.length + 1,
+					queuing_number: $scope.classroom.students.length,
 					observation: $scope.student.observation,
 					isBarred: 0,
-					id_classroom: $scope.classroom.id
+					id_classroom: $scope.classroom.title
 				};
+				student.massar_number = student.id; // id and massar_number are the same
 
 
 				if (student.full_name.length > 3) {
 					//if full_name contain more thant 3 caracters
 
-					if (ionic.Platform.isWebView()) {
 
+					hdrlocalstorage.addStudent(student, $scope.classroom.students.length);
 
-						console.log(student);
+					$scope.countStudent++;
+					$scope.header_title = "<span>قسم</span> : " + "<span>" + $scope.classroom.title + "</span>" + " <sub>" + $scope.countStudent + "</sub>";
+					$timeout(function () {
+						alert("تمت إضافة التلميذ بنجاح.");
 
-						hdrdbx.insertRow('student', student)
-							.then(function (insertedStudent) {
-								var newStudent = insertedStudent;
-								newStudent.massar_number = insertedStudent.id;
+						$scope.closeModal();
+						document.getElementById("hdr-add-student-name").value = "";
 
-								console.log("new Student");
-								console.log(newStudent);
+						$ionicScrollDelegate.scrollBottom(true);
 
-								hdrdbx.updateStudent(insertedStudent, newStudent)
-									.then(function () {
-										alert("تمت إضافة التلميذ بنجاح.");
-										$rootScope.isDBchanged = true;
-										//push newStudent to $scope.classroom.students
-										$scope.classroom.students.push(newStudent);
+						$timeout(function () {
+							$scope.selectElement(student);
+						}, 250);
+					}, 50)
 
-										var classroomIndex = $rootScope.classrooms_view.indexOf($scope.classroom);
-										$rootScope.classrooms_view[classroomIndex] = $scope.classroom
-										$window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
-
-										//update queuing_number in absenceline table by the new value
-										//hdrdbx.updateAbsenceLine("queuing_number", insertedStudent.queuing_number, " massar_number ='" + student.massar_number + "'");
-
-										$scope.closeModal();
-										document.getElementById("hdr-add-student-name").value = "";
-
-										$ionicScrollDelegate.scrollBottom(true);
-
-										$timeout(function () {
-											$scope.selectElement(insertedStudent);
-										}, 250);
-
-									}, function (err) {
-										console.log(err);
-									});
-							}, function (err) { });
-
-					}
 
 				}
 				else {
@@ -313,29 +253,25 @@ angular.module('hdrApp')
 			// student revenant
 			else {
 				var revenantStudent = $scope.selectedStudent;
-				revenantStudent.id_classroom = $scope.classroom.id;
-				revenantStudent.queuing_number = parseInt($scope.classroom.students.length + 1);
-				hdrdbx.updateStudent($scope.selectedStudent, revenantStudent)
-					.then(function (count) {
+				revenantStudent.id_classroom = $scope.classroom.title;
+				revenantStudent.queuing_number = $scope.classroom.students.length;
+				//revenantStudent.birth_date="2000-01-01";
 
-						$rootScope.isDBchanged=true;
-						$scope.classroom.students.push(revenantStudent);
-						var classroomIndex = $rootScope.classrooms_view.indexOf($scope.classroom);
-						$rootScope.classrooms_view[classroomIndex] = $scope.classroom
-						$window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
+				//insert new student in the last
 
-						$scope.closeModal();
-						$ionicScrollDelegate.scrollBottom(true);
+				hdrlocalstorage.addStudent(revenantStudent, $scope.classroom.students.length);
 
-						$timeout(function () {
-							$scope.selectElement(revenantStudent);
-						}, 250);
+				$scope.closeModal();
 
-						console.log("student has been updated succefully..")
-					}, function (err) {
-						console.log("Error while updating student")
-						console.log(err);
-					});
+				$ionicScrollDelegate.scrollBottom(true);
+
+				$timeout(function () {
+					$scope.selectElement(revenantStudent);
+				}, 250);
+
+
+
+
 			}
 		}
 
@@ -349,16 +285,7 @@ angular.module('hdrApp')
 
 		$scope.openModal = function () {
 			$scope.modal.show();
-
-
-			hdrdbx.selectRows('student', 'id_classroom is null')
-				.then(function (students) {
-					console.log("Removed students :");
-					console.log(students);
-					$scope.removedStudents = students;
-				}, function (err) {
-					console.log(err);
-				});
+			$scope.removedStudents = hdrlocalstorage.removed_students;
 
 			$scope.selectElement($scope.selectedStudent);
 		};
@@ -392,27 +319,27 @@ angular.module('hdrApp')
 
 
 
+
+
 		if (ionic.Platform.isWebView()) {
-			$scope.classroom = $filter('filter')($rootScope.classrooms_view, $stateParams.classroom_title)[0];
-
-			hdrdbx.getStudentsAbsencesCount($scope.classroom.title)
-				.then(function (arr) {
-					console.log(arr);
-					for (var i = 0; i < arr.length; i++) {
-						$scope.classroom.students[arr[i].queuing_number - 1].times = new Array(arr[i].absences_count);
-					}
-
-
-				}, function (err) {
-					console.log(err);
-				});
-
+			$scope.classroom = hdrlocalstorage.getStudentClassroom({ id_classroom: $stateParams.classroom_title });
+			//$scope.classroom = $filter('filter')($rootScope.classrooms_view, $stateParams.classroom_title)[0];
+			$scope.countStudent = $scope.classroom.students.length;
+			$scope.header_title = "<span>قسم</span> : " + "<span>" + $scope.classroom.title + "</span>" + " <sub>" + $scope.countStudent + "</sub>";
 
 		}
 		else {
 			//console.log(" controller  " + $scope.classroom.title);
+			$scope.classroom = {
+				id: "1",
+				color: "",
+				title: "TCS4",
+				level: "جذع مشترك علمي",
+				students: [{ id: '1', full_name: "عمر فيلالي", queuing_number: "10" }, { id: '2', full_name: "كريم زرهوني", queuing_number: "12" }, { id: '3', full_name: "سفياني بدر", queuing_number: "22" }]
+			}
 
-			$scope.classroom = $filter('filter')($rootScope.classrooms_view, $stateParams.classroom_title)[0];
+			$scope.header_title = "<span>قسم</span> : " + "<span>" + $scope.classroom.title + "</span>" + " <sub>" + $scope.classroom.students.length + "</sub>";
+
 			$scope.removedStudents = $scope.classroom.students;
 		}
 	})

@@ -1,32 +1,11 @@
 angular.module('hdrApp')
-    .controller('SearchController', function ($scope, $rootScope, hdrdbx, $ionicScrollDelegate, $window, $filter) {
+    .controller('SearchController', function ($scope,hdrlocalstorage,azdutils,$rootScope, $ionicScrollDelegate, $window, $filter) {
 
-        $rootScope.students_view = [1];
+        $scope.allStudents = [];
 
         $scope.$on('$ionicView.beforeEnter', function () {
-
-            /*           $rootScope.classrooms_view = $rootScope.classrooms_view ? $rootScope.classrooms_view :
-                      $window.localStorage['hdr.classrooms_view'] ? angular.fromJson($window.localStorage['hdr.classrooms_view']) : []; */
-
-
-
-
-            if ($window.localStorage["hdr.classrooms_view"]) {
-                $rootScope.students_view = [1];
-                hdrdbx.getStudentsAbsencesCount("")
-                    .then(function (arr) {
-                        $rootScope.students_view = arr;
-                        for (var i = 0; i < arr.length; i++) {
-                            $rootScope.students_view = arr;
-                        }
-                    }, function (err) {
-                        console.log(err)
-                    })
-            } else {
-                $scope.clearText();
-                $rootScope.students_view = [];
-            }
-
+            $scope.allStudents=azdutils.mergeAllStudentInOneArray($rootScope.classrooms_view)
+            //console.log($scope.allStudents);
         })
 
         $scope.foundStudents = [];
@@ -49,7 +28,7 @@ angular.module('hdrApp')
 
             if (textToSearch.length > startIndex)
                 /*  $scope.foundStudents = $filter('filter')($rootScope.students_view, { full_name: textToSearch }); */
-                $scope.foundStudents = $filter('filter')($rootScope.students_view, $scope.search);
+                $scope.foundStudents = $filter('filter')($scope.allStudents, $scope.search);
             else
                 $scope.foundStudents = [];
         }

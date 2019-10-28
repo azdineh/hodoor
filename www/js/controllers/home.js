@@ -1,15 +1,15 @@
 angular.module('hdrApp')
-    .controller('HomeController', function ($scope, $http, $state, $rootScope, $location,
+    .controller('HomeController', function ($scope, $http, hdrlocalstorage, $state, $rootScope, $location,
         $timeout, $ionicScrollDelegate, $window, hdrFileSystem,
         $ionicPlatform, hdrdbx) {
 
         $scope.page = "home";
 
-        /*       $rootScope.deviceWidth = $window.innerWidth;
-                $rootScope.deviceHeight = $window.innerHeight; */
+        hdrlocalstorage.init();
 
-        $rootScope.classrooms_view = $window.localStorage['hdr.classrooms_view'] ? angular.fromJson($window.localStorage['hdr.classrooms_view']) : [];
-        $rootScope.students_count_global = $window.localStorage['hdr.students_count_global'] ? angular.fromJson($window.localStorage['hdr.students_count_global']) : 0;
+
+
+
 
         //$rootScope.currentVersionCode = $window.localStorage['hdr.currentVersionCode'] ? angular.fromJson($window.localStorage['hdr.currentVersionCode']) : 0;
         $rootScope.daies = [];
@@ -132,6 +132,16 @@ angular.module('hdrApp')
 
         }
         else {// browser 
+
+
+            $scope.colors = randomColor({
+                count: 10,
+                luminosity: "bright",
+                format: 'rgba',
+                alpha: 0.9
+            });
+
+
             console.log(ionic.Platform.version());
             $scope.isthereAreAbsent = true;
             $scope.isthereNewVersion = true;
@@ -217,13 +227,13 @@ angular.module('hdrFilters', [])
         };
 
         return function (input) {
-            if (input)
+            if (input && input!="")
                 return calculateAge(input);
             else
                 return "العمر غير متوفر"
         };
 
-
+ 
     })
     .filter('hdrFullDate', function (azdutils, $filter) {
         return function (input) {
@@ -249,11 +259,11 @@ angular.module('hdrFilters', [])
         return function (input) {
 
             var str = new String(input);
-            if (str.length > 5) {
+            if (str.length > 5 && str.length <= 10) {
                 return input
             }
             else
-                return "رقم مسار غير متوفر"
+                return "--"
         }
     })
     .filter('hdrparity', function () {

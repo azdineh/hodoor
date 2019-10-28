@@ -1,14 +1,54 @@
 
 angular.module('hdrApp')
-    .controller('SessionshistoryController', function ($scope, $rootScope, hdrdbx, $ionicLoading, $timeout, $window, $ionicScrollDelegate, $state, $ionicPopup) {
+    .controller('SessionshistoryController', function ($scope, $rootScope, hdrlocalstorage, $filter, $timeout, $interval,
+        $ionicScrollDelegate, $state, $ionicPopup) {
 
         //$state.go($state.current, $stateParams, {reload: true, inherit: false});
         //$watch
 
-        //$rootScope.daies = [];
+        $rootScope.sessions_view = [];
 
-        $rootScope.isDBchanged = true;
-        $rootScope.lastday = true;
+        var sesseions_view_initial = hdrlocalstorage.sessions.slice();
+        //copy drlocalstorage.session array
+        //sesseions_view_initial = hdrlocalstorage.sessions.slice();
+
+        $scope.settings = {
+            classroomsfilteredBy: 'all', //'TCS-3 ...
+            sessionsfiltredBy: 'all' //examOnly
+        };
+
+        $scope.$watch('settings', function (newSettings, oldSettings) {
+
+            if ((newSettings.classroomsfilteredBy != oldSettings.classroomsfilteredBy) || newSettings.sessionsfiltredBy != oldSettings.sessionsfiltredBy) {
+                $rootScope.sessions_view = [];
+
+
+                $ionicScrollDelegate.scrollTop(true);
+                //switch sessions array in hdrlocalstorage
+                if (newSettings.classroomsfilteredBy != "all") {
+
+                    sesseions_view_initial = $filter('filter')(hdrlocalstorage.sessions, { classroom_title: newSettings.classroomsfilteredBy });
+                    //console.log('sessions array length: ' + sesseions_view_initial.length);
+                }
+                else {
+
+                    //copy hdrlocalstorage.sessions array
+                    sesseions_view_initial = hdrlocalstorage.sessions.slice();
+                }
+
+                if (newSettings.sessionsfiltredBy != 'all') {
+                    sesseions_view_initial = $filter('filter')(sesseions_view_initial, { isExamSession: newSettings.sessionsfiltredBy });
+                }
+                else {
+                }
+
+
+                firstShow();
+            }
+
+            console.log("Current settings : " + newSettings.classroomsfilteredBy + " et " + newSettings.sessionsfiltredBy);
+
+        }, true);
 
         var deselectAll = function () {
             var hdr_cards = document.getElementsByClassName("card hdr-card");
@@ -25,235 +65,155 @@ angular.module('hdrApp')
             }
         }
 
+        $scope.list_iterator = 0;
+        // apres la 1ere consultation
+        $scope.getMore = function () {
+            //var j;
 
-        $scope.$on('$ionicView.enter', function () {
-            //$scope.isDBchanged = $window.localStorage('hdr.isDBchanged') ? angular.fromJson($window.localStorage('hdr.isDBchanged')) : false;
+            var promise = $interval(function () {
+                if ($scope.list_iterator > sesseions_view_initial.length - 1) {
+                    $interval.cancel(promise);
 
+                }
+                else {
 
-            if (ionic.Platform.isWebView()) {
+                    var sessioni = sesseions_view_initial[$scope.list_iterator];
+                    sessioni.absents_students.forEach(function (student, index, arr) {
+                        student = hdrlocalstorage.getRecentStudent_forSessionView(student);
+                        arr[index] = student;
+                    })
 
-                if ($rootScope.isDBchanged == true) {
-                    deselectAll();
-                    $scope.selectSessionsHistory(0);
-                    $rootScope.isDBchanged = false;
+                    $rootScope.sessions_view.push(sessioni);
+                    $scope.list_iterator++;
                 }
 
-            } else {
+                $ionicScrollDelegate.scrollBottom(true);
+
+            }, 310, 3);
 
 
+            /*             $timeout(function () {
+                            var currentPos = $ionicScrollDelegate.getScrollPosition();
+                            var currTop = currentPos.top;
+                            $ionicScrollDelegate.scrollTo(currentPos.left, currTop + 200, true);
+                            console.log("move it...");
+                            //$ionicScrollDelegate.resize();
+            
+                        }, 200); */
 
-                $rootScope.daies = [
-                    {
-                        date: '1254876321545454',
-                        sessions_view: [
-                            {
-                                session: {
-                                    id: '1',
-                                    unix_time: '9876543210',
-                                    title: '10-11',
-                                    students_count: 50,
-                                    parity: 'odd',
-                                    isExamSession: 1,
-                                    observation: "حصة امتحان<br/>kjkljkljl <br/>:;j;,kljkl"
+        }
 
-                                },
-                                classroom: {
-                                    title: 'TCS-3'
-                                },
-                                students: [
-                                    {
-                                        full_name: 'الرياحي منير',
-                                        queuing_number: '15',
-                                        is_student_fix_problem: 0
-                                    },
-                                    {
-                                        full_name: 'كوثر قيلالي',
-                                        queuing_number: '19',
-                                        is_student_fix_problem: 1
-                                    },
-                                    {
-                                        full_name: 'كمال مضعيف',
-                                        queuing_number: '33',
-                                        is_student_fix_problem: 0
-                                    },
-                                    {
-                                        full_name: 'كمال مضعيف',
-                                        queuing_number: '33',
-                                        is_student_fix_problem: 0
-                                    },
-                                    {
-                                        full_name: 'كمال مضعيف',
-                                        queuing_number: '33',
-                                        is_student_fix_problem: 0
-                                    },
-                                    {
-                                        full_name: 'كمال مضعيف',
-                                        queuing_number: '33',
-                                        is_student_fix_problem: 0
-                                    },
-                                    {
-                                        full_name: 'كمال مضعيف',
-                                        queuing_number: '33',
-                                        is_student_fix_problem: 1
-                                    },
-                                    {
-                                        full_name: 'كمال مضعيف',
-                                        queuing_number: '33',
-                                        is_student_fix_problem: 0
-                                    },
-                                    {
-                                        full_name: 'كمال مضعيف',
-                                        queuing_number: '33',
-                                        is_student_fix_problem: 0
-                                    },
-                                    {
-                                        full_name: 'كمال مضعيف',
-                                        queuing_number: '33',
-                                        is_student_fix_problem: 1
-                                    }
-                                ]
-                            },
-                            {
-                                session: {
-                                    id: '2',
-                                    unix_time: '9876543210',
-                                    title: '10-11',
-                                    students_count: 50,
-                                    parity: 'even',
-                                    isExamSession: 0,
-                                    observation: "حصة امتحان"
+        $scope.refresh = function () {
+            $ionicScrollDelegate.scrollTop(true);
+            $rootScope.sessions_view = [];            
+            $scope.settings.classroomsfilteredBy = "all";
+            $scope.settings.sessionsfiltredBy = "all";
+            sesseions_view_initial = hdrlocalstorage.sessions.slice();
+            firstShow();
+        }
 
-                                },
-                                classroom: {
-                                    title: 'TCS-2'
-                                },
-                                students: [
-                                    {
-                                        full_name: 'الرياحي منير',
-                                        queuing_number: '15'
-                                    },
-                                    {
-                                        full_name: 'كوثر الغيابة',
-                                        queuing_number: '19'
-                                    },
-                                    {
-                                        full_name: 'كمال الأجسام',
-                                        queuing_number: '33'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                    ,
-                    {
-                        date: '125487878845454',
-                        sessions_view: [
-                            {
-                                session: {
-                                    id: '3',
-                                    unix_time: '9876543210',
-                                    title: '10-11',
-                                    students_count: 50,
-                                    parity: 'all',
-                                    isExamSession: 0,
-                                    observation: "حصة امتحان"
+        var firstShow = function () {
 
-                                },
-                                classroom: {
-                                    title: 'TCS-5'
-                                },
-                                students: [
-                                    {
-                                        full_name: 'الرياحي منير',
-                                        queuing_number: '15'
-                                    },
-                                    {
-                                        full_name: 'كوثر الغيابة',
-                                        queuing_number: '19'
-                                    },
-                                    {
-                                        full_name: 'كمال الأجسام',
-                                        queuing_number: '33'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
+            $scope.sessions_initial_count = sesseions_view_initial.length;
+            $scope.list_iterator = 0;
 
-                ];
+            if ($rootScope.sessions_view.length == 0) {
+                if (sesseions_view_initial.length > 0) {
+
+                    var session0 = sesseions_view_initial[$scope.list_iterator];
+                    session0.absents_students.forEach(function (student, index, arr) {
+                        student = hdrlocalstorage.getRecentStudent_forSessionView(student);
+                        arr[index] = student;
+                    })
+
+                    $rootScope.sessions_view.push(session0);
+                    $scope.list_iterator++;
+
+                    var promise = $interval(function () {
+
+                        if ($scope.list_iterator > sesseions_view_initial.length - 1) {
+                            $interval.cancel(promise);
+                        }
+                        else {
+                            var sessioni = sesseions_view_initial[$scope.list_iterator];
+                            sessioni.absents_students.forEach(function (student, index, arr) {
+                                student = hdrlocalstorage.getRecentStudent_forSessionView(student);
+                                arr[index] = student;
+                            })
+
+                            $rootScope.sessions_view.push(sessioni);
+                            $scope.list_iterator++;
+                        }
+                    }, 380, 2);
+                }
 
             }
-        });
-
-
-
-
-        $scope.selectSessionsHistory = function (offset) {
-
-            if ($rootScope.classrooms_view.length > 0)
-                $ionicLoading.show({});
-
-            var subquery = "select date(substr(unix_time,1,length(unix_time)-3), 'unixepoch') as sdate from session group by sdate order by sdate desc limit 3 offset " + offset;
-
-            hdrdbx.selectRows('session', "date(substr(unix_time,1,length(unix_time)-3), 'unixepoch') in ( " + subquery + " ) order by unix_time desc")
-                .then(function (sessions_arr) {
-
-                    if (sessions_arr.length == 0) {
-                        $timeout(function () {
-                            //$scope.spinnershown = false;
-                            $ionicLoading.hide({});
-                            $rootScope.daies = [];
-                        }, 50);
-                    }
-
-                    hdrdbx.daies_arr = [];
-                    //var start_index = hdrdbx.sessions_view_obj_arr.length > 0 ? hdrdbx.sessions_view_obj_arr.length - 1 : 0;
-                    hdrdbx.selectSessionsView2(sessions_arr, 0, sessions_arr.length,
-                        function () {
-
-                            $timeout(function () {
-                                //$scope.spinnershown = false;
-                                $ionicLoading.hide({});
-
-                                if (offset == 0)
-                                    $rootScope.daies = hdrdbx.daies_arr;
-                                else {
-                                    $rootScope.daies = $rootScope.daies.concat(hdrdbx.daies_arr);
-
-                                    $ionicScrollDelegate.resize();
-                                }
-
-                                hdrdbx.selectDaies()
-                                    .then(function (daies) {
-                                        if (daies.length == $rootScope.daies.length) {
-                                            $rootScope.lastday = true;
-                                        }
-                                        else {
-                                            $rootScope.lastday = false;
-                                        }
-
-                                    }, function (err) {
-                                        console.log(err);
-                                    })
-
-                            }, 10);
-
-
-
-                        });
-                }, function (err) {
-                    console.log(err);
-                })
         }
 
-        $scope.more = function () {
+        if (ionic.Platform.isWebView()) {
+            // pour afficher les sesions de maniere progressive..
 
-            $scope.offsetStep += 3;
-            $scope.selectSessionsHistory($scope.offsetStep);
+            //premiere affichage..
+            firstShow();
 
 
+            $scope.$on('$ionicView.enter', function () {
+                $timeout(function () {
+                    deselectAll();
+                }, 200)
+            })
+
+
+
+            //browsre platform
+        } else {
+
+            $rootScope.classrooms_view = [
+                { title: "TCS-3" },
+                { title: "TCS-2" },
+                { title: "TCSHL-7" }
+            ]
+            $rootScope.sessions_view = [
+                {
+                    id: 1,
+                    classroom_title: "TCS-2",
+                    unix_time: 1569149296002,
+                    title: "14-18",
+                    absents_students: [{ id: '1', full_name: "عمر فيلالي", queuing_number: "10" }, { id: '2', full_name: "كريم زرهوني", queuing_number: "12" }, { id: '3', full_name: "سفياني بدر", queuing_number: "22" }],
+                    parity: "all",
+                    students_count: 32,
+                    isExamSession: 0,
+                    observation: "سشي شسي محجمق فقخحلنتبي سنسيتبنسيعي ينبتي نيتبهيتب ثهعبيو نتيبمهيب نيتب"
+
+                },
+                {
+                    id: 2,
+                    classroom_title: "TCS-9",
+                    unix_time: 1569149296002,
+                    title: "08-09",
+                    absents_students: [{ id: '3', full_name: "سفياني بدر", queuing_number: "22" }],
+                    parity: "odd",
+                    students_count: 22,
+                    isExamSession: 1,
+                    observation: "انقطاع خارجي للكهرباء.."
+
+                },
+                {
+                    id: 3,
+                    classroom_title: "TCL-5",
+                    unix_time: 1569559398002,
+                    title: "08-09",
+                    absents_students: [],
+                    parity: "odd",
+                    students_count: 22,
+                    isExamSession: 1,
+                    observation: ""
+
+                }
+            ]
 
         }
+
 
         $scope.offsetStep = 0;
 
@@ -265,7 +225,7 @@ angular.module('hdrApp')
         $scope.sessionsSelected = [];
         $scope.selectElement = function (session_view) {
 
-            var elem = document.getElementById('hdr-session-card' + session_view.session.id);
+            var elem = document.getElementById('hdr-session-card' + session_view.id);
 
             if (elem.classList.contains('hdr-card-session')) {
                 elem.classList.remove("hdr-card-session");
@@ -278,40 +238,38 @@ angular.module('hdrApp')
             }
         }
 
-        /*         $scope.removeSession = function (session) {
-        
-                    hdrdbx.removeSession(session.id)
-                        .then(function (res) {
-                            $state.go('tab.sessionshistory');
-                        }, function (err) {
-        
-                        })
-                } */
-
-
-
-
-
 
         $scope.removeSeveralSessions = function (arr_of_session_view) {
 
-            hdrdbx.removeSeveralSessions(arr_of_session_view)
-                .then(function (res) {
-                    $rootScope.isDBchanged = true;
+            arr_of_session_view.forEach(function (session) {
 
-                    /*                     $scope.sessionsSelected.forEach(function (element) {
-                                            var elm = document.getElementById('hdr-session-card' + element.session.id);
-                                            elm.classList.remove("hdr-card-session");
-                    
-                                        }, this); */
+                var ind = $rootScope.sessions_view.findIndex(function (item) {
+                    return item.id == session.id
+                })
+
+                /*                 console.log("sesseions view selected :");
+                                console.log(arr_of_session_view);
+                                console.log("index :", ind); */
+
+                if (ind >= 0) {
 
                     deselectAll();
 
+                    $rootScope.sessions_view.splice(ind, 1);
+                    sesseions_view_initial.splice(ind, 1);
+                    $scope.sessions_initial_count--;
 
-                    $state.go($state.current, {}, { reload: true });
-                }, function (err) {
+                    hdrlocalstorage.removeSession(session);
+                    $scope.list_iterator--;
+                    $ionicScrollDelegate.scrollBottom(true);
+                    if ($rootScope.sessions_view.length == 0)
+                        if (sesseions_view_initial.length > 0) $scope.getMore();
+                }
 
-                })
+            });
+
+
+            //$state.go($state.current, {}, { reload: true });
         }
 
 

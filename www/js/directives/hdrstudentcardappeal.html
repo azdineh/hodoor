@@ -81,7 +81,8 @@
               <div class="hdr-main-text positive">{{student.full_name}}</div>
               <div class="hdr-sub-text">
                 <i class="ion-android-bookmark"></i>
-                <span ng-if="student.birth_date">{{student.birth_date|hdrage}}</span>
+                <span ng-if="student.birth_date!=''">{{student.birth_date|hdrage}}</span>
+                <span ng-if="student.birth_date==''">{{student.birth_date|hdrFullDate}}</span>
                 <!-- <span ng-if="!student.birth_date"> 16 عام و نصف</span> -->
               </div>
 
@@ -92,7 +93,7 @@
             <div id="hdr-absent-symbol">
               <!-- <div class="hdr-absent-symbol-item" ng-repeat="t in student.times track by $index"></div> -->
 
-              <div ng-repeat="absenceline in student_absences" class="hdr_sessionalter_fix{{absenceline.is_student_fix_problem}}"></div>
+              <div ng-repeat="absentsession in student.absentSessions" class="hdr_sessionalter_fix{{absentsession.is_student_fix_problem}}"></div>
 
               <div class="hdr_sessionalter_fix0" ng-show="tapped"></div>
 

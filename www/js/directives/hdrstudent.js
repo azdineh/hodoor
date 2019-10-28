@@ -1,5 +1,5 @@
 angular.module('hdrApp')
-	.directive('hdrStudent', function (hdrdbx, $timeout, $state) {
+	.directive('hdrStudent', function ($timeout, $state, hdrlocalstorage) {
 
 
 		return {
@@ -11,7 +11,6 @@ angular.module('hdrApp')
 				$scope.showmore = true;
 				$scope.shomeqn = true;
 				//	$scope.mode = "simple";
-				$scope.student_absences = [];
 
 
 				//in the scope, there is stduent object that present student in the absenceline
@@ -19,24 +18,26 @@ angular.module('hdrApp')
 
 				if (ionic.Platform.isWebView()) {
 
+					//get the last image of student from classrooms[i].studends[j]
+					/* if ($state.current.name == "tab.sessionshistory" || $state.current.name == "tab.sessionalter") {
 
-					if ($state.current.name == "tab.sessionshistory" || $state.current.name == "tab.sessionalter") {
+
+						var ind_student = hdrlocalstorage.findIndexOf('students', $scope.student);
+						var ind_classroom = hdrlocalstorage.findIndexOf('classrooms', { id: $scope.student.id_classroom });
+
+						var current_is_fix_problem =angular.copy($scope.student.is_student_fix_problem);
+
+						$scope.student = hdrlocalstorage.classrooms[ind_classroom].students[ind_student];
+
+						$scope.student.is_student_fix_problem = current_is_fix_problem;
+						console.log($scope.student);
 						//console.log("current state :" + $state.current.name);
 
 					}
 					else {
 
 
-						hdrdbx.selectStudentAbsences($scope.student.massar_number)
-							.then(function (arr) {
-								$scope.student_absences = arr;
-
-
-							}, function (err) {
-								console.log('Error while getting student absences');
-								console.log(err);
-							});
-					}
+					} */
 
 
 
@@ -61,23 +62,13 @@ angular.module('hdrApp')
 			link: function (scope, element, attrs) {
 
 
-				scope.$watch("sessionalterchange", function (newValue, oldValue) {
+				/* scope.$watch("sessionalterchange", function (newValue, oldValue) {
 					//This gets called when data changes.
 					if (ionic.Platform.isWebView()) {
 
 						if ($state.current.name == "tab.sessionshistory") {
 
 						} else {
-
-
-							hdrdbx.selectStudentAbsences(scope.student.massar_number)
-								.then(function (arr) {
-									scope.student_absences = arr;
-
-								}, function (err) {
-									console.log('Error while getting student absences');
-									console.log(err);
-								});
 						}
 
 					} else {
@@ -89,7 +80,7 @@ angular.module('hdrApp')
 						];
 
 					}
-				});
+				}); */
 			}
 		};
 	})

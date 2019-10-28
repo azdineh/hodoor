@@ -20,74 +20,80 @@
 
 <div style="background-color: rgb(242, 242, 242);padding: 5px;">
 
-<div class="appeal-abstent-student" style="padding: 8px;padding-top: 0px">
-	<div ng-show="choiceIndexOfFastCase==-1">
-		<span ng-repeat="student in absentStudents|orderBy:'queuing_number'" ng-show="absentStudents.length>0 && classroom.students.length>absentStudents.length">
-			<b>{{student.queuing_number | hdrnumber}}</b>
-			<i ng-show="!$last">, </i>
-			<i ng-show="$last">.</i>
-		</span>
-		<span ng-show="0==absentStudents.length" style="float: right">حضر جميع التلاميذ</span>
-		<span ng-show="classroom.students.length==absentStudents.length" style="float: right">تغيب جميع التلاميذ</span>
+	<div class="appeal-abstent-student" style="padding: 8px;padding-top: 0px">
+		<div ng-show="choiceIndexOfFastCase==-1">
+			<span ng-repeat="student in absentStudents|orderBy:'queuing_number'"
+				ng-show="absentStudents.length>0 && classroom.students.length>absentStudents.length">
+				<b>{{student.queuing_number | hdrnumber}}</b>
+				<i ng-show="!$last">, </i>
+				<i ng-show="$last">.</i>
+			</span>
+			<span ng-show="0==absentStudents.length" style="float: right">حضر جميع التلاميذ</span>
+			<span ng-show="classroom.students.length==absentStudents.length" style="float: right">تغيب جميع
+				التلاميذ</span>
 
+		</div>
+		<span ng-show="choiceIndexOfFastCase==0" style="float: right">حضر جميع التلاميذ</span>
+		<!-- 	<span ng-show="choiceIndexOfFastCase==1" style="float: right">أدخل أرقام التلاميذ الذين تغيبوا</span> -->
+		<span ng-show="choiceIndexOfFastCase==1" style="float: right">تغيب جميع التلاميذ</span>
+		<!-- 	<span ng-show="choiceIndexOfFastCase==3" style="float: right">أدخل أرقام التلاميذ الذين حضروا</span> -->
 	</div>
-	<span ng-show="choiceIndexOfFastCase==0" style="float: right">حضر جميع التلاميذ</span>
-	<!-- 	<span ng-show="choiceIndexOfFastCase==1" style="float: right">أدخل أرقام التلاميذ الذين تغيبوا</span> -->
-	<span ng-show="choiceIndexOfFastCase==1" style="float: right">تغيب جميع التلاميذ</span>
-	<!-- 	<span ng-show="choiceIndexOfFastCase==3" style="float: right">أدخل أرقام التلاميذ الذين حضروا</span> -->
-</div>
-<div dir="rtl" ng-show="choiceIndexOfFastCase==0 || choiceIndexOfFastCase==1">
-	<div class="hdr-second-txt">حصة تتعلق ب: ؟</div>
-	<div class="hdr-parity-classroom">
-		<table>
+	<div dir="rtl" ng-show="choiceIndexOfFastCase==0 || choiceIndexOfFastCase==1">
+		<div class="hdr-second-txt">حصة تتعلق ب: ؟</div>
+		<div class="hdr-parity-classroom">
+			<table>
+				<tr>
+					<td on-tap="selectSessionParity('all')" id="hdr-parity-all">جميع</td>
+					<td on-tap="selectSessionParity('odd')" id="hdr-parity-odd">فرديين</td>
+					<td on-tap="selectSessionParity('even')" style="font-size: 16px" id="hdr-parity-even">زوجيين</td>
+
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div style="background: none;margin: auto;margin-top: 10px;width: 100%;">
+
+		<table id="hdr-session-time-picker">
 			<tr>
-				<td on-tap="selectSessionParity('all')" id="hdr-parity-all">جميع</td>
-				<td on-tap="selectSessionParity('odd')" id="hdr-parity-odd">فرديين</td>
-				<td on-tap="selectSessionParity('even')" style="font-size: 16px" id="hdr-parity-even">زوجيين</td>
-				
+				<td colspan="4" class="hdr-second-txt">إضبط بداية الحصة :</td>
+			</tr>
+			<tr>
+
+				<td>
+					<button class="button-clear ion-chevron-right" on-tap="upCurrentTimeUnixBy_30minutes()"></button>
+				</td>
+				<td colspan="2">
+					<div>{{currentUnixtTime|date:'HH:mm'}}</div>
+				</td>
+				<td>
+					<button class="button-clear ion-chevron-left" on-tap="downCurrentTimeUnixBy_30minutes()"></button>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4" class="hdr-second-txt">حدد مدة الحصة :</td>
+			</tr>
+			<tr>
+				<td>
+					<div id="hdr-session-duration-1" on-tap="selectSessionDuration('1')">1<span>س</span></div>
+				</td>
+				<td>
+					<div id="hdr-session-duration-2" on-tap="selectSessionDuration('2')">2<span>س</span></div>
+				</td>
+				<td>
+					<div id="hdr-session-duration-3" on-tap="selectSessionDuration('3')">3<span>س</span></div>
+				</td>
+				<td>
+					<div id="hdr-session-duration-4" on-tap="selectSessionDuration('4')">4<span>س</span></div>
+				</td>
 			</tr>
 		</table>
+
+
 	</div>
-</div>
-<div style="background: none;margin: auto;margin-top: 10px;width: 100%;">
 
-	<table id="hdr-session-time-picker">
-		<tr>
-			<td colspan="4" class="hdr-second-txt">إضبط بداية الحصة :</td>
-		</tr>
-		<tr>
-			<td>
-				<button class="button-clear ion-chevron-right" on-tap="downCurrentTimeUnixBy_30minutes()"></button>
-			</td>
-			<td colspan="2"><div>{{currentUnixtTime|date:'HH:mm'}}</div></td>
-			<td>
-				<button class="button-clear ion-chevron-left" on-tap="upCurrentTimeUnixBy_30minutes()"></button>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="4" class="hdr-second-txt">حدد مدة الحصة :</td>
-		</tr>
-		<tr>
-			<td>
-				<div id="hdr-session-duration-1" on-tap="selectSessionDuration('1')">1<span>س</span></div>
-			</td>
-			<td>
-				<div  id="hdr-session-duration-2" on-tap="selectSessionDuration('2')">2<span>س</span></div>
-			</td>
-			<td>
-				<div  id="hdr-session-duration-3" on-tap="selectSessionDuration('3')">3<span>س</span></div>
-			</td>
-			<td>
-				<div  id="hdr-session-duration-4" on-tap="selectSessionDuration('4')">4<span>س</span></div>
-			</td>
-		</tr>
-	</table>
-
-
-</div>
-
-<div id="hdr-cnt-checkbox" style="margin-top: 20px" dir="rtl">
-	<div class="hdr-second-txt"> هل يتعلق الأمر بحصة اختبار ؟</div>
-	<ion-checkbox ng-model="data.isExamSession" ng-change="teeeest()" class="checkbox-dark" style="padding-right: 46px;background-color: transparent;border: 0px">حصة اختبار</ion-checkbox>
-</div>
+	<div id="hdr-cnt-checkbox" style="margin-top: 20px" dir="rtl">
+		<div class="hdr-second-txt"> هل يتعلق الأمر بحصة اختبار ؟</div>
+		<ion-checkbox ng-model="data.isExamSession" ng-change="teeeest()" class="checkbox-dark"
+			style="padding-right: 46px;background-color: transparent;border: 0px">حصة اختبار</ion-checkbox>
+	</div>
 </div>

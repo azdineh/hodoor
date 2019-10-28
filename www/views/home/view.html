@@ -1,15 +1,22 @@
 <ion-view view-title="الصفحة الرئيسة">
   <ion-content>
 
+    <ul>
+      <li style="height:10;" ng-repeat="color in colors">
+        <p ng-style="{'background-color': color}" style="height: 30px ">{{color}}</p>
+      </li>
+    </ul>
+
+
     <div class="card" dir="rtl" ng-if="isthereNewVersion">
       <div class="item item-text-wrap" style="background-color: rgba(204, 192, 26, 0.623)">
-        <div class="hdr-parag" >
+        <div class="hdr-parag">
           <div class="hdr-title" style="margin-bottom: 12px;">
             <span class="icon ion-loop assertive"> </span>تحديث جديد :</span>
           </div>
           <div style="padding: 4px;">
             تحديث جديد بمزايا إضافية.. مزيد من المعلومات على هذا الرابط :
-            <br/>
+            <br />
             <table style="width: 100%">
               <tr>
                 <td style="vertical-align: middle;text-align: center;padding: 8px">
@@ -21,7 +28,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="card " dir="rtl" ng-if="isthereAreRemarkableStudents">
       <div class="item item-text-wrap  hdr-bg">
         <div class="hdr-parag">
@@ -61,23 +68,27 @@
             يقدم تطبيق
             <span style="color:red"> "حضور Hodoor"</span>
             طريقة لإنجاز عملية النداء خلال الحصص الدراسية لتحديد المتغيبين من التلاميذ باستعمال الهاتف الذكي.
-            <br/> يأتي هذا التطبيق ضمن الأدوات الرقمية المحمولة المُعينة للمدرس خلال الممارسة الصفية، حيث يوظف إمكانات تكنلوجيا
-            المعلومات والاتصال ليبسط و يرقمن تتبع حضور و مواظبة المتمدرسين، كما يوفر كذلك إمكانية تدوين ملاحظات تهم الحصص
+            <br /> يأتي هذا التطبيق ضمن الأدوات الرقمية المحمولة المُعينة للمدرس خلال الممارسة الصفية، حيث يوظف إمكانات
+            تكنلوجيا
+            المعلومات والاتصال ليبسط و يرقمن تتبع حضور و مواظبة المتمدرسين، كما يوفر كذلك إمكانية تدوين ملاحظات تهم
+            الحصص
             و التلاميذ كلٌ على حدة.
           </div>
-          <br/>
+          <br />
           <p style="text-align: center">
             <img src="img/hodoor_pic.png" width="100%">
           </p>
           <div>
-            جدير بالذكر أن هذا التطبيق صُمم لكي يتتبع مواظبة التلاميذ لكل مدرس بشكل مستقل، كما صُمم كذلك للعمل دون الحاجة للربط بشبكة
+            جدير بالذكر أن هذا التطبيق صُمم لكي يتتبع مواظبة التلاميذ لكل مدرس بشكل مستقل، كما صُمم كذلك للعمل دون
+            الحاجة للربط بشبكة
             الأنترنت.
             <br>
             <br>
             <div class="hdr-title" style="margin-bottom: 12px;">كيف يعمل التطبيق؟</div>
-            يقوم التطبيق بملء قاعدة بياناته من ملفات Excel  التي تتضمن لوائح التلاميذ و التي يمكن تحميلها إنطلاقا من موقع مسار.
+            يقوم التطبيق بملء قاعدة بياناته من ملفات Excel التي تتضمن لوائح التلاميذ و التي يمكن تحميلها إنطلاقا من موقع
+            مسار.
             قم بتنزيل اللوائح باختيار تصدير البيانات حسب الأستاذ :
-            <br/>
+            <br />
             <div style="text-align: center">
               <img src="img/massar-export01.png" width="75%" style="padding: 8px;" alt="">
               <img src="img/phone-exportcc.png" width="22%" alt="">
@@ -95,7 +106,8 @@
     <div class="card " dir="rtl">
       <div class="item item-text-wrap  hdr-bg">
         <p style="padding: 16px" class="hdr-parag ">
-          للمزيد من التفاصيل و التعرف على طريقة إشتغال التطبيق بمزيد من التوضيح، المرجو الإطلاع على المدونة الخاصة بالتطبيق على الرابط
+          للمزيد من التفاصيل و التعرف على طريقة إشتغال التطبيق بمزيد من التوضيح، المرجو الإطلاع على المدونة الخاصة
+          بالتطبيق على الرابط
           التالي :
           <!--  <a href="http://7odoor.blogspot.com/" target="_blank" style="font-size: 16px"></a> -->
           <button class="button button-clear button-block" ng-click="goToBlog()">7odoor.blogspot.com</button>

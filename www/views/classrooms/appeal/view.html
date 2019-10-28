@@ -6,14 +6,16 @@
 
       <div dir="rtl" id="hdr-appeal-subheader">
         <div>
-          <button ng-show="currentGroup=='odd'" ng-click="nextGroup()" ng-disabled="!isFirstSlide" class="button button-balanced" style="min-width: 50px;">
+          <button ng-show="currentGroup=='odd'" ng-click="nextGroup()" ng-disabled="!isFirstSlide"
+            class="button button-balanced" style="min-width: 50px;">
             <b style="font-size: 1.5em">ف</b>
           </button>
-          <button ng-show="currentGroup=='even'" ng-click="nextGroup()" ng-disabled="!isFirstSlide" class="button button-balanced"
-            style="min-width: 50px;">
+          <button ng-show="currentGroup=='even'" ng-click="nextGroup()" ng-disabled="!isFirstSlide"
+            class="button button-balanced" style="min-width: 50px;">
             <b style="font-size: 1.5em">ز</b>
           </button>
-          <button ng-show="currentGroup=='all'" ng-click="nextGroup()" ng-disabled="!isFirstSlide" class="button button-balanced" style="min-width: 50px;">
+          <button ng-show="currentGroup=='all'" ng-click="nextGroup()" ng-disabled="!isFirstSlide"
+            class="button button-balanced" style="min-width: 50px;">
             <b style="font-size: 1em">جميع</b>
           </button>
         </div>
@@ -49,7 +51,8 @@
           <hdr-student-card-appeal class="student-item-card"></hdr-student-card-appeal>
         </div>
 
-        <div dir="rtl" class="hdr-slider-item" style="font-size: 12px;padding-right: 3vmax;position: relative;top:2vh" class="dark">
+        <div dir="rtl" class="hdr-slider-item" style="font-size: 12px;padding-right: 3vmax;position: relative;top:2vh"
+          class="dark">
           <i class="ion-record"></i> نهاية اللائحة
         </div>
 
@@ -57,16 +60,20 @@
 
     </div>
 
-    <div id="hdr-updown-control" ng-if="updownControlshwon" style="position: fixed; bottom: 100px;z-index: 5000;width: 100%;text-align: center">
+    <div id="hdr-updown-control" ng-if="updownControlshwon"
+      style="position: fixed; bottom: 100px;z-index: 5000;width: 100%;text-align: center">
       <div class="button-bar">
         <a class="button" on-tap="hideUpDwonControll()">
           <span class="icon ion-close"></span>
         </a>
-        <div ng-if="currentGroup!='all'" style="background-color: yellow;padding: 16px">لا يمكن تغيير الترتيب في حالة نداء بالأفواج، غير الى : جميع القسم</div>
-        <a class="button" ng-if="currentGroup=='all'" ng-class="isLastStudent?'disabled':''" on-tap="downStudentinList()">
+        <div ng-if="currentGroup!='all'" style="background-color: yellow;padding: 16px">لا يمكن تغيير الترتيب في حالة
+          نداء بالأفواج، غير الى : جميع القسم</div>
+        <a class="button" ng-if="currentGroup=='all'" ng-class="isLastStudent?'disabled':''"
+          on-tap="downStudentinList()">
           <span class="icon ion-arrow-down-a"></span>
         </a>
-        <a class="button" ng-if="currentGroup=='all'" ng-class="isFirstStudent?'disabled':''" on-tap="upStudentinList()">
+        <a class="button" ng-if="currentGroup=='all'" ng-class="isFirstStudent?'disabled':''"
+          on-tap="upStudentinList()">
           <span class="icon ion-arrow-up-a"></span>
         </a>
       </div>
@@ -115,9 +122,9 @@
 <!--         <label class="item item-input">
           <input type="text" placeholder="رقم مسار">
         </label> -->
-<!--         <label class="item item-input">
+       <label class="item item-input">
           <div style="padding-right:25px;opacity:0.5;font-size:15px">تاريخ الازدياد</div>
-          <input type="date" placeholder="تاريخ الازدياد" ng-model="student.birth_date" value="">
+          <input type="date" placeholder="تاريخ الازدياد"  ng-model="student.birth_date">
        
         </label>
         <label class="item item-input">
@@ -126,7 +133,7 @@
         <div style="padding-right:25px;padding-top:10px">      
           <span style="font-size:18px;color:red">*</span>
           <span> حقل ضروري</span>
-        </div> -->
+        </div>
       </div>
 
 
@@ -139,7 +146,7 @@
     </div>
 
     <br/>
-    <div  style="font-size:20px;padding:8px;background-color: rgba(150,150,150,0.2);color: red" on-tap="changeOption(false)">        
+    <div ng-show="removedStudents.length>0" style="font-size:20px;padding:8px;background-color: rgba(150,150,150,0.2);color: red" on-tap="changeOption(false)">        
         <table>
             <tr><td style="width:26px"> 
                 <div class="icon ion-chevron-down" ng-if="!isNewStudent"> </div>

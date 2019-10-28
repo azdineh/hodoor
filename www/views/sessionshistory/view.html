@@ -1,44 +1,66 @@
 <style>
     #hdr-table-006 td {
-        /*     border: 1px solid red;  */
+        border: 0px;
+        /* border: 1px solid red;  */ 
         text-align: center;
         vertical-align: middle;
         width: 14.29%
     }
 </style>
 
-<ion-view view-title="سجل التغيبات">
+<ion-view view-title="سجل الحصص">
 
-    <div class="bar bar-subheader" style="height: 45px;padding: 0px;border: 0px;background-color: rgba(211, 224, 228, 0.5) ">
+    <div class="bar bar-subheader"
+        style="height: 45px;padding: 0px;border: 0px;background-color: rgba(211, 224, 228, 0.5) ">
         <table id="hdr-table-006" style="width: 100%;height: 100%">
             <tr>
-                <td>
+                <!--                 <td>
 
-                    <button class="button button-clear" style="zoom: 0.8;width: 45px;height: 45px" ng-click="showHelpPopup(daies)">
-                        <i class="icon ion-help" style="font-size: 12px;color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
+                    <button class="button button-clear" style="zoom: 0.8;width: 45px;height: 45px"
+                        ng-click="showHelpPopup(sessions_view)">
+                        <i class="icon ion-help"
+                            style="font-size: 12px;color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
                     </button>
 
-                </td>
-                <td>
+                </td> -->
 
-                </td>
-                <td>
 
-                </td>
-                <td>
 
+                <td style="width: 30%">
+                    <select ng-model="settings.sessionsfiltredBy" dir="rtl"
+                        style="text-align:right;font-size: 0.7em;zoom: 1.5;
+                            width: 100%;height: 80%;border: 0px;border-bottom: 1px solid rgba(169, 169, 169, 0.3);background-color: transparent">
+                        <option value="all">ج. الحصص</option>
+                        <option value="1">الإمتحانات فقط</option>
+                    </select>
                 </td>
-                <td>
-
+                <td style="width: 2%"></td>
+                <td style="width: 30%;">
+                    <select ng-model="settings.classroomsfilteredBy" dir="rtl"
+                        style="font-size: 0.7em;zoom: 1.5;text-align: right;
+                            width: 100%;height: 80%;border: 0px;border-bottom: 1px solid rgba(169, 169, 169, 0.3);background-color: transparent">
+                        <option value="all">ج. الأقسام</option>
+                        <option ng-value="classroom.title" ng-repeat="classroom in classrooms_view">{{classroom.title}}
+                        </option>
+                    </select>
                 </td>
+                <td style="width: 2%"></td>
                 <td>
-                    <button class="button button-clear" ng-click="goToSessionAlter()" style="width: 45px;height: 45px" ng-disabled="sessionsSelected.length==0 || sessionsSelected.length>1">
+                    <button class="button button-clear" ng-click="goToSessionAlter()" style="padding-left: 4px;padding-top: 4px;width: 45px;height: 45px"
+                        ng-disabled="sessionsSelected.length==0 || sessionsSelected.length>1">
                         <i class="icon ion-compose" style="color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
                     </button>
                 </td>
                 <td>
-                    <button class="button button-clear" ng-click="showConfirm()" style="width: 45px;height: 45px" ng-disabled="!sessionsSelected.length>0">
+                    <button class="button button-clear" ng-click="showConfirm()" style="padding-left: 4px;padding-top: 4px;width: 45px;height: 45px"
+                        ng-disabled="!sessionsSelected.length>0">
                         <i class="icon ion-trash-b" style="color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
+                    </button>
+                </td>
+                <td style="background-color: rgba(93, 202, 197, 0.185);width: 45px">
+                    <button class="button button-clear" ng-click="refresh()" style="padding-left: 5px;padding-top: 4px;width: 45px;height: 45px">
+                        <i class="icon ion-refresh"
+                            style="color: rgba(25, 24, 29,0.8);filter: saturate(0.3);zoom: 0.9;"></i>
                     </button>
                 </td>
             </tr>
@@ -46,43 +68,27 @@
     </div>
 
     <ion-content scroll="true" dir="rtl" style="margin-top: 45px;padding-top: 10px">
+        <div ng-repeat="session_view in sessions_view track by $index" dir="rtl"
+            style="margin-bottom: 1vmax;width: 94%;margin: auto;margin-top: 4px">
 
-        <div ng-repeat="day in daies track by $index" dir="rtl" style="margin-bottom: 1vmax;width: 94%;margin: auto;margin-top: 4px">
-            <div class=" light-bg dark" style="border:0px;text-align: right;margin-bottom:2px;background-color: inherit;opacity: 0.9;font-size: 1em">
-                <table style="width: 100%;" id="gg">
-                    <tr>
-                        <td style="text-align: right" class="positive">
-                            <div style="text-align: center;width: 20px;height: 20px;border-radius: 50%">
-                                <i class="ion ion-android-bookmark positive" aria-hidden="true" style="zoom: 1.4;"></i>
-                            </div>
-                            <div style="padding-right: 4px">{{day.date|date:'fullDate'}}</div>
-                            <!-- <span> - </span> -->
-                            <!-- <span>({{day.sessions_view.length|hdrsession}})</span> -->
-                        </td>
-                    </tr>
-                </table>
-            </div>
 
-            <hdrabsencehistoryitem ng-repeat="session_view in day.sessions_view track by $index" ></hdrabsencehistoryitem>
+            <hdrabsencehistoryitem></hdrabsencehistoryitem>
+            <div>{{session_view.id}}</div>
         </div>
 
-        <div style="padding: 11px;zoom: 1.25;position: relative;top:-9px;color: rgb(169, 169, 169)" ng-show="lastday && daies.length>0">
-            <span class="icon ion-record"></span>
+        <div style="text-align: center"
+            ng-hide="sessions_view.length==0 || sessions_view.length==sessions_initial_count">
+            <button class="button button-large button-clear ion-ios-arrow-down" style="font-size: 40px"
+                ng-click="getMore()"></button>
         </div>
-        <div style="text-align: center" ng-hide="lastday || daies.length==0">
-            <button class="button button-large button-clear ion-ios-arrow-down" style="font-size: 40px" ng-click="more()"></button>
+        <div style="text-align: center"
+            ng-show="sessions_view.length==sessions_initial_count && sessions_view.length>0">
+            <i class="ion-record" style="font-size: 25px;opacity: 0.8;"></i>
+        </div>
+        <div style="text-align: center" ng-show="sessions_view.length==0">
+            <p style="padding:10px"> لا توجد حصص..</p>
         </div>
 
-        <div ng-show="daies.length==0" style="height: 100%;width: 100%;padding-top: 20px;text-align: center">
-            <p class="title" style="font-size: 1.7em;line-height: 2em;padding: 14px;padding-top: 5vmax">
-                <!--  هنا، سيتم إظهار سجل تغيبات التلاميذ عبر الحصص المسجلة. -->
-                <i class="icon ion-filing" style="font-size: 45vmax;opacity: 0.2"></i>
-                <!-- <p style="font-size: 20px;text-align: center;opacity: 0.6">السجل فارغ..</p> -->
-            </p>
-        </div>
-        <!-- <div ng-show="spinnershown && classrooms_view.length > 0" style="text-align: center;padding-top: 10vmax">
-            <ion-spinner icon="lines" style="zoom: 4;opacity: 0.4"></ion-spinner>
-        </div> -->
     </ion-content>
 
 </ion-view>

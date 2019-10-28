@@ -16,6 +16,7 @@ angular.module('hdrApp')
             that.kissm.prototype.school = '';
             that.kissm.prototype.teachername = '';
             that.kissm.prototype.teachersubject = '';
+
             //that.kissm.prototype.ostade = '';
             that.kissm.prototype.talaamiid = [];
 
@@ -167,6 +168,48 @@ angular.module('hdrApp')
                 });
                 return absarray;
             };
+
+            // return classroom
+            that.convertToClassroom = function (kissm) {
+
+                //on utilise classroom.title comme id interne
+                var cl = {
+                    id: kissm.issm,
+                    title: kissm.issm,
+                    level: kissm.mostawa,
+                    color: "#666666",
+                    school: {
+                        name: kissm.school,
+                        rd: kissm.rd,
+                        academy: kissm.academy
+                    },
+                    teacher: {
+                        name: kissm.teachername,
+                        subject: kissm.teachersubject
+                    },
+                    students: []
+                }
+
+                kissm.talaamiid.forEach(function (tilmiid, index) {
+                    //on utilise student.massar_number comme id interne
+                    var st = {
+                        id: tilmiid.ra9mMasar,
+                        birth_date: tilmiid.tari5Izdiad,
+                        full_name: tilmiid.issmKamel,
+                        id_classroom: cl.title,
+                        isBarred: 0,
+                        massar_number: tilmiid.ra9mMasar,
+                        observation: "",
+                        queuing_number: index + 1,
+                        registration_number: tilmiid.ra9mTasjiil
+                    }
+
+                    cl.students.push(st);
+
+                });
+
+                return cl;
+            }
 
 
 
