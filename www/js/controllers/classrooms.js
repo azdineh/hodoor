@@ -1,5 +1,6 @@
 angular.module('hdrApp').controller('ClassroomsController',
-    function ($scope, $rootScope, hdrFileSystem, $filter, $window, $state, $ionicLoading, $ionicScrollDelegate, hdrlocalstorage, $ionicActionSheet, $interval, $cordovaFile, $ionicPopup) {
+    function ($scope, $rootScope, hdrFileSystem, $window, $state, $ionicLoading, $ionicScrollDelegate,
+         hdrlocalstorage, $ionicActionSheet, $interval, $cordovaFile, $ionicPopup) {
 
         $scope.page = "Classrooms";
         var classrooms_colors = ['#66d9e8', '#ffd43b', '#e66824', '#a9e34b', '#b197fc', '#c7bfb0', '#faa2c1', '#57e69a', '#e6a857', '#bfb4a6'];

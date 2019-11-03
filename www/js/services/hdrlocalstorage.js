@@ -1,5 +1,5 @@
 angular.module('hdrApp')
-    .factory('hdrlocalstorage', function ($window, $filter, azdutils, $rootScope) {
+    .factory('hdrlocalstorage', function ($window, azdutils, $rootScope) {
         //this service must called only when ionicPlatfom is ready
 
         var classroom = {
@@ -265,7 +265,7 @@ angular.module('hdrApp')
 
                 vm.updateStorage();
             }
-
+            hdrlocalstorage
             vm.removeAbsentSession = function (session, student) {
                 var i_classroom = vm.findIndexOf('classrooms', { id: student.id_classroom });
                 var i_student = vm.findIndexOf('students', student);

@@ -1,5 +1,6 @@
 angular.module('hdrApp')
-    .controller('TeacherController', function ($scope, hdrlocalstorage, $rootScope, $ionicViewService, $ionicScrollDelegate, $window, $ionicPopup) {
+    .controller('TeacherController', function ($scope, hdrlocalstorage, $rootScope, $ionicViewService, $ionicScrollDelegate,
+         $window, $ionicPopup) {
 
 
 

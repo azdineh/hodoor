@@ -1,5 +1,5 @@
 angular.module('hdrApp')
-	.directive('hdrStudent', function ($timeout, $state, hdrlocalstorage) {
+	.directive('hdrStudent', function ($state) {
 
 
 		return {

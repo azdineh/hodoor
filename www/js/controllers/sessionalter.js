@@ -1,5 +1,6 @@
 angular.module('hdrApp')
-	.controller('SessionalterController', function ($scope, $filter, $timeout, hdrlocalstorage, $rootScope, $state, $ionicLoading, $ionicScrollDelegate, $stateParams, $ionicPopup) {
+	.controller('SessionalterController', function ($scope, $filter, $timeout, hdrlocalstorage, $rootScope,
+		 $ionicLoading, $ionicScrollDelegate, $stateParams, $ionicPopup) {
 
 		$scope.initialobservation = "";
 		$scope.pageReady = false;

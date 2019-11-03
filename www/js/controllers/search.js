@@ -1,5 +1,5 @@
 angular.module('hdrApp')
-    .controller('SearchController', function ($scope,hdrlocalstorage,azdutils,$rootScope, $ionicScrollDelegate, $window, $filter) {
+    .controller('SearchController', function ($scope,azdutils,$rootScope, $ionicScrollDelegate, $filter) {
 
         $scope.allStudents = [];
 

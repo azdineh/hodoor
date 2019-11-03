@@ -1,5 +1,5 @@
 angular.module('hdrApp')
-	.directive('hdrabsencehistoryitem', function ($ionicScrollDelegate, $rootScope, $filter) {
+	.directive('hdrabsencehistoryitem', function ($ionicScrollDelegate) {
 		return {
 			restrict: 'E',
 			templateUrl: "js/directives/hdrabsencehistory-item.html",

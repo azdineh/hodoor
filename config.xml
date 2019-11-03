@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="20006" id="com.ionicframework.chapter5978610" version="1.6.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Hodoor</name>
+<widget android-versionCode="20009" id="com.ionicframework.chapter5978610" version="1.6.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>HodoorApp</name>
     <description>
        Application pour les enseignants aidant à marquer et garder l'historique des absences des élèves. 
     </description>
@@ -8,7 +8,7 @@
       فريق حضور
     </author>
     <content src="index.html" />
-    <preference name="android-targetSdkVersion" value="23" />
+    <preference name="android-targetSdkVersion" value="28" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />

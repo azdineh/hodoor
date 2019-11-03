@@ -1,15 +1,10 @@
 angular.module('hdrApp')
-    .controller('HomeController', function ($scope, $http, hdrlocalstorage, $state, $rootScope, $location,
-        $timeout, $ionicScrollDelegate, $window, hdrFileSystem,
-        $ionicPlatform, hdrdbx) {
+    .controller('HomeController', function ($scope, hdrlocalstorage, $rootScope,
+        $window, $ionicPlatform) {
 
         $scope.page = "home";
 
         hdrlocalstorage.init();
-
-
-
-
 
         //$rootScope.currentVersionCode = $window.localStorage['hdr.currentVersionCode'] ? angular.fromJson($window.localStorage['hdr.currentVersionCode']) : 0;
         $rootScope.daies = [];
@@ -43,12 +38,9 @@ angular.module('hdrApp')
 
         $scope.$on('$ionicView.enter', function () {
             $rootScope.today = Date.now();
-            // getStudentsView();
         })
         $scope.$on('$ionicView.afterEnter', function () {
-            if ($rootScope.isDBThere) {
-                getStudentsView();
-            }
+
         })
         /* 
                 $rootScope.academy = $window.localStorage['hdr.academy'] ? angular.fromJson($window.localStorage['hdr.academy']) : {};
@@ -56,44 +48,11 @@ angular.module('hdrApp')
                 $rootScope.school = $window.localStorage['hdr.school'] ? angular.fromJson($window.localStorage['hdr.school']) : {};
                 $rootScope.teacher = $window.localStorage['hdr.teacher'] ? angular.fromJson($window.localStorage['hdr.teacher']) : {}; */
 
-        $rootScope.isDBThere = false;
         $scope.isthereAreAbsent = false;
         $scope.isthereAreRemarkableStudents = false;
 
         var wind;
 
-        var getStudentsView = function () {
-            hdrdbx.getStudentsAbsencesCount("", 2)
-                .then(function (students_view) {
-
-                    if (students_view.length > 0) {
-                        $scope.mostabsentStudents = students_view;
-                        $scope.isthereAreAbsent = true;
-                    }
-                    else {
-                        $scope.isthereAreAbsent = false;
-                    }
-                }, function (err) {
-                    console.log(err);
-                    $scope.mostabsentStudents = null;
-                    $scope.isthereAreAbsent = false;
-                });
-
-            hdrdbx.getRemarkablesStudents()
-                .then(function (students) {
-                    if (students.length > 0) {
-                        $scope.remarkablesStudents = students;
-                        $scope.isthereAreRemarkableStudents = true;
-                    }
-                    else {
-                        $scope.isthereAreRemarkableStudents = false;
-                    }
-                }, function (err) {
-                    console.log(err)
-                    $scope.remarkablesStudents = null;
-                    $scope.isthereAreRemarkableStudents = false;
-                })
-        }
 
         $scope.btnWind = function () {
             console.log(wind);
@@ -104,12 +63,9 @@ angular.module('hdrApp')
 
                 /*                 document.addEventListener("pause", function () {
                                     console.log("App is in pause state");
-                                    hdrdbx.exportDbToFile("data.7dr");
                                 }, false); */
 
-                hdrdbx.openDB();
-                $rootScope.isDBThere = true;
-                getStudentsView();
+
 
                 cordova.getAppVersion.getVersionCode(function (currentVersionCode) {
                     //console.log(version);
@@ -189,11 +145,6 @@ angular.module('hdrApp')
 
 
 
-
-
-
-
-
     });
 
 angular.module('hdrFilters', [])
@@ -227,13 +178,13 @@ angular.module('hdrFilters', [])
         };
 
         return function (input) {
-            if (input && input!="")
+            if (input && input != "")
                 return calculateAge(input);
             else
                 return "العمر غير متوفر"
         };
 
- 
+
     })
     .filter('hdrFullDate', function (azdutils, $filter) {
         return function (input) {

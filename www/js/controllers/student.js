@@ -1,5 +1,6 @@
 angular.module('hdrApp')
-    .controller('StudentController', function ($scope, hdrlocalstorage, $stateParams, $rootScope, $window, $timeout, $ionicScrollDelegate, $filter) {
+    .controller('StudentController', function ($scope, hdrlocalstorage, $stateParams, $rootScope, $window,
+        $timeout, $ionicScrollDelegate, $filter) {
 
 
         if (ionic.Platform.isWebView()) {
