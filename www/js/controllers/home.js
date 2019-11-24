@@ -6,6 +6,57 @@ angular.module('hdrApp')
 
         hdrlocalstorage.init();
 
+
+
+        if (ionic.Platform.isWebView()) {
+            $ionicPlatform.ready(function () {
+
+                var veersion_code = 0;
+                cordova.getAppVersion.getVersionCode(function (versioncode) {
+                    veersion_code = versioncode;
+                    console.log("Version code :" + veersion_code);
+                });
+
+
+                window.FirebasePlugin.setConfigSettings({
+                    newest_version_code : 20010
+                });
+
+                window.FirebasePlugin.fetch(60*60*24, function () {
+                    // success callback
+                }, function () {
+                    // error callback
+                });
+
+                window.FirebasePlugin.activateFetched(function (activated) {
+                    // activated will be true if there was a fetched config activated,
+                    // or false if no fetched config was found, or the fetched config was already activated.
+                    console.log(activated);
+
+                }, function (error) {
+                    console.error(error);
+                });
+
+
+                window.FirebasePlugin.getValue("newest_version_code", function (newestversioncode) {
+                    console.log("newest version code :" + newestversioncode);
+
+                    if (newestversioncode == veersion_code) {
+                        $scope.isthereNewVersion = false;
+                    }
+                    else {
+                        $scope.isthereNewVersion = true;
+                    }
+
+                }, function (error) {
+                    console.error(error);
+                });
+
+            })
+        }
+
+
+
         //$rootScope.currentVersionCode = $window.localStorage['hdr.currentVersionCode'] ? angular.fromJson($window.localStorage['hdr.currentVersionCode']) : 0;
         $rootScope.daies = [];
 
@@ -60,27 +111,6 @@ angular.module('hdrApp')
 
         if (ionic.Platform.isWebView()) {
             $ionicPlatform.ready(function () {
-
-                /*                 document.addEventListener("pause", function () {
-                                    console.log("App is in pause state");
-                                }, false); */
-
-
-
-                cordova.getAppVersion.getVersionCode(function (currentVersionCode) {
-                    //console.log(version);
-                    $rootScope.nextVersionCode = $window.localStorage['hdr.nextVersionCode'] ? angular.fromJson($window.localStorage['hdr.nextVersionCode']) : currentVersionCode;
-                    console.log("current version code " + currentVersionCode);
-
-                    console.log("next version " + $rootScope.nextVersionCode);
-
-                    if ($rootScope.nextVersionCode != currentVersionCode) {
-                        $scope.isthereNewVersion = true;
-                    }
-                    else {
-                        $scope.isthereNewVersion = false;
-                    }
-                });
 
 
             });
