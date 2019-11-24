@@ -7,3 +7,4 @@ plugins/
 hooks/
 bower_components/
 node_modules
+google-services.json
