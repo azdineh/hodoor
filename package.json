@@ -4,27 +4,29 @@
   "description": "hdrApp: An Ionic project",
   "dependencies": {
     "angular-animate": "^1.6.7",
-    "cordova-android": "^8.0.0",
+    "cordova-android": "^8.1.0",
+    "cordova-android-play-services-gradle-release": "^4.0.0",
     "cordova-browser": "^4.1.0",
-    "cordova-filepath-resolver": "^1.0.5",
+    "cordova-plugin-androidx": "^1.0.2",
+    "cordova-plugin-androidx-adapter": "^1.1.0",
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-filechooser": "^1.2.0",
+    "cordova-plugin-filepath": "^1.5.6",
+    "cordova-plugin-firebasex": "^6.1.0",
     "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
-    "cordova-plugin-ionic-webview": "^2.5.1",
+    "cordova-plugin-ionic-webview": "^2.5.3",
     "cordova-plugin-splashscreen": "^5.0.3",
     "cordova-plugin-whitelist": "^1.3.4",
-    "cordova-plugin-x-socialsharing": "^5.6.0",
+    "cordova-plugin-x-socialsharing": "^5.6.2",
     "cordova-plugin-zip": "^3.1.0",
-    "cordova-sqlite-storage": "^3.3.0",
     "es6-promise-plugin": "^4.2.2",
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",
     "gulp-rename": "^1.2.0",
-    "gulp-sass": "^0.7.1",
-    "uk.co.workingedge.cordova.plugin.sqliteporter": "^1.1.1"
+    "gulp-sass": "^0.7.1"
   },
   "devDependencies": {
     "@ionic/v1-toolkit": "2.0.10",
@@ -37,7 +39,6 @@
     "cordova-plugin-whitelist",
     "cordova-plugin-filechooser",
     "cordova-plugin-zip",
-    "cordova-filepath-resolver",
     "cordova-plugin-ionic-keyboard",
     "cordova-plugin-inappbrowser",
     "cordova-plugin-ionic-webview@latest",
@@ -55,7 +56,6 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-filechooser": {},
       "cordova-plugin-zip": {},
-      "cordova-filepath-resolver": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-ionic-webview": {
@@ -63,11 +63,27 @@
       },
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-app-version": {},
-      "uk.co.workingedge.cordova.plugin.sqliteporter": {},
-      "cordova-sqlite-storage": {},
       "cordova-plugin-x-socialsharing": {
         "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
-      }
+      },
+      "cordova-plugin-androidx": {},
+      "cordova-plugin-androidx-adapter": {},
+      "cordova-plugin-firebasex": {
+        "FIREBASE_ANALYTICS_COLLECTION_ENABLED": "true",
+        "FIREBASE_PERFORMANCE_COLLECTION_ENABLED": "true",
+        "FIREBASE_CRASHLYTICS_COLLECTION_ENABLED": "true",
+        "ANDROID_ICON_ACCENT": "#FF00FFFF",
+        "ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION": "17.0.0",
+        "ANDROID_FIREBASE_CORE_VERSION": "17.0.0",
+        "ANDROID_FIREBASE_MESSAGING_VERSION": "19.0.0",
+        "ANDROID_FIREBASE_CONFIG_VERSION": "18.0.0",
+        "ANDROID_FIREBASE_PERF_VERSION": "18.0.0",
+        "ANDROID_FIREBASE_AUTH_VERSION": "18.0.0",
+        "ANDROID_CRASHLYTICS_VERSION": "2.10.1",
+        "ANDROID_CRASHLYTICS_NDK_VERSION": "2.1.0",
+        "ANDROID_SHORTCUTBADGER_VERSION": "1.1.22"
+      },
+      "cordova-plugin-filepath": {}
     }
   }
 }

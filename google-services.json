@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "403938982040",
+    "firebase_url": "https://hdrapp-ec963.firebaseio.com",
+    "project_id": "hdrapp-ec963",
+    "storage_bucket": "hdrapp-ec963.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403938982040:android:5bbfbb2368b7f68a",
+        "android_client_info": {
+          "package_name": "com.ionicframework.chapter5978610"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "403938982040-fdq7okp5lj39gd3k73do8d15edfgnu1a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuIGXEJvv928LcjGsWTWkMrEyp1Qfa3aw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "403938982040-fdq7okp5lj39gd3k73do8d15edfgnu1a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

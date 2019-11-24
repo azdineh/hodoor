@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="20009" id="com.ionicframework.chapter5978610" version="1.6.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>HodoorApp</name>
+<widget android-versionCode="20010" id="com.ionicframework.chapter5978610" version="1.6.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Hodoor</name>
     <description>
        Application pour les enseignants aidant à marquer et garder l'historique des absences des élèves. 
     </description>
@@ -46,7 +46,6 @@
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <engine name="browser" spec="^4.1.0" />
-    <plugin name="cordova-filepath-resolver" spec="^1.0.5" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-filechooser" spec="^1.2.0" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />

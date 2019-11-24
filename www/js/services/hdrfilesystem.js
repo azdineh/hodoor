@@ -42,9 +42,9 @@ angular.module('hdrApp')
 
             };
 
-/*             HdrFileSystem.rename=function(fs){
-                $cordovaFile.moveDir(path, directory, newPath, newDirectory);
-            } */
+            /*             HdrFileSystem.rename=function(fs){
+                            $cordovaFile.moveDir(path, directory, newPath, newDirectory);
+                        } */
 
             /**
              * [getWorkbook return a Workbook object from an Excel file]
@@ -67,8 +67,8 @@ angular.module('hdrApp')
                             reader.readAsBinaryString(file);
                         } else {
                             //alert("A File is not an Excel file.");
-                            alert("يبدو أن الملف الجاري لا يمثل ملف إكسيل");
-                            deferred.reject("A File is not an Excel file.");
+                            console.log("يبدو أن الملف الجاري لا يمثل ملف إكسيل");
+                            deferred.reject("يبدو أن الملف الجاري لا يمثل ملف إكسيل");
                         }
 
                     }, function (error) {
@@ -97,7 +97,7 @@ angular.module('hdrApp')
                     };
 
                 }, function (error) {
-                    q.reject("error");
+                    q.reject(error);
                 });
 
                 return q.promise;
@@ -109,7 +109,7 @@ angular.module('hdrApp')
              * @param  {DirectoryEntry} directoryentry the directory to read its content
              * @return {array} array of classroom object.
              */
-            HdrFileSystem.readHdrFiles = function (directoryentry, callBackSuccess) {
+            HdrFileSystem.readHdrFiles = function (directoryentry, callBackSuccess, callBackError) {
                 //var hdrFiles=[];
                 //var q = $q.defer();
 
@@ -123,18 +123,22 @@ angular.module('hdrApp')
                             function () {
                                 console.log("reponse of areHdrFiles");
                                 callBackSuccess();
+                            }, function () {
+                                callBackError()
                             });
 
                     } else {
                         //var msgerror="The "+HdrFileSystem.hdrDirectory+" directory is empty..";
                         var msgerror = "يبدو أن الملف  " + HdrFileSystem.hdrDirectory + " فارغ";
-                        alert(msgerror);
+                        console.log(msgerror)
+                        callBackError(msgerror);
                         //q.reject(msgerror);
                     };
 
                 }, function (error) {
                     //alert("Error when reading entries of the "+HdrFileSystem.hdrDirectory+" directory..");
                     alert("حدث خطأ خلال مراجعة ملفات الملف " + HdrFileSystem.hdrDirectory);
+                    callBackError(error)
                     //q.reject();
                 });
 
@@ -143,7 +147,7 @@ angular.module('hdrApp')
             };
 
             HdrFileSystem.classrooms = [];
-            HdrFileSystem.areHdrFiles = function (entries, index, callBack) {
+            HdrFileSystem.areHdrFiles = function (entries, index, callBack, callBackError) {
                 //var q = $q.defer();
 
                 HdrFileSystem.isHdrFile(entries[index])
@@ -154,7 +158,7 @@ angular.module('hdrApp')
                         console.log('*****' + index);
 
                         if (index + 1 < entries.length) {
-                            HdrFileSystem.areHdrFiles(entries, index + 1,callBack);
+                            HdrFileSystem.areHdrFiles(entries, index + 1, callBack, callBackError);
                         }
                         else {
                             console.log("*** resolve " + index);
@@ -164,6 +168,8 @@ angular.module('hdrApp')
 
                     }, function (error) {
                         //q.reject(error);
+                        callBackError(error)
+                        //alert(error);
                         console.log(error);
                     });
 

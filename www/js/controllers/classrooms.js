@@ -1,6 +1,6 @@
 angular.module('hdrApp').controller('ClassroomsController',
     function ($scope, $rootScope, hdrFileSystem, $window, $state, $ionicLoading, $ionicScrollDelegate,
-         hdrlocalstorage, $ionicActionSheet, $interval, $cordovaFile, $ionicPopup) {
+        hdrlocalstorage, $ionicActionSheet, $interval, $cordovaFile, $ionicPopup) {
 
         $scope.page = "Classrooms";
         var classrooms_colors = ['#66d9e8', '#ffd43b', '#e66824', '#a9e34b', '#b197fc', '#c7bfb0', '#faa2c1', '#57e69a', '#e6a857', '#bfb4a6'];
@@ -166,69 +166,124 @@ angular.module('hdrApp').controller('ClassroomsController',
                 console.log(path);
                 window.resolveLocalFileSystemURL(path, function (directoryentry) {
 
+                    var counter = 0;
+
                     var directoryReader = directoryentry.createReader();
                     directoryReader.readEntries(
                         function (entries) {
+
+                            console.log(entries);
+
+                            entries.forEach(function (entry) {
+
+                                if (entry.isFile) {
+
+                                    var indexOflastDot = entry.name.lastIndexOf(".")
+                                    var extension = entry.name.substring(indexOflastDot + 1, entry.name.length)
+                                    console.log(extension)
+
+                                    if (extension == "xls" || extension == "xlsx") {
+                                        counter++;
+                                    }
+                                }
+
+                            });
+
                             if (entries.length > 0) {
                                 console.log(entries);
                             }
                             else {
+                                $scope.hide();
+                                alert("يبدو أن الملف فارغ..")
+                                // remove ecxel file imported in cache
+                                window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + "/hodoor-classrooms",
+                                    function (direntry) {
+                                        direntry.removeRecursively(function () {
+                                            console.log("Remove Recursively Succeeded");
+                                            $scope.hide();
+                                        }, function (err) {
+                                            alert("Failed to remove directory or it's contents: " + error.code);
+                                        });
+                                    }, function (err) {
+
+                                    });
                                 console.log("home directiry is empty..");
                             }
+
+                            if (counter == entries.length) {
+                                hdrFileSystem.readHdrFiles(directoryentry,
+                                    function () {
+                                        //hdrFileSystem.classrooms are available in this scope
+                                        //console.log("call back success..");
+                                        //console.log(hdrFileSystem.classrooms);
+
+                                        //set classrooms colors
+
+                                        var itecolor = 0;
+                                        //$rootScope.classrooms_view = hdrdbx.classrooms_view;
+                                        $interval(function () {
+                                            var shifted = hdrFileSystem.classrooms.shift();
+                                            shifted.color = classrooms_colors[itecolor];
+
+                                            //for to garanty colors for all classrooms
+                                            if (itecolor == 9) {
+                                                itecolor = 0;
+                                            }
+                                            else {
+                                                itecolor++;
+                                            }
+
+                                            hdrlocalstorage.classrooms.push(shifted);
+                                            $rootScope.students_count_global += shifted.students.length;
+
+                                            if (hdrFileSystem.classrooms.length == 0) {
+                                                hdrlocalstorage.save('classrooms', null);
+
+                                                // remove ecxel file imported in cache
+                                                window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + "/hodoor-classrooms",
+                                                    function (direntry) {
+                                                        direntry.removeRecursively(function () {
+                                                            console.log("Remove Recursively Succeeded");
+                                                            $scope.hide();
+                                                        }, function (err) {
+                                                            alert("Failed to remove directory or it's contents: " + error.code);
+                                                        });
+                                                    }, function (err) {
+
+                                                    });
+                                            }
+                                        }, 450, hdrFileSystem.classrooms.length);
+
+
+                                    }, function (err) {
+                                        $scope.hide();
+                                        alert(err)
+                                    })
+                            }
+                            else {
+                                $scope.hide();
+                                alert("ليس هذا هو الملف المنتظر..");
+                                // remove ecxel file imported in cache
+                                window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + "/hodoor-classrooms",
+                                    function (direntry) {
+                                        direntry.removeRecursively(function () {
+                                            console.log("Remove Recursively Succeeded");
+                                            $scope.hide();
+                                        }, function (err) {
+                                            alert("Failed to remove directory or it's contents: " + error.code);
+                                        });
+                                    }, function (err) {
+
+                                    });
+                            }
+
                         },
                         function (err) {
 
                         }
                     );
-                    hdrFileSystem.readHdrFiles(directoryentry,
-                        function () {
-                            //hdrFileSystem.classrooms are available in this scope
-                            //console.log("call back success..");
-                            //console.log(hdrFileSystem.classrooms);
-
-                            //set classrooms colors
-
-                            var itecolor = 0;
-                            //$rootScope.classrooms_view = hdrdbx.classrooms_view;
-                            $interval(function () {
-                                var shifted = hdrFileSystem.classrooms.shift();
-                                shifted.color = classrooms_colors[itecolor];
-
-                                //for to garanty colors for all classrooms
-                                if (itecolor == 9) {
-                                    itecolor = 0;
-                                }
-                                else {
-                                    itecolor++;
-                                }
-
-                                hdrlocalstorage.classrooms.push(shifted);
-                                $rootScope.students_count_global += shifted.students.length;
-
-                                if (hdrFileSystem.classrooms.length == 0) {
-                                    hdrlocalstorage.save('classrooms', null);
-
-                                    // remove ecxel file imported in cache
-                                    window.resolveLocalFileSystemURL(cordova.file.cacheDirectory + "/hodoor-classrooms",
-                                        function (direntry) {
-                                            direntry.removeRecursively(function () {
-                                                console.log("Remove Recursively Succeeded");
-                                                $scope.hide();
-                                            }, function (err) {
-                                                alert("Failed to remove directory or it's contents: " + error.code);
-                                            });
-                                        }, function (err) {
-
-                                        });
-                                }
-                            }, 450, hdrFileSystem.classrooms.length);
 
 
-
-
-
-
-                        })
 
 
 
@@ -264,10 +319,10 @@ angular.module('hdrApp').controller('ClassroomsController',
         $scope.zipFilesAndImportClassrooms = function () {
             if (ionic.Platform.isWebView()) {
                 var pathDist = cordova.file.cacheDirectory;
-                fileChooser.open(function (uripath) {
+                fileChooser.open({ "mime": "application/zip" }, function (uripath) {
 
-                    //alert('file chooser uripath :' + uripath)
-                    window.FilePath.resolveNativePath(uripath, successNative, failNative);
+
+
                     function successNative(finalpath) {
                         //alert("url of file is " + finalpath);
                         console.log("url of file is " + finalpath);
@@ -278,6 +333,7 @@ angular.module('hdrApp').controller('ClassroomsController',
                                 //alert("unzipping is done");
                                 console.log("unzipping is done");
                                 $cordovaFile.createDir(pathDist, "hodoor-classrooms", false);
+
                                 $scope.importClassrooms();
 
                             } else {
@@ -289,10 +345,16 @@ angular.module('hdrApp').controller('ClassroomsController',
                     }
 
                     function failNative(err) {
-                        alert('code :' + err.code + " message : " + err.message);
-                        console.log("error while resolving native file path");
+/*                         var msg = "An error here,while resolving native file path"
+                        alert('Access denied ' + '[OR]' + msg + 'code :' + err.code + " message : " + err.message); */
+                        alert(err);
+                        console.log(err);
                     }
-                });
+
+                    //alert('file chooser uripath :' + uripath)
+                    window.FilePath.resolveNativePath(uripath, successNative, failNative);
+
+                }, function () { });
             } else {
                 console.log("classrooms page");
                 $rootScope.classrooms_view.push({ id: "1", color: classrooms_colors[0], title: "TCS4", level: "جذع مشترك علمي", 'students': [{ id: '1', full_name: "عمر فيلالي", queuing_number: "10" }, { id: '2', full_name: "كريم زرهوني", queuing_number: "12" }, { id: '3', full_name: "سفياني بدر", queuing_number: "22" }] });
