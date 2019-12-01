@@ -73,7 +73,6 @@ angular.module('hdrApp')
             vm.classrooms = [];
             vm.sessions = [];
             vm.removed_students = [];
-
             //hdr.helpPopupShown
 
             vm.filename = "data.hdr"
@@ -145,6 +144,8 @@ angular.module('hdrApp')
                 //update object
                 vm.init();
             }
+
+
 
             //function add directly to absent students; their sessions which they were absents, in order to show them in student card, whitout using all process
             vm.addAbsentSessionToStudent = function (session, student) {
@@ -314,6 +315,7 @@ angular.module('hdrApp')
             }
 
 
+
             vm.updateStudent = function (student) {
                 var ind_student = vm.findIndexOf('students', student);
                 var ind_classroom = vm.findIndexOf('classrooms', { id: student.id_classroom });
@@ -366,6 +368,8 @@ angular.module('hdrApp')
                 classroom = vm.classrooms[ind_of_classroom];
                 return classroom;
             }
+
+
 
 
 

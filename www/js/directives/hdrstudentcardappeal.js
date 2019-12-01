@@ -1,5 +1,5 @@
 angular.module('hdrApp')
-	.directive('hdrStudentCardAppeal', function ($rootScope,$timeout) {
+	.directive('hdrStudentCardAppeal', function ($rootScope, $timeout,azdutils) {
 		return {
 			restrict: 'E',
 			templateUrl: "js/directives/hdrstudentcardappeal.html",
@@ -24,6 +24,11 @@ angular.module('hdrApp')
 					}
 				}, 475)
 
+				$scope.isBirthday=function(){
+					return azdutils.isBirthday($scope.student.birth_date);
+				}
+
+				
 				$scope.onDoubleTap = function (student) {
 					if ($scope.tapped) {
 						$scope.tapped = false;

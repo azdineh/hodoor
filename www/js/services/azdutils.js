@@ -105,6 +105,23 @@ angular.module('hdrApp')
 
             }
 
+            that.isBirthday = function (date_string) {
+                var flag = false;
+
+                var str = date_string.trim();
+                var dd = parseInt(str.substr(0, 2));
+                var mm = parseInt(str.substr(3, 2)) - 1; // JS counts months from 0 to 11;
+                /*               var yyyy = parseInt(str.substr(6, 4)); */
+
+                var today = new Date(Date.now());
+                if (dd == today.getDate() && mm == today.getMonth()) {
+                    flag = true;
+                }
+
+                return flag;
+            }
+
+
             /* that.openFile = function (filename) {
                 var q = $q.defer();
                 if (filename) {

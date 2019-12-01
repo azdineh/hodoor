@@ -22,7 +22,7 @@
                 <td style="vertical-align: middle;text-align: center;padding: 8px">
                   <a href="#" on-tap="goToPlayStore()" target="_blank">
                     https://goo.gl/bZz1sD
-                   </a>
+                  </a>
                 </td>
               </tr>
             </table>
@@ -31,12 +31,12 @@
       </div>
     </div>
 
-    <div class="card " dir="rtl" ng-if="isthereAreRemarkableStudents">
+    <div class="card " dir="rtl" ng-if="remarkableStudents.lenght>0">
       <div class="item item-text-wrap  hdr-bg">
         <div class="hdr-parag">
           <div class="hdr-title" style="margin-bottom: 12px;"> الملاحظات المدونة:</div>
           <div style="padding: 4px;zoom: 0.88">
-            <div ng-repeat="student in remarkablesStudents" ng-class="'hdr-bg-second'">
+            <div ng-repeat="student in remarkableStudents" ng-class="'hdr-bg-second'">
               <hdr-student ng-init="showborder=false;page='search';mode='m2'">
               </hdr-student>
             </div>

@@ -28,28 +28,9 @@ angular.module('hdrApp')
 
         $scope.updateStudent = function () {
 
-            hdrdbx.updateStudent($scope.student, $scope.student)
-                .then(function (res) {
+                    hdrlocalstorage.updateStudent($scope.student);
 
-                    // update localStorage here
-
-
-                    //$scope.student.isBarred = $scope.student.isBarred;
-
-                    //if ($rootScope.absentStudents.indexOf($scope.student) >= 0)
-                    //$rootScope.absentStudents[$rootScope.absentStudents.indexOf($scope.student)].observation = $scope.student.observation;
-
-                    $rootScope.classrooms_view[classroomIndex].students[studentIndex].observation = $scope.student.observation;
-                    $rootScope.classrooms_view[classroomIndex].students[studentIndex].isBarred = $scope.student.isBarred;
-
-
-                    $window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
-                    //localstorage ends
                     $scope.switchObservationUpateMode();
-
-                }, function (err) {
-                    console.log(err);
-                });
         }
 
         $scope.$on('$ionicView.enter', function () {

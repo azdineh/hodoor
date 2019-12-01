@@ -19,10 +19,11 @@ angular.module('hdrApp')
 
 
                 window.FirebasePlugin.setConfigSettings({
-                    newest_version_code : 20010
+                    // inisilize the newest_version_code by the current version
+                    newest_version_code: veersion_code
                 });
 
-                window.FirebasePlugin.fetch(60*60*24, function () {
+                window.FirebasePlugin.fetch(60 * 60 * 24, function () {
                     // success callback
                 }, function () {
                     // error callback
@@ -100,7 +101,7 @@ angular.module('hdrApp')
                 $rootScope.teacher = $window.localStorage['hdr.teacher'] ? angular.fromJson($window.localStorage['hdr.teacher']) : {}; */
 
         $scope.isthereAreAbsent = false;
-        $scope.isthereAreRemarkableStudents = false;
+        $scope.remarkableStudents = [];
 
         var wind;
 

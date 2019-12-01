@@ -26,9 +26,9 @@
 </style> -->
 
 <style>
-  /*     #ggh td {
+/*     #ggh td {
       border: 1px solid red
-    }  */
+    } */  
 
   #hdr-absent-symbol {
     position: relative;
@@ -59,10 +59,9 @@
 </style>
 <div style="position: relative;min-height: 10vh" id="student-item-card-{{student.id}}">
 
-
-
-
+  
   <div dir="rtl" class="card" on-double-tap="onDoubleTap(student)" ng-class="cardInRed" ng-class-even="cardInGray" style="min-height: inherit;padding: 0;margin:0px;">
+
     <div class="item item-text-wrap" style="padding: 0;min-height: 10vh;padding-top: 2px;">
 
 
@@ -78,7 +77,12 @@
           </td>
           <td style="padding-right: 10px;width: 50%;transition: filter 1s"  ng-style="student.isBarred==1?{'filter':'blur(2px)'}:{}">
             <div>
-              <div class="hdr-main-text positive">{{student.full_name}}</div>
+              <div class="hdr-main-text positive">
+                <span>
+                <img ng-if="isBirthday()" src="img/hdr-birthday.png"  class="hdr-birthday" alt="">
+                  {{student.full_name}}
+                </span>
+              </div>
               <div class="hdr-sub-text">
                 <i class="ion-android-bookmark"></i>
                 <span ng-if="student.birth_date!=''">{{student.birth_date|hdrage}}</span>

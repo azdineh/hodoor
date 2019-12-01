@@ -16,6 +16,9 @@ In google play : https://goo.gl/z33iyN
     cordova platform add android
     cordova run android
 
+### Firebase configuration
+    Don't forget to add google-services.json firebase configuration file to the project
+    
 ### Configuring Cordova for Android Development on Linux
 see : 
 https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#requirements-and-support

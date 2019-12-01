@@ -447,3 +447,9 @@ body {
 #hdr-session-time-picker tr:nth-child(4) td div span {
   font-size: 12px;
 }
+
+.hdr-birthday{
+  width: 23px;
+  position: relative;
+  top: 4px;
+}
