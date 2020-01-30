@@ -10,8 +10,27 @@
   .hdr-student2-tabel td {
     /*   border: 1px solid rgb(18, 50, 18);  */
     vertical-align: middle;
-    padding: 4px;
+    border-collapse: collapse;
+    padding: 6px;
+  }
 
+  .hdr-standard-table td {
+    padding: 10px;
+    text-align: center;
+  }
+
+  #hdr00009 td {
+    /* border: 1px solid rgb(18, 50, 18); */
+   
+    padding: 4px;
+  }
+
+  #hdr00009 #hdr-marks-choices div {
+    background-color: rgba(128, 206, 128, 0.123);
+    margin-top: 8px;
+    padding-top: 12px;
+    padding-bottom: 6px;
+    padding-right: 4px;
   }
 
   .hdr-standard-table tr:nth-child(1hdr) td {
@@ -46,10 +65,32 @@
   }
 
   #hdr-card-student-container {
-    
+
     padding: 6px;
     background-image: linear-gradient(to top right, rgba(235, 235, 235, 0.15), rgba(215, 228, 238, 0.109));
     /* border: 5px solid rgba(80, 78, 65, 0.137); */
+  }
+
+  .hdr-marks-menu {
+    padding: 0px;
+    text-align: left;
+    width: 100%;
+    height: inherit;
+    overflow: hidden;
+  }
+
+
+  .hdr-marks-menu button {
+    background-color: transparent;
+  }
+
+ #hdr-mark-up-and-down{
+  /* border: 1px solid red */;
+  margin: auto;
+ }
+  #hdr-mark-up-and-down td{
+      /* border: 1px solid red; */
+      vertical-align: middle;
   }
 </style>
 <ion-view view-title="تفاصيل حول : {{student.full_name}}">
@@ -57,7 +98,7 @@
   <ion-content dir="rtl">
 
     <div id="hdr-card-student-container">
-      <table class="hdr-student2-tabel" style="">
+      <table class="hdr-student2-tabel">
         <tr>
           <!-- <td style="width: 25%">
           <img src="img/user-alt-128.png" style="width: 100%">
@@ -68,13 +109,13 @@
                 style="margin-bottom: 12px;text-align: center;padding:12px 6px 12px 6px;background-color: rgba(133, 162, 180, 0.205)">
                 {{student.full_name}}</h3>
               <div class="hdr-second-txt" style="font-size: 1.2em;text-align: center">
-                
+
                 <div>
-                    <span><img src="img/bron.png" height="20" alt=""></span>
+                  <span><img src="img/bron.png" height="20" alt=""></span>
                   <span style="position: relative;top:-6px">{{student.birth_date|hdrFullDate}}</span>
                 </div>
                 <div>
-                    <span><img src="img/studentnow.png" height="30" alt=""></span>
+                  <span><img src="img/studentnow.png" height="30" alt=""></span>
                   <span style="position: relative;top:-8px">{{student.birth_date|hdrage}}</span>
                 </div>
               </div>
@@ -122,13 +163,15 @@
 
         <table class="hdr-student2-tabel hdr-student-table-marks">
           <tr>
-            <td class="assertive" ng-if="absences.length>0">{{absences.length}}</td>
-            <td class="positive" ng-if="delays.length>0">{{delays.length}}</td>
+            <td class="assertive" ng-if="absences.length>=0">{{absences.length}}</td>
+            <td class="dark" ng-if="delays.length>0">{{delays.length}}</td>
+            <td class="positive" ng-if="student.marks.length>0">{{totalmarks}}</td>
             <!--  <td>3</td> -->
           </tr>
           <tr>
-            <td class="assertive" ng-if="absences.length>0">عدد التغيبات</td>
-            <td class="positive" ng-if="delays.length>0">عدد التأخرات</td>
+            <td class="assertive" ng-if="absences.length>=0">عدد التغيبات</td>
+            <td class="dark" ng-if="delays.length>0">عدد التأخرات</td>
+            <td class="positive" ng-if="student.marks.length>0">مج. العلامات الإضافية</td>
             <!--  <td>مج النقاط</td> -->
           </tr>
         </table>
@@ -142,12 +185,12 @@
           <tr ng-repeat="abs in absences track by $index">
             <td style="text-align: center">{{$index+1}}</td>
             <td>{{abs.title}}</td>
-            <td>{{abs.unix_time|date:'shortDate'}}</td>
+            <td>{{abs.unix_time|date:'mediumDate'}}</td>
           </tr>
         </table>
 
         <table class="hdr-standard-table" ng-if="delays.length>0">
-          <tr class="positive-bg">
+          <tr class="dark-bg" style="color: gray;">
             <td style="text-align: center">#</td>
             <td>الحصة</td>
             <td>التاريخ</td>
@@ -155,18 +198,60 @@
           <tr ng-repeat="abs in delays track by $index">
             <td style="text-align: center">{{$index+1}}</td>
             <td>{{abs.title}}</td>
-            <td>{{abs.unix_time|date:'shortDate'}}</td>
+            <td>{{abs.unix_time|date:'mediumDate'}}</td>
           </tr>
         </table>
 
-        <table class="hdr-student2-tabel">
-          <tr>
-            <td></td>
+        <table class="hdr-standard-table" ng-if="student.marks.length>0">
+          <tr class="positive-bg">
+            <td style="width: 18%;"> العلامة </td>
+            <td style="width: 25%;"> التاريخ </td>
+            <td>السبب</td>
           </tr>
+          <tr ng-repeat="mark in student.marks" class="hdr-mark" id="hdr-mark-{{mark.number}}"
+            on-double-tap="selectMark({{mark}})">
+
+            <!--   <button class="button ion-compose " style="padding: 0px;border: 0px;min-width: 30px;" ng-click="editMark(mark)"> </button> -->
+            <!--  -->
+
+            <td>
+              <div style="zoom:1.2;border:1px solid rgba(0, 0, 139, 0.233);border-radius: 4px;
+            ;width: 85%;color: rgb(7, 4, 34);margin: auto;">
+                <span ng-if="mark.value>0" >+</span>
+                <span ng-if="mark.value>0" style="color: darkblue;">{{mark.value}}</span>
+                <span ng-if="mark.value<0" style="color: darkred;">{{mark.value}}</span>
+                ن</div>
+            </td>
+            <td>{{mark.unix_time|date:'mediumDate'}}</td>
+            <td style="text-align: right;vertical-align: middle;position: relative;height:100%;">
+
+              <div>
+                <div style="width: 100%">{{mark.title}}</div>
+                <div ng-if="mark.observation.length>0" class="hdr-second-txt">
+                  <div>
+                    <span class="icon ion-arrow-left-b" style="position: relative;top:2px;color: goldenrod;"></span>
+                    <span style="white-space: pre-line;">{{mark.observation}}</span>
+                  </div>
+                </div>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+        </table>
+
+        <table style="width: 100%;">
           <tr>
-            <td></td>
+            <td style="text-align: center;"><button ng-click="openModal_for_addStudentMark(false)" class="button positive ion-ribbon-a"
+                style="text-align: right;"> إدراج علامة
+                إضافية</button></td>
           </tr>
         </table>
+
+
       </div>
       <table style="width: 100%">
         <tr>
@@ -191,23 +276,25 @@
         <tr>
           <td style="font-size: 0.9em;text-align: right;padding: 0px 4px 0px 0px">ملاحظات</td>
         </tr>
-        <tr>
+
+        <tr class="lined-paper-pattern">
           <td ng-show="observationUpdateMode==false" on-tap="switchObservationUpateMode()"
-            style="font-size: 1em;text-align: right;vertical-align: top;height: 20vmax" class="lined-paper-pattern">
-            {{student.observation}}</td>
+            class="hdr-student-observation">
+            <div class="hdr-student-observation-content" style="min-height: 65px;">{{student.observation}}</div>
+          </td>
 
           <td ng-show="observationUpdateMode==true" style="text-align: right;vertical-align: top;height: 20vmax"
-            class="lined-paper-pattern">
+            class="hdr-student-observation">
 
-            <textarea ng-model="student.observation" id="hdr-textarea-observation"
-              style="width: 100%;font-family: hdrFont;font-size: 1em;line-height: 1.4em;background-color: transparent"
-              rows="10">
+            <textarea ng-model="student.observation" class="hdr-student-observation-content"
+              style="width: 100%;background-color: transparent;" rows="10">
           </textarea>
 
           </td>
           </td>
         </tr>
       </table>
+
 
 
       <table class="hdr-student2-tabel">
@@ -225,3 +312,74 @@
   </ion-content>
 
   </ion-veiw>
+
+  <script id="addstudentmarkmodal.html" type="text/ng-template">
+    <ion-modal-view>
+      <ion-header-bar class="balanced-bg">
+        <h1 class="title">المكافأة بالعلامات الإضافية</h1>
+      </ion-header-bar>
+      <ion-content dir="rtl" style="padding:16px;">
+   <p class="hdr-parag">
+    تساعد المكافآت بالعلامات الإضافية على تحفيز التلاميذ، لا سيما من لا يملك منهم ميلا طبيعيا للعمل الجاد، وعلى نتويه بمجهودات التلاميذ النشيطين و المواظبين.
+   </p>
+
+   <div class="hdr-parag" style="" dir="rtl">
+  إضافة علامة :
+   </div>
+<table style="width:100%" id="hdr00009" >
+  <tr><td> قيمة العلامة <span>(نقطة) </span></td></tr>
+  <tr>
+    <td style="text-align:center">
+     <table id="hdr-mark-up-and-down">
+       <tr>
+         <td style="text-align:left"><button class="button" ng-click="plusPoint()">+</button></td>
+         <td> 
+          <div ng-model="newMark.value" style="font-size:3.5em;background-color:transparent;width:80px;text-align:center">{{newMark.value}}</div>
+        </td>
+         <td style="text-align:right"><button class="button" ng-click="minusPoint()">-</button></td>
+       </tr>
+     </table>
+    
+  </td>
+  </tr>
+  
+  <tr><td>نوع المشاركة</td></tr>
+  <tr>
+    <td style="text-align:right" id="hdr-marks-choices">
+        <div>
+            <input style="zoom:1.6" type="radio"  name="mocharaka" ng-model="newMark.id" value="1" checked>
+            <label style="position:relative;top:-6px">مشاركة: إجابة عن سؤال</label>
+        </div>
+
+        <div>
+            <input style="zoom:1.6" type="radio"  name="mocharaka" ng-model="newMark.id"  value="2">
+            <label style="position:relative;top:-6px" >مشاركة: طرح سؤال مهم</label>
+        </div>
+        
+        <div>
+            <input style="zoom:1.6" type="radio"  name="mocharaka" ng-model="newMark.id"  value="3">
+            <label style="position:relative;top:-6px" >مشاركة أو عمل آخر</label>
+        </div>
+  </td>
+</tr>
+<tr><td> ملاحظات</td></tr>
+<tr class="lined-paper-pattern">
+    <td style="text-align: right;vertical-align: top;height: 4vmax"
+    class="hdr-student-observation">
+
+    <textarea ng-model="newMark.observation" class="hdr-student-observation-content"
+      style="width: 100%;background-color: transparent;" rows="4">
+  </textarea>
+</td>
+</tr>
+</table>
+
+     <div style="margin-top:10px;text-align:right;width:100%"> 
+      <button class="button button-positive" ng-click="addMark()" style="width:40%"><span ng-if="editMarkMode">تعديل</span><span ng-if="!editMarkMode">إضافة</span></button>
+      <button class="button  button-assertive  ion-trash-a " ng-if="editMarkMode" ng-click="removeMark()"></button>
+      <button class="button button-outline " ng-click="closeModal()">رجوع</button>
+     </div>
+        
+      </ion-content>
+    </ion-modal-view>
+  </script>

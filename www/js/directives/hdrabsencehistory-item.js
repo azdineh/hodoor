@@ -14,9 +14,6 @@ angular.module('hdrApp')
 				}
 
 
-			},
-			link: function (scope, element, attrs) {
-
 			}
 		};
 	});

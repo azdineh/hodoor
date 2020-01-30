@@ -154,7 +154,8 @@ angular.module('hdrApp')
             // pour afficher les sesions de maniere progressive..
 
             //premiere affichage..
-            firstShow();
+            //firstShow();
+            $scope.refresh();
 
 
             $scope.$on('$ionicView.enter', function () {

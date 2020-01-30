@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="20012" id="com.ionicframework.chapter5978610" version="1.6.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="20015" id="com.ionicframework.chapter5978610" version="1.7.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Hodoor</name>
     <description>
        Application pour les enseignants aidant à marquer et garder l'historique des absences des élèves. 

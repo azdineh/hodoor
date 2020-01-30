@@ -1,9 +1,9 @@
 angular.module('hdrApp')
     .controller('HomeController', function ($scope, hdrlocalstorage, $rootScope,
-        $window, $ionicPlatform) {
+        $ionicPlatform) {
 
         $scope.page = "home";
-
+        $scope.isthereNewVersion = false;
         hdrlocalstorage.init();
 
 
@@ -15,43 +15,43 @@ angular.module('hdrApp')
                 cordova.getAppVersion.getVersionCode(function (versioncode) {
                     veersion_code = versioncode;
                     console.log("Version code :" + veersion_code);
+
+                    window.FirebasePlugin.setConfigSettings({
+                        // inisilize the newest_version_code by the current version
+                        newest_version_code: veersion_code
+                    });
+
+                    window.FirebasePlugin.fetch(60 * 60 * 24, function () {
+                        // success callback
+                    }, function () {
+                        // error callback
+                    });
+
+                    window.FirebasePlugin.activateFetched(function (activated) {
+                        // activated will be true if there was a fetched config activated,
+                        // or false if no fetched config was found, or the fetched config was already activated.
+                        console.log(activated);
+
+                    }, function (error) {
+                        console.error(error);
+                    });
+
+
+                    window.FirebasePlugin.getValue("newest_version_code", function (newestversioncode) {
+                        console.log("newest version code :" + newestversioncode);
+
+                        if (newestversioncode == veersion_code) {
+                            $scope.isthereNewVersion = false;
+                        }
+                        else {
+                            $scope.isthereNewVersion = true;
+                        }
+
+                    }, function (error) {
+                        console.error(error);
+                    });
                 });
 
-
-                window.FirebasePlugin.setConfigSettings({
-                    // inisilize the newest_version_code by the current version
-                    newest_version_code: veersion_code
-                });
-
-                window.FirebasePlugin.fetch(60 * 60 * 24, function () {
-                    // success callback
-                }, function () {
-                    // error callback
-                });
-
-                window.FirebasePlugin.activateFetched(function (activated) {
-                    // activated will be true if there was a fetched config activated,
-                    // or false if no fetched config was found, or the fetched config was already activated.
-                    console.log(activated);
-
-                }, function (error) {
-                    console.error(error);
-                });
-
-
-                window.FirebasePlugin.getValue("newest_version_code", function (newestversioncode) {
-                    console.log("newest version code :" + newestversioncode);
-
-                    if (newestversioncode == veersion_code) {
-                        $scope.isthereNewVersion = false;
-                    }
-                    else {
-                        $scope.isthereNewVersion = true;
-                    }
-
-                }, function (error) {
-                    console.error(error);
-                });
 
             })
         }
@@ -196,13 +196,21 @@ angular.module('hdrFilters', [])
             var ageDifMs = Date.now() - birthdate.getTime();
             var ageDate = new Date(ageDifMs); // miliseconds from epoch
             var ageYear = Math.abs(ageDate.getUTCFullYear() - 1970);
-            var ageMonth = ageDate.getUTCMonth();
+            var ageMonth = ageDate.getUTCMonth() + 1;
 
-            if (ageMonth <= 6) {
-                age = ageYear + " عام ";
+            console.log(dateSimpleStringFormat + " :" + ageYear + "/" + ageMonth)
+
+            if (azdutils.isBirthday(dateSimpleStringFormat)) {
+                //age = ageYear + "سنة كاملة"
+                age = ageYear + 1 + "عام";
             }
             else {
-                age = ageYear + " عام ونصف";
+                if (ageMonth <= 6) {
+                    age = ageYear + " عام ";
+                }
+                else {
+                    age = ageYear + " عام ونصف ";
+                }
             }
             return age;
 

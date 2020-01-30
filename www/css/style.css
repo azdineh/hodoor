@@ -26,6 +26,10 @@ ion-content {
   color: #FFFFFF !important;
 }
 
+.card-red .hdr-student-observation-content {
+  color: rgb(190, 35, 35) !important;
+}
+
 .card-red .item {
   /*  background: rgba(202, 18, 18, 0.681) !important; */
   background-image: linear-gradient(to right, #e78a8a, #d63c3c) !important;
@@ -202,10 +206,23 @@ body {
 }
 
 .lined-paper-pattern {
-  background-color: #fff !important;
+  background-color: white !important;
   background-image: linear-gradient(90deg, transparent 95%, #abced4 95%, #abced4 95.4%, transparent 95.4%), linear-gradient(#eee .1em, transparent .1em) !important;
-  background-size: 100% 1.42em !important;
+  background-size: 100% 1em !important;
   padding-right: 7% !important;
+}
+
+.hdr-student-observation{
+  padding-top: 0.4em;
+  padding-bottom: 6px;
+  font-size: 0.9em;
+  padding-right: 24px !important;
+  background-image:linear-gradient(to bottom, rgba(249, 234, 185, 0.315),rgba(247, 242, 201, 0.239));
+}
+
+.hdr-student-observation-content{
+  white-space: pre-line;line-height: 1.1em;
+  color: rgb(190, 35, 35)
 }
 
 /*http://www.svgeneration.com/recipes/GPlay/ */
@@ -286,7 +303,8 @@ body {
 .hdr-second-txt {
   /*    color: rgb(83, 79, 94)!important; */
   color: #666;
-  font-size: 0.85em;
+  font-size: 0.9em;
+  line-height: 1.3em;
 }
 
 .card {

@@ -143,6 +143,8 @@ angular.module('hdrApp')
 
                 //update object
                 vm.init();
+                vm.saveInFile();
+                
             }
 
 

@@ -31,32 +31,28 @@
                     ng-repeat="classroom in classrooms_view track by $index"
                     ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
 
-                    <div class="hdr-classroom-container">
+                    <div class="hdr-classroom-container" style="width: 100%;">
                         <div id="hdr-item0" class="hdr-item">
                             <button class="button button-outline" ng-disabled="classroom.students.length==0"
                                 ng-click="showActionSheet(classroom)">
                                 <i class="ion-android-more-vertical" ng-hide="clicked" style="zoom: 1.5"></i>
                             </button>
                         </div>
-                        <div id="hdr-item1" class="hdr-item" style="position: relative;margin: 4px;">
+                        <div id="hdr-item1" class="hdr-item" style="position: relative;margin: 4px;width: inherit;height: 80px;">
 
                             <button ng-disabled="classroom.students.length==0"
                                 ng-style="{'background-color': classroom.color }"
-                                style="text-align: center;border-radius: 16px" class="button button-outline"
+                                style="text-align: center;border-radius: 16px;width: 100%;" class="button button-outline"
                                 id="{{classroom.id}}" ng-click="startAttendanceCall(classroom,'-1')">
 
-                                <div style="margin-right: 10px;">
-                                    <div class="hdr-main-text">
+                                <div style="margin-right: 10px;text-align: center;width: 100%">
+                                    <div class="hdr-main-text;">
                                         <span class="dark">
-                                            <span> {{classroom.title}}</span>
+                                            <span style="font-size: 1.3em;"> {{classroom.title}}</span>
                                         </span>
                                     </div>
-                                    <div class="hdr-sub-text dark">{{classroom.level}}</div>
+                                    <div class="hdr-sub-text dark" style="white-space: normal;line-height: 1.1em;width: 100%;">{{classroom.level}}</div>
                                 </div>
-
-
-
-
                             </button>
 
 

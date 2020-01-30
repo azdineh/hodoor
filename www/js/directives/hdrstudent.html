@@ -129,6 +129,12 @@
 
           </div>
         </td>
+        
+        <td style="max-width: 20px;">
+          <div ng-repeat="mark in student.marks"
+            style="color: firebrick;font-size: 0.65em;font-weight: bold;text-align: center;vertical-align: middle;">
+            +{{mark.value}}ن</div>
+        </td>
 
         <td style="">
           <div id="hdr-absent-symbol" ng-show="showabsences==true">
@@ -150,15 +156,13 @@
           </div>
         </td>
       </tr>
-      <tr ng-if="student.observation.length>0">
-        <td colspan="4" style="padding-right: 4px">
-          <span class="icon ion-compose"></span>
-          <span style="color: rgb(36, 33, 33)">
-            {{student.observation}}
-
-          </span>
+      <tr ng-if="student.observation.length>0" class="lined-paper-pattern" style="zoom: 1.2;">
+        <td colspan="5" class="hdr-student-observation">
+          <!-- <span class="icon ion-compose" style="margin-right: 12px;"></span> -->
+          <div class="hdr-student-observation-content">{{student.observation}}</div>
         </td>
       </tr>
+
     </table>
 
   </button>

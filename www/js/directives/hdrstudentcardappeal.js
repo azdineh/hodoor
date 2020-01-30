@@ -8,6 +8,7 @@ angular.module('hdrApp')
 				$scope.tapped = false;
 				$scope.cardInGray = "card-gray";
 
+				
 
 				$timeout(function () {
 
