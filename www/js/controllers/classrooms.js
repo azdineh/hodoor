@@ -1,6 +1,6 @@
 angular.module('hdrApp').controller('ClassroomsController',
     function ($scope, $rootScope, hdrFileSystem, $window, $state, $ionicLoading, $ionicScrollDelegate,
-        hdrlocalstorage, $ionicActionSheet, $interval, $cordovaFile, $ionicPopup) {
+        hdrlocalstorage, $ionicActionSheet, $interval, $cordovaFile, $ionicPopup, smartxlsreader) {
 
         $scope.page = "Classrooms";
         var classrooms_colors = ['#66d9e8', '#ffd43b', '#e66824', '#a9e34b', '#b197fc', '#c7bfb0', '#faa2c1', '#57e69a', '#e6a857', '#bfb4a6'];
@@ -104,6 +104,34 @@ angular.module('hdrApp').controller('ClassroomsController',
             }
         }
 
+
+        $scope.extarctClassroomFromExcel = function () {
+            window.resolveLocalFileSystemURL("file:///android_asset/www/hodoor-classrooms-simulation/TCS-3.xlsx", function (entry) {
+                hdrFileSystem.getWorkbook(entry)
+                    .then(function (workbook) {
+                        smartxlsreader.init(workbook, 0);
+
+                        //var sellred = smartxlsreader.searchCellByContent(" اسم  التلميذ ");
+                        //console.log(sellred);
+
+                        //console.log(XLSX.utils.sheet_to_json(smartxlsreader.currentSheet))
+
+                        //console.log(smartxlsreader.currentSheet[{c:3,r:15}])
+                        //var ccel = "D16";
+                        //var nextccel = smartxlsreader.nextCell(ccel);
+                        //console.log("Next cell :"+nextccel);
+                        //console.log(smartxlsreader.getCellValue(nextccel));
+                        var nextccel = smartxlsreader.nextCell('D16');
+                        console.log(nextccel+"  "+smartxlsreader.getCellValue(nextccel))
+
+
+                    }, function (err) {
+                        alert(err);
+                    })
+
+            })
+        }
+
         $scope.importSimulatedClassrooms = function () {
 
             ionic.Platform.ready(function () {
@@ -157,13 +185,15 @@ angular.module('hdrApp').controller('ClassroomsController',
         };
 
 
+
+
         $scope.importClassrooms = function () {
 
             ionic.Platform.ready(function () {
                 $scope.show();
                 var pathDist = cordova.file.cacheDirectory;
                 var path = pathDist + "/hodoor-classrooms";
-                console.log(path);
+                //console.log(path);
                 window.resolveLocalFileSystemURL(path, function (directoryentry) {
 
                     var counter = 0;
@@ -321,8 +351,6 @@ angular.module('hdrApp').controller('ClassroomsController',
                 var pathDist = cordova.file.cacheDirectory;
                 fileChooser.open({ "mime": "application/zip" }, function (uripath) {
 
-
-
                     function successNative(finalpath) {
                         //alert("url of file is " + finalpath);
                         console.log("url of file is " + finalpath);
@@ -345,8 +373,8 @@ angular.module('hdrApp').controller('ClassroomsController',
                     }
 
                     function failNative(err) {
-/*                         var msg = "An error here,while resolving native file path"
-                        alert('Access denied ' + '[OR]' + msg + 'code :' + err.code + " message : " + err.message); */
+                        /*                         var msg = "An error here,while resolving native file path"
+                                                alert('Access denied ' + '[OR]' + msg + 'code :' + err.code + " message : " + err.message); */
                         alert(err);
                         console.log(err);
                     }

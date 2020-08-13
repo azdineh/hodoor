@@ -1,10 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="20015" id="com.ionicframework.chapter5978610" version="1.7.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="20016" id="com.ionicframework.chapter5978610" version="1.7.2" 
+xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" >
     <name>Hodoor</name>
     <description>
        Application pour les enseignants aidant à marquer et garder l'historique des absences des élèves. 
     </description>
-    <author email="azdineh@gmail.com" href="www.hodoor.com">
+    <author email="azdineh@gmail.com" href="https://7odoor.blogspot.com/">
       فريق حضور
     </author>
     <content src="index.html" />

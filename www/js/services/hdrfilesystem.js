@@ -63,6 +63,7 @@ angular.module('hdrApp')
                             var workbook = XLSX.read(evt.target.result, HdrFileSystem.readOptions);
                             deferred.resolve(workbook);
                         };
+                        
                         if (file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                             reader.readAsBinaryString(file);
                         } else {

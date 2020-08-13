@@ -1,4 +1,4 @@
-<ion-view view-title="لائحة الأقسام" cache-view="false">
+<ion-view view-title="الفصول الدراسية" cache-view="false">
 
     <ion-content dir="rtl">
         <div ng-show="classrooms_view.length>0">
@@ -38,12 +38,14 @@
                                 <i class="ion-android-more-vertical" ng-hide="clicked" style="zoom: 1.5"></i>
                             </button>
                         </div>
-                        <div id="hdr-item1" class="hdr-item" style="position: relative;margin: 4px;width: inherit;height: 80px;">
+                        <div id="hdr-item1" class="hdr-item"
+                            style="position: relative;margin: 4px;width: inherit;height: 80px;">
 
                             <button ng-disabled="classroom.students.length==0"
                                 ng-style="{'background-color': classroom.color }"
-                                style="text-align: center;border-radius: 16px;width: 100%;" class="button button-outline"
-                                id="{{classroom.id}}" ng-click="startAttendanceCall(classroom,'-1')">
+                                style="text-align: center;border-radius: 16px;width: 100%;"
+                                class="button button-outline" id="{{classroom.id}}"
+                                ng-click="startAttendanceCall(classroom,'-1')">
 
                                 <div style="margin-right: 10px;text-align: center;width: 100%">
                                     <div class="hdr-main-text;">
@@ -51,7 +53,9 @@
                                             <span style="font-size: 1.3em;"> {{classroom.title}}</span>
                                         </span>
                                     </div>
-                                    <div class="hdr-sub-text dark" style="white-space: normal;line-height: 1.1em;width: 100%;">{{classroom.level}}</div>
+                                    <div class="hdr-sub-text dark"
+                                        style="white-space: normal;line-height: 1.1em;width: 100%;">{{classroom.level}}
+                                    </div>
                                 </div>
                             </button>
 
@@ -74,49 +78,64 @@
         <div ng-show="classrooms_view.length==0 && isDataFileExist==false">
             <div>
                 <div dir="rtl" style="padding: 18px" class="hrd-parag">
-                    <span class="icon ion-alert-circled assertive" style="font-size: 8vmax"></span>
-                    <p class="hdr-title">لا يتوفر التطبيق على بيانات التلاميذ بعد.</p>
+                    <div
+                        style="border: 1px solid rgba(124, 26, 26, 0.507);background-color: rgba(218, 25, 25, 0.226);padding: 16px;">
+                        <span class="icon ion-alert-circled assertive" style="font-size: 8vmax"></span>
+                        <p class="hdr-title">
+                            لم يتم إضافة أي فصل دراسي بعد.
+                        </p>
+                    </div>
                     <br />
 
                     <div class="hdr-parag">
-                        يحب أن يتوفر هاتفك على ملف الأقسام المُحمّل من موقع مسار، حيث يقوم التطبيق بتغذية قاعدة بياناته
-                        من لوائح التلاميذ المتواجدة
-                        داخله.
+                        يقوم التطبيق بإضافة الفصول الدراسية إنطلاقا من ملفات إكسل التي تحتوي على لوائح النلاميذ.
                     </div>
                     <div class="hdr-parag">
-                        لتحقيق ذلك، قم بإنجاز الخطوتين التاليتين :
+                        قم بتحديد ملف إكسل عن طريق هذا الزر.
                     </div>
-                    <div class="hdr-parag">
-                        1) عن طريق هاتفك، قم بتصدير لوائح الأقسام من موقع منظومة مسار ( قم باختيار التصدير حسب الأستاذ).
+
+
+                    <div style="width:100%;text-align: center;visibility: hidden;">
+                        <button class="button icon-right ion-document button-large button-positive"
+                            style="width:60%;;" ng-click="zipFilesAndImportClassrooms()">
+                            حدد ملف Excel
+                        </button>
+
                     </div>
-                    <div class="hdr-parag">
-                        2) بعد ذلك، عد الى التطبيق ثم إضغط على الزر الأزرق الموالي لتحديد الملف المُحمل .
+
+                    <div style="width:100%;text-align: center;">
+                        <button class="button icon-right ion-document button-large button-positive"
+                            style="width:60%;;" ng-click="extarctClassroomFromExcel()">
+                            حدد ملف Excel
+                        </button>
+
+                    </div>
+
+                    <br />
+                    <div>
+
+                        <div class="hdr-parag">
+                            عند تحديد الملف، سيتأكد التطبيق من وجود العناصر الأساسية التالية :
+                            <ol style="list-style-type: decimal; zoom: 0.9;padding-right: 26px;">
+                                <li>عمود بعنوان : <b>الإسم</b></li>
+                                <li>عمود بعنوان : <b>النسب</b></li>
+                                <li>
+                                    أو عمود بعنوان : <b>الإسم الكامل</b>، إذ كان الإسم و النسب مجتمعين في عمود واحد 
+                                </li>
+                                <li>خانة بعنوان : <b>القسم</b></li>
+                                <li>خانة بعنوان : <b>المستوى</b></li>
+                            </ol>
+                            <br/>
+                             يمكن للتطبيق إغناء قاعدة بياناته بالعناصر التالية إن وجدت:
+                            <ol style="list-style-type: decimal; zoom: 0.9;padding-right: 26px;">
+                                <li>عمود بعنوان : <b>تاريخ الإزدياد</b></li>
+                                <li>عمود بعنوان : <b>النوع</b></li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
 
-                <div style="text-align: center;display:table-cell;vertical-align: middle">
-                    <br />
 
-                    <button class="button icon-right ion-plus button-large button-positive"
-                        style="width:60%;;border-radius: 100px" ng-click="zipFilesAndImportClassrooms()">
-                        حدد ملف الأقسام
-                    </button>
-
-                    <br />
-                    <br />
-                    <p dir="rtl" style="padding: 18px;" class="hdr-parag hdr-second-txt">يمكن كذلك استعمال بيانات
-                        محاكاتية مدمجة مع التطبيق، هذه البيانات تمكن من أخذ فكرة عملية قبل استخدام معلومات
-                        الأقسام الخاصة بالأستاذ.
-                    </p>
-
-                    <button class="button" style="width:60%" ng-click="importSimulatedClassrooms()">
-                        استعمال بيانات محاكاتية
-                    </button>
-
-                    <br />
-                    <br />
-                    <br />
-                </div>
             </div>
         </div>
     </ion-content>
