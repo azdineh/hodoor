@@ -182,9 +182,9 @@ angular.module('hdrApp')
 				okText: 'تعديل'
 			});
 
-			$timeout(function () {
-				$scope.selectSessionParity($scope.session_view.parity);
-			}, 570);
+			// $timeout(function () {
+			// 	$scope.selectSessionParity($scope.session_view.parity);
+			// }, 570);
 
 			confirmPopup.then(function (res) {
 				if (res) {
@@ -278,7 +278,7 @@ angular.module('hdrApp')
 
 							//$scope.session_view.title = $scope.hEnd + ":" + $scope.mEnd + "-" + $scope.hStart + ":" + $scope.mStart;
 							$scope.session_view.isExamSession = $scope.data.isExamSession == true ? 1 : 0;
-							$scope.session_view.parity = $scope.userPartity;
+							//$scope.session_view.parity = $scope.userPartity;
 
 							hdrlocalstorage.updateSession($scope.session_view);
 

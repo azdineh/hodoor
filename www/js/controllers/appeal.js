@@ -55,7 +55,7 @@ angular.module('hdrApp')
 
 
 
-		$scope.groups = ["all", "odd", "even"];
+		$scope.groups = ["all", "odd", "even", "groupe1", "groupe2"];
 		$scope.currentGroup = "all";
 
 		$scope.nextGroup = function () {
@@ -93,6 +93,12 @@ angular.module('hdrApp')
 			}
 			if ($scope.currentGroup == 'all') {
 				flag = true;
+			}
+			if ($scope.currentGroup == 'groupe1') {
+				flag = (index + 1) <= 20
+			}
+			if ($scope.currentGroup == 'groupe2') {
+				flag = (index + 1) > 20
 			}
 
 			return flag;
@@ -182,7 +188,7 @@ angular.module('hdrApp')
 			$scope.classroom.students.push({ id: '9', full_name: 'يسرى منال', registration_number: '159986', massar_number: "S12345687", birth_date: "01/12/2000", queuing_number: '9', marks: [{ value: 1 }, { value: 1 }] });
 			$scope.classroom.students.push({ id: '10', full_name: 'خولة لحمر', registration_number: '159986', massar_number: "S12345687", birth_date: "15/10/1998", queuing_number: '10' });
 			$scope.classroom.students.push({ id: '11', full_name: 'مريم يعقوبي', registration_number: '159986', massar_number: "S12345687", birth_date: "12/02/2000", queuing_number: '11' });
-			$scope.classroom.students.push({ id: '12', full_name: 'عزيز ملوكي', registration_number: '159986', massar_number: "S12345687", birth_date: "04/08/1986", queuing_number: '12' ,marks: [{ value: 1 }, { value: 3 }, { value: 2 },{value :3}]});
+			$scope.classroom.students.push({ id: '12', full_name: 'عزيز ملوكي', registration_number: '159986', massar_number: "S12345687", birth_date: "04/08/1986", queuing_number: '12', marks: [{ value: 1 }, { value: 3 }, { value: 2 }, { value: 3 }] });
 			$scope.classroom.students.push({ id: '13', full_name: 'سناء عكرود', registration_number: '159986', massar_number: "S12345687", birth_date: "12/04/2000", queuing_number: '13' });
 			$scope.classroom.students.push({ id: '14', full_name: 'لحبيب نظيف', registration_number: '159986', massar_number: "S12345687", birth_date: "12/05/2000", queuing_number: '14' });
 			$scope.classroom.students.push({ id: '15', full_name: 'كبور سميرس', registration_number: '159986', massar_number: "S12345687", birth_date: "12/06/2000", queuing_number: '15' });
@@ -253,9 +259,13 @@ angular.module('hdrApp')
 					}
 				]
 			});
-			$timeout(function () {
+
+			/* $timeout(function () {
 				$scope.selectSessionDuration("1");
-			}, 250);
+			}, 500) */
+
+
+
 		};
 
 		$scope.showActionSheet = function (student) {
@@ -726,10 +736,10 @@ angular.module('hdrApp')
 			else {
 				$scope.showPopup($scope.choiceIndexOfFastCase);
 
-				$timeout(function () {
-					$scope.selectSessionParity("all");
+				// $timeout(function () {
+				// 	$scope.selectSessionParity("all");
 
-				}, 250);
+				// }, 250);
 
 			}
 
@@ -802,7 +812,9 @@ angular.module('hdrApp')
 			} */
 
 		}
-
+		
+		$scope.sessionDurationSelected = 1;
+		
 		$scope.selectSessionDuration = function (id) {
 			if (id == "1") {
 				document.getElementById("hdr-session-duration-2").style.backgroundColor = "rgb(212, 223, 206)";

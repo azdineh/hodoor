@@ -168,7 +168,7 @@ angular.module('hdrApp')
         }
 
         $scope.goToBlog = function () {
-            cordova.InAppBrowser.open("http://7odoor.blogspot.com/", '_system');
+            cordova.InAppBrowser.open("https://7odoor.blogspot.com/2020/01/blog-post_29.html", '_system');
         }
         $scope.goToPlayStore = function () {
             cordova.InAppBrowser.open("https://goo.gl/bZz1sD", '_system');
@@ -261,8 +261,15 @@ angular.module('hdrFilters', [])
             var hdrparity = '';
             if (input == 'odd') {
                 hdrparity = 'فرديين';
-            } else if (input == 'even') {
+            }
+            if (input == 'even') {
                 hdrparity = 'زوجيين';
+            }
+            if (input == 'groupe1') {
+                hdrparity = 'فوج 1';
+            }
+            if (input == 'groupe2') {
+                hdrparity = 'فوج 2';
             }
 
             return hdrparity;

@@ -1,6 +1,6 @@
 angular.module('hdrApp').controller('ClassroomsController',
     function ($scope, $rootScope, hdrFileSystem, $window, $state, $ionicLoading, $ionicScrollDelegate,
-        hdrlocalstorage, $ionicActionSheet, $interval, $cordovaFile, $ionicPopup, smartxlsreader) {
+        hdrlocalstorage, $ionicActionSheet, $interval, $cordovaFile, $ionicPopup, smartxlsreader, azdutils) {
 
         $scope.page = "Classrooms";
         var classrooms_colors = ['#66d9e8', '#ffd43b', '#e66824', '#a9e34b', '#b197fc', '#c7bfb0', '#faa2c1', '#57e69a', '#e6a857', '#bfb4a6'];
@@ -122,7 +122,7 @@ angular.module('hdrApp').controller('ClassroomsController',
                         //console.log("Next cell :"+nextccel);
                         //console.log(smartxlsreader.getCellValue(nextccel));
                         var nextccel = smartxlsreader.nextCell('D16');
-                        console.log(nextccel+"  "+smartxlsreader.getCellValue(nextccel))
+                        console.log(nextccel + "  " + smartxlsreader.getCellValue(nextccel))
 
 
                     }, function (err) {
@@ -345,6 +345,114 @@ angular.module('hdrApp').controller('ClassroomsController',
 
 
         };
+
+        //launch selectExcelFiles filechooser
+        $scope.selectExcelFiles = function () {
+
+            console.log("selectExcelFiles")
+
+            
+            if(ionic.Platform.isWebView()){
+                filehandler = shaggy.filehandler;
+                function success(files) {
+                    $scope.show()
+                    console.log(files);
+                    uris = files.uris; //array of selected uris   
+                    //You can now work with the uris, to access the selected files.
+                    var j = 0;
+                    $interval(function () {
+    
+                        window.resolveLocalFileSystemURL(uris[j], function (entry) {
+                            console.log(entry)
+                            hdrFileSystem.isHdrFile(entry)
+                                .then(function (workbook) {
+                                    console.log("workbook is ready")
+                                    //add classroom to hdrFileSystem.classrooms
+                                    hdrFileSystem.addClassroom(workbook);
+                                    var new_classroom = hdrFileSystem.classrooms.shift()
+                                    if (azdutils.findClassroomViaTitle(hdrlocalstorage.classrooms, new_classroom.title)) {
+                                        $scope.hide();
+                                        var msg = new_classroom.title + "\n" + "قد أُدرج هذا الملف السابقا..";
+                                        alert(msg)
+                                    }
+                                    else {
+    
+                                        //set classrooms colors
+    
+                                        var itecolor = hdrlocalstorage.classrooms.length;
+    
+                                        //for to garanty colors for all classrooms
+                                        if (itecolor >= 9) {
+                                            itecolor = (itecolor % 9) + 1;
+                                        }
+                                        else {
+                                            itecolor++;
+                                        }
+    
+                                        //$rootScope.classrooms_view = hdrdbx.classrooms_view;
+                                        new_classroom.color = classrooms_colors[itecolor - 1];
+    
+                                        hdrlocalstorage.classrooms.push(new_classroom);
+                                        $rootScope.students_count_global += new_classroom.students.length;
+    
+                                        hdrlocalstorage.save('classrooms', null);
+                                        if (j == uris.length){
+                                            $scope.hide();
+                                            $ionicScrollDelegate.scrollBottom(true);
+                                        }
+                                    }
+    
+    
+    
+                                }, function (error) {
+                                    $scope.hide();
+                                    alert(error);
+                                })
+                        }, function (error) {
+                            $scope.hide();
+                            console.log("resolveLocalFileSystemURL error :");
+                            console.log(error);
+                        });
+    
+                        j++;
+                    }, 250, uris.length)
+    
+                }
+    
+                function error(message) {
+                    console.log("Got the following error: " + message);
+                    $scope.hide();
+                }
+    
+                options =
+                {
+                    types: ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"], //array of strings
+                    num: 0, // 0 (unlimited) and 1 supported
+                    persistent: false, //Not yet supported
+                    title: "Choose files(s)"
+                };
+                filehandler.choose(success, error, options);
+            }else{
+                //browser view
+                console.log("classrooms page");
+                $rootScope.classrooms_view=[];
+                $rootScope.classrooms_view.push({ id: "1", color: classrooms_colors[0], title: "TCS4", level: "جذع م fd dfdبيب يبيب شيشسي صثصث سؤؤشترك علمي  بيس ", 'students': [{ id: '1', full_name: "عمر فيلالي", queuing_number: "10" }, { id: '2', full_name: "كريم زرهوني", queuing_number: "12" }, { id: '3', full_name: "سفياني بدر", queuing_number: "22" }] });
+                $rootScope.classrooms_view.push({ id: "2", color: classrooms_colors[1], title: "TCLSH2", level: "جذع مشترك أداب و علوم إنسانية", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
+                $rootScope.classrooms_view.push({ id: "3", color: classrooms_colors[2], title: "1BacSM4", level: "أولى باك علوم رياضية", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
+                $rootScope.classrooms_view.push({ id: "4", color: classrooms_colors[3], title: "2BacSP3", level: "ثانية علوم فيزيائية", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
+                $rootScope.classrooms_view.push({ id: "5", color: classrooms_colors[4], title: "TCPS1", level: "جذع مشترك خدماتي", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
+                $rootScope.classrooms_view.push({ id: "6", color: classrooms_colors[5], title: "TCSH7", level: "جذع مشترك خدماتي", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
+
+                $rootScope.classrooms_view.forEach(function (classroom) {
+                    $rootScope.students_count_global += classroom.students.length;
+                }, this);
+
+                $window.localStorage['hdr.classrooms_view'] = angular.toJson($rootScope.classrooms_view);
+                $window.localStorage['hdr.students_count_global'] = angular.toJson($rootScope.students_count_global);
+            }
+
+        }
+
 
         $scope.zipFilesAndImportClassrooms = function () {
             if (ionic.Platform.isWebView()) {

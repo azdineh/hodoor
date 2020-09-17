@@ -38,7 +38,7 @@
 		<span ng-show="choiceIndexOfFastCase==1" style="float: right">تغيب جميع التلاميذ</span>
 		<!-- 	<span ng-show="choiceIndexOfFastCase==3" style="float: right">أدخل أرقام التلاميذ الذين حضروا</span> -->
 	</div>
-	<div dir="rtl" ng-show="choiceIndexOfFastCase==0 || choiceIndexOfFastCase==1">
+	<!-- 	<div dir="rtl" ng-show="choiceIndexOfFastCase==0 || choiceIndexOfFastCase==1">
 		<div class="hdr-second-txt">حصة تتعلق ب: ؟</div>
 		<div class="hdr-parity-classroom">
 			<table>
@@ -50,7 +50,7 @@
 				</tr>
 			</table>
 		</div>
-	</div>
+	</div> -->
 	<div style="background: none;margin: auto;margin-top: 10px;width: 100%;">
 
 		<table id="hdr-session-time-picker">
@@ -97,3 +97,21 @@
 			style="padding-right: 46px;background-color: transparent;border: 0px">حصة اختبار</ion-checkbox>
 	</div>
 </div>
+
+<script>
+	selectSessionDuration = function (id) {
+		if (id == "1") {
+			document.getElementById("hdr-session-duration-2").style.backgroundColor = "rgb(212, 223, 206)";
+			document.getElementById("hdr-session-duration-3").style.backgroundColor = "rgb(212, 223, 206)";
+			document.getElementById("hdr-session-duration-4").style.backgroundColor = "rgb(212, 223, 206)";
+		}
+
+		var elm = document.getElementById("hdr-session-duration-" + id);
+		var initbgColor = elm.style.backgroundColor;
+		elm.style.backgroundColor = "rgb(114, 241, 41)";
+
+
+	}
+
+	selectSessionDuration(1);
+</script>

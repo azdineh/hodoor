@@ -122,40 +122,14 @@ angular.module('hdrApp')
             }
 
 
-            /* that.openFile = function (filename) {
-                var q = $q.defer();
-                if (filename) {
-                    window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function (dir) {
-                        dir.getFile(filename, { create: false }, function (fileEntry) {
-                            //data.7dr exist
-                            fileEntry.file(function (file) {
-                                var reader = new FileReader();
-
-                                reader.onloadend = function () {
-                                    //console.log("Successful file read: " + this.result);
-                                    console.log("Successful read loca file " + filename);
-
-                                };
-
-                                reader.readAsText(file);
-
-
-                            }, function (err) {
-                                console.log("error while reading file..")
-                                alert("Error while reading file..")
-                            });
-
-                        }, function (err) {
-                            console.log("data33.7dr is not exist.. show menu to import data from excel files");
-                        });
-
-
-                    });
-                }
-                else {
-                    console.log('file name is empty')
-                }
-            } */
+            /**
+             * return classroom abject via its title if it exists
+             */
+            that.findClassroomViaTitle = function (classrooms_array, classroom_name) {
+                return classroom = classrooms_array.find(function (classroom) {
+                    return classroom_name == classroom.title;
+                })
+            }
 
 
             return that;

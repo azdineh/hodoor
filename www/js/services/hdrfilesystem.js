@@ -1,5 +1,5 @@
 angular.module('hdrApp')
-    .factory('hdrFileSystem', function ($q, hdrKissm, $cordovaFile) {
+    .factory('hdrFileSystem', function ($q, hdrKissm, $cordovaFile, azdutils) {
 
         var fct = function () {
 
@@ -60,10 +60,16 @@ angular.module('hdrApp')
                         var reader = new FileReader();
                         reader.onloadend = function (evt) {
                             //the file resid in evt.target.result
-                            var workbook = XLSX.read(evt.target.result, HdrFileSystem.readOptions);
-                            deferred.resolve(workbook);
+                            try {
+                                var workbook = XLSX.read(evt.target.result, HdrFileSystem.readOptions);
+                                deferred.resolve(workbook);
+                            }
+                            catch (error) {
+                                console.log(error)
+                                deferred.reject("يبدو أن هتاك مشكك مع الملف الجاري");
+                            }
                         };
-                        
+
                         if (file.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                             reader.readAsBinaryString(file);
                         } else {
@@ -81,7 +87,7 @@ angular.module('hdrApp')
             };
 
             /**
-             * [isHdrFile determins if the parameter is a conform file.]
+             * [isHdrFile determins if the parameter is a conform massar file.]
              * @return {promise} [workbook if the file is conform to the HodoorApp criteria.]
              */
             HdrFileSystem.isHdrFile = function (fileentry) {
@@ -175,6 +181,14 @@ angular.module('hdrApp')
                     });
 
                 //return q.promise;
+            }
+
+            /**add hdr classroom to HdrFileSystem.classrooms */
+            HdrFileSystem.addClassroom = function (workbook, callBack) {
+                var kissm = hdrKissm.getKissm(workbook);
+
+                HdrFileSystem.classrooms.push(hdrKissm.convertToClassroom(kissm));
+
             }
 
             /**

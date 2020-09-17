@@ -1,8 +1,41 @@
 <ion-view view-title="الفصول الدراسية" cache-view="false">
 
-    <ion-content dir="rtl">
-        <div ng-show="classrooms_view.length>0">
+    <ion-nav-buttons side="primary">
+        <button class="button icon ion-plus" ng-click="selectExcelFiles()">
 
+        </button>
+    </ion-nav-buttons>
+
+
+    <ion-content dir="rtl">
+        <div ng-show="classrooms_view.length==0 || classrooms_view == null">
+            <p class="title" style="text-align: center;padding: 14px;padding-top: 16vmax;opacity: 0.71;">
+                <img src="img/xlsx.png" width="55%" alt="">
+            </p>
+            <div style="padding: 15px;text-align: right;font-size: 16px;line-height: 28px;opacity: 0.7">
+                <span>لائحة الفصول الدراسية فارغة، </span>
+                <span>لإضافة فصل دراسي، يجب تحديد جذاذة <span>MS Excel</span> الخاص به.</span>
+                    <span>و ذلك بالنقر على الزر </span>
+                <span class="icon ion-plus" style="zoom: 1.2"></span>
+                أعلاه.
+            </div>
+
+
+            <div style="padding: 20px;margin: 24px;text-align: center;border-radius: 8px;border: 1px solid gray;">
+                <p dir="rtl" style="padding: 4px;" class="hdr-parag hdr-second-txt">يمكن كذلك استعمال بيانات
+                    محاكاتية مدمجة مع التطبيق، هذه البيانات تمكن من أخذ فكرة عملية قبل استخدام معلومات
+                    الأقسام الخاصة بالأستاذ.
+                </p>
+    
+                <button class="button hdr-second-txt" ng-click="importSimulatedClassrooms()">
+                    استعمال بيانات محاكاتية
+                </button>
+            </div>
+
+
+        </div>
+
+        <div ng-show="classrooms_view.length>0">
 
             <!--  <ion-spinner ng-if="tapped" icon="lines" class="spinner-assertive" style="position: absolute;top: 35%;left: 35%;z-index: 500"></ion-spinner> -->
 
@@ -11,7 +44,7 @@
 
                 <table style="width: 105%">
                     <tr>
-                        <td> هناك {{students_count_global}} تلميذ وتلميذة موزعين على {{classrooms_view.length}} أقسام.
+                        <td> هناك {{students_count_global}} تلميذ وتلميذة موزعون على {{classrooms_view.length}} أقسام.
                             <br /> بمعدل {{(students_count_global/classrooms_view.length)|number:1}} تلميذ في القسم.
                         </td>
                         <td style="text-align: left;vertical-align: middle">
@@ -27,16 +60,17 @@
                     <i class="ion-information-circled assertive"></i>
                     <span class="assertive"> لبدء عملية النداء، قم بنقر القسم المراد.</span>
                 </div>
+
                 <li class="item hdr-list-item" style="padding:0;height: auto"
                     ng-repeat="classroom in classrooms_view track by $index"
                     ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}">
 
                     <div class="hdr-classroom-container" style="width: 100%;">
-                        <div id="hdr-item0" class="hdr-item">
-                            <button class="button button-outline" ng-disabled="classroom.students.length==0"
+                        <div id="hdr-item0" class="hdr-item" style="width: 10px;">
+                            <!-- <button class="button button-outline" ng-disabled="classroom.students.length==0"
                                 ng-click="showActionSheet(classroom)">
                                 <i class="ion-android-more-vertical" ng-hide="clicked" style="zoom: 1.5"></i>
-                            </button>
+                            </button> -->
                         </div>
                         <div id="hdr-item1" class="hdr-item"
                             style="position: relative;margin: 4px;width: inherit;height: 80px;">
@@ -75,68 +109,9 @@
 
         </div>
 
-        <div ng-show="classrooms_view.length==0 && isDataFileExist==false">
-            <div>
-                <div dir="rtl" style="padding: 18px" class="hrd-parag">
-                    <div
-                        style="border: 1px solid rgba(124, 26, 26, 0.507);background-color: rgba(218, 25, 25, 0.226);padding: 16px;">
-                        <span class="icon ion-alert-circled assertive" style="font-size: 8vmax"></span>
-                        <p class="hdr-title">
-                            لم يتم إضافة أي فصل دراسي بعد.
-                        </p>
-                    </div>
-                    <br />
-
-                    <div class="hdr-parag">
-                        يقوم التطبيق بإضافة الفصول الدراسية إنطلاقا من ملفات إكسل التي تحتوي على لوائح النلاميذ.
-                    </div>
-                    <div class="hdr-parag">
-                        قم بتحديد ملف إكسل عن طريق هذا الزر.
-                    </div>
-
-
-                    <div style="width:100%;text-align: center;visibility: hidden;">
-                        <button class="button icon-right ion-document button-large button-positive"
-                            style="width:60%;;" ng-click="zipFilesAndImportClassrooms()">
-                            حدد ملف Excel
-                        </button>
-
-                    </div>
-
-                    <div style="width:100%;text-align: center;">
-                        <button class="button icon-right ion-document button-large button-positive"
-                            style="width:60%;;" ng-click="extarctClassroomFromExcel()">
-                            حدد ملف Excel
-                        </button>
-
-                    </div>
-
-                    <br />
-                    <div>
-
-                        <div class="hdr-parag">
-                            عند تحديد الملف، سيتأكد التطبيق من وجود العناصر الأساسية التالية :
-                            <ol style="list-style-type: decimal; zoom: 0.9;padding-right: 26px;">
-                                <li>عمود بعنوان : <b>الإسم</b></li>
-                                <li>عمود بعنوان : <b>النسب</b></li>
-                                <li>
-                                    أو عمود بعنوان : <b>الإسم الكامل</b>، إذ كان الإسم و النسب مجتمعين في عمود واحد 
-                                </li>
-                                <li>خانة بعنوان : <b>القسم</b></li>
-                                <li>خانة بعنوان : <b>المستوى</b></li>
-                            </ol>
-                            <br/>
-                             يمكن للتطبيق إغناء قاعدة بياناته بالعناصر التالية إن وجدت:
-                            <ol style="list-style-type: decimal; zoom: 0.9;padding-right: 26px;">
-                                <li>عمود بعنوان : <b>تاريخ الإزدياد</b></li>
-                                <li>عمود بعنوان : <b>النوع</b></li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
         </div>
+
+
     </ion-content>
+
 </ion-view>
