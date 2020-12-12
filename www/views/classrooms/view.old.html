@@ -38,12 +38,14 @@
                                 <i class="ion-android-more-vertical" ng-hide="clicked" style="zoom: 1.5"></i>
                             </button>
                         </div>
-                        <div id="hdr-item1" class="hdr-item" style="position: relative;margin: 4px;width: inherit;height: 80px;">
+                        <div id="hdr-item1" class="hdr-item"
+                            style="position: relative;margin: 4px;width: inherit;height: 80px;">
 
                             <button ng-disabled="classroom.students.length==0"
                                 ng-style="{'background-color': classroom.color }"
-                                style="text-align: center;border-radius: 16px;width: 100%;" class="button button-outline"
-                                id="{{classroom.id}}" ng-click="startAttendanceCall(classroom,'-1')">
+                                style="text-align: center;border-radius: 16px;width: 100%;"
+                                class="button button-outline" id="{{classroom.id}}"
+                                ng-click="startAttendanceCall(classroom,'-1')">
 
                                 <div style="margin-right: 10px;text-align: center;width: 100%">
                                     <div class="hdr-main-text;">
@@ -51,7 +53,9 @@
                                             <span style="font-size: 1.3em;"> {{classroom.title}}</span>
                                         </span>
                                     </div>
-                                    <div class="hdr-sub-text dark" style="white-space: normal;line-height: 1.1em;width: 100%;">{{classroom.level}}</div>
+                                    <div class="hdr-sub-text dark"
+                                        style="white-space: normal;line-height: 1.1em;width: 100%;">{{classroom.level}}
+                                    </div>
                                 </div>
                             </button>
 

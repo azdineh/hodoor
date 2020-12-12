@@ -1,13 +1,7 @@
 angular.module('hdrApp')
-    .controller('StudentController', function ($scope, hdrlocalstorage, $stateParams, $timeout, $ionicScrollDelegate, $filter, $ionicModal) {
+    .controller('StudentController', function ($scope, hdrlocalstorage, $stateParams, $timeout, $ionicScrollDelegate, $filter, $ionicModal, azdutils) {
 
-        $scope.sumMarks = function () {
-            var sum = 0;
-            $scope.student.marks.forEach(function (mark) {
-                sum += mark.value;
-            });
-            return sum;
-        }
+
 
         if (ionic.Platform.isWebView()) {
 
@@ -16,7 +10,7 @@ angular.module('hdrApp')
                 $scope.student.marks = [];
             }
             else {
-                $scope.totalmarks = $scope.sumMarks();
+                $scope.totalmarks = azdutils.sumMarks($scope.student);
             }
             $scope.classroom = hdrlocalstorage.getStudentClassroom($scope.student);
         }
@@ -76,8 +70,8 @@ angular.module('hdrApp')
 
             if ($scope.editMarkMode == true) {
 
-                var ind = $scope.student.marks.findIndex(function(mark){
-                    return mark.number==$scope.selectedMark.number;
+                var ind = $scope.student.marks.findIndex(function (mark) {
+                    return mark.number == $scope.selectedMark.number;
                 })
 
                 if (ind >= 0)
@@ -108,7 +102,7 @@ angular.module('hdrApp')
             }
 
             console.log($scope.student.marks);
-            $scope.totalmarks = $scope.sumMarks();
+            $scope.totalmarks = azdutils.sumMarks($scope.student);
             $scope.closeModal()
             $timeout(function () {
                 $scope.selectMark($scope.newMark, false)
@@ -184,7 +178,7 @@ angular.module('hdrApp')
             if (ind >= 0) {
                 //$scope.selectMark(mark);
                 $scope.student.marks.splice(ind, 1);
-                $scope.totalmarks = $scope.sumMarks();
+                $scope.totalmarks = azdutils.sumMarks($scope.student);
                 if (ionic.Platform.isWebView()) {
                     hdrlocalstorage.updateStudent($scope.student);
                 }
@@ -282,7 +276,7 @@ angular.module('hdrApp')
                         { id: '2', number: 2, unix_time: '1520027361941', value: 20, title: '', observation: '' },
                         { id: '3', number: 3, unix_time: '1520027361941', value: 1, title: '', observation: '' }
                     ]
-                    $scope.totalmarks = $scope.sumMarks();
+                    $scope.totalmarks = azdutils.sumMarks($scope.student);
                 }, 100)
             }
         })

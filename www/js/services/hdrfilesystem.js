@@ -66,7 +66,7 @@ angular.module('hdrApp')
                             }
                             catch (error) {
                                 console.log(error)
-                                deferred.reject("يبدو أن هتاك مشكك مع الملف الجاري");
+                                deferred.reject("يبدو أن هناك مشكل مع الملف الجاري.. ربما يكون الملف الذي اخترته مجرد اختصار لملف سبق حذفه");
                             }
                         };
 
@@ -109,6 +109,8 @@ angular.module('hdrApp')
 
                 return q.promise;
             };
+
+     
 
 
             /**
@@ -225,6 +227,10 @@ angular.module('hdrApp')
 
                 return deferred.promise;
             };
+
+            HdrFileSystem.saveExcelFile = function (name) {
+
+            }
 
 
             return HdrFileSystem;

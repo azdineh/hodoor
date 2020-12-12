@@ -29,6 +29,28 @@
     vertical-align: middle;
     width: 14.29%
   }
+
+  #hdr-classroom-groupes {
+    /* border: 1px solid red; */
+    opacity: 0.85;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 1.3em;
+  }
+
+  #hdr-classroom-groupes table {
+    /* border: 1px solid blue; */
+    width: 100%;
+    background-color: rgba(113, 133, 160, 0.122);
+  }
+
+  #hdr-classroom-groupes table table td {
+
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+
+  }
 </style>
 
 
@@ -90,6 +112,53 @@
       <hdr-student ng-repeat="student in students_view"></hdr-student>
     </ul> -->
 
+      <div id="hdr-classroom-groupes">
+        <table>
+          <tr>
+            <td style="width: 50%;height: 120px;">
+              <table style="width: 100%;">
+                <tr>
+                  <td colspan="2" style="background-color: rgba(0, 0, 0, 0.075);">الفوج 1</td>
+                </tr>
+                <tr>
+                  <td style="width: 50%;">
+                    1
+                  </td>
+                  <td style="background-color:  rgba(255, 255, 255, 0.17);height: 75px;">
+                    <div class="button-bar">
+                      <a class="button" ng-click="incrementGroupe1()">+</a>
+                      <div style="display: inline;width: 50px;padding-top: 12px;height: inherit;text-align: center;font-size: 1.1em; 
+                      background-color: orange;">
+                        {{classroom.group1LastIndex}}
+                      </div>
+                      <a class="button" ng-click="decrementGroupe1()">-</a>
+                    </div>
+
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td>
+              <table style="width: 100%">
+                <tr>
+                  <td colspan="3"
+                    style="background-color: rgba(0, 0, 0, 0.075);border-right: 1px solid rgba(0, 0, 0, 0.299);">الفوج 2
+                  </td>
+                </tr>
+                <tr>
+                  <td style="width: 50%;;border-right: 1px solid rgba(0, 0, 0, 0.299)">
+                    {{classroom.group1LastIndex +1}}
+                  </td>
+                  <td style="background-color:  rgba(255, 255, 255, 0.17);height:75px;">
+                    {{countStudent}}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+
       <div ng-show="classroom.students.length==0" style="text-align: center">
         <div style="padding-top:20vh;" dir="rtl" class="h3 title dark" style="opacity: 0.7">لائحة فارغة</div>
         <!-- <ion-spinner icon="lines" class="spinner-assertive" style="font-size: 4vh"></ion-spinner> -->
@@ -114,7 +183,7 @@
   </ion-content>
 </ion-view>
 
-  <script id="addstudentmodal.html" type="text/ng-template">
+<script id="addstudentmodal.html" type="text/ng-template">
     <ion-modal-view>
       <ion-header-bar class="balanced-bg">
         <h1 class="title"> {{classroom.title}} إضافة تلميذ الى</h1>

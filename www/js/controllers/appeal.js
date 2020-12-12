@@ -85,6 +85,8 @@ angular.module('hdrApp')
 		$scope.byGroupfilter = function (input, index) {
 			var flag = false;
 
+			var StudentsNumber = Math.trunc($scope.classroom.students.length / 2);
+
 			if ($scope.currentGroup == 'even') {
 				flag = (index + 1) % 2 === 0
 			}
@@ -95,10 +97,10 @@ angular.module('hdrApp')
 				flag = true;
 			}
 			if ($scope.currentGroup == 'groupe1') {
-				flag = (index + 1) <= 20
+				flag = (index + 1) <= $scope.classroom.group1LastIndex
 			}
 			if ($scope.currentGroup == 'groupe2') {
-				flag = (index + 1) > 20
+				flag = (index + 1) > $scope.classroom.group1LastIndex
 			}
 
 			return flag;
@@ -177,11 +179,11 @@ angular.module('hdrApp')
 		} else {
 			$scope.classroom = {};
 			$scope.classroom.students = [];
-			$scope.classroom.students.push({ id: '1', full_name: 'ن ننننن ننن ننن كريم فيلالي', registration_number: '159986', massar_number: "S12345687", birth_date: "", queuing_number: '1', observation: 'cahier' });
-			$scope.classroom.students.push({ id: '5', full_name: 'لحبيب نظيف', registration_number: '159986', massar_number: "S12345687", birth_date: "04/12/2000", queuing_number: '5', marks: [{ value: 1 }, { value: 3 }, { value: 2 }], observation: 'سيشسي\nشسيش \nسيشسي شسيشس\nيشسيش يسشيشسي\nشسيضصث \nضص ثل\nالبابلا ' });
-			$scope.classroom.students.push({ id: '2', full_name: 'مريم يعقوبي', registration_number: '159986', massar_number: "S12345687", birth_date: "12/02/2000", queuing_number: '2' });
+			$scope.classroom.students.push({ id: '1', full_name: 'ن ننننن ننن ننن كريم فيلالي', registration_number: '159986', massar_number: "S12345687", birth_date: "", queuing_number: '1', marks: [{ value: 3 }, { value: 2 }, { value: 2 }, { value: 2 }, { value: 2 }, { value: 2 }], observation: 'cahier',absentSessions:[{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:1},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0},{is_student_fix_problem:0}] });
+			$scope.classroom.students.push({ id: '5', full_name: 'لحبيب نظيف', registration_number: '159986', massar_number: "S12345687", birth_date: "04/11/2005", queuing_number: '5', marks: [{ value: 1 }, { value: 3 }, { value: 2 }], observation: 'سيشسي\nشسيش \nسيشسي شسيشس\nيشسيش يسشيشسي\nشسيضصث \nضص ثل\nالبابلا ' });
+			$scope.classroom.students.push({ id: '2', full_name: 'مريم يعقوبي الفيلالي', registration_number: '159986', massar_number: "S12345687", birth_date: "03/11/2005", queuing_number: '2' ,absentSessions:[{is_student_fix_problem:0}]});
 			$scope.classroom.students.push({ id: '4', full_name: 'سناء عكرود', registration_number: '159986', massar_number: "S12345687", birth_date: "", queuing_number: '4' });
-			$scope.classroom.students.push({ id: '3', full_name: 'عزيز ملوكي', registration_number: '159986', massar_number: "S12345687", birth_date: "05/12/2000", queuing_number: '3' });
+			$scope.classroom.students.push({ id: '3', full_name: 'عزيز ملوكي', registration_number: '159986', massar_number: "S12345687", birth_date: "05/12/2000", queuing_number: '3' ,absentSessions:[{is_student_fix_problem:0}]});
 			$scope.classroom.students.push({ id: '6', full_name: 'كبور سميرس', registration_number: '159986', massar_number: "S12345687", birth_date: "12/06/2000", queuing_number: '6' });
 			$scope.classroom.students.push({ id: '7', full_name: 'بوكيمون لزعر', registration_number: '159986', massar_number: "S12345687", birth_date: "12/07/2000", queuing_number: '7', marks: [{ value: 1 }, { value: 3 }, { value: 2 }] });
 			$scope.classroom.students.push({ id: '8', full_name: 'عبدو فريد', registration_number: '159986', massar_number: "S12345687", birth_date: "12/08/2000", queuing_number: '8' });
@@ -759,7 +761,8 @@ angular.module('hdrApp')
 				students_count: $scope.classroom.students.length,
 				parity: $scope.currentGroup,
 				isExamSession: 0,
-				observation: ""
+				observation: "",
+				attachments: ""
 
 			}
 
@@ -812,9 +815,9 @@ angular.module('hdrApp')
 			} */
 
 		}
-		
+
 		$scope.sessionDurationSelected = 1;
-		
+
 		$scope.selectSessionDuration = function (id) {
 			if (id == "1") {
 				document.getElementById("hdr-session-duration-2").style.backgroundColor = "rgb(212, 223, 206)";

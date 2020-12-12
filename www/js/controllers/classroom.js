@@ -319,12 +319,32 @@ angular.module('hdrApp')
 
 
 
+		$scope.incrementGroupe1 = function () {
+			if ($scope.classroom.group1LastIndex < $scope.countStudent - 1) {
+				$scope.classroom.group1LastIndex++;
+				if (ionic.Platform.isWebView())
+					hdrlocalstorage.updateClassroom($scope.classroom);
+			}
+		}
+		$scope.decrementGroupe1 = function () {
+			if ($scope.classroom.group1LastIndex > 1) {
+				$scope.classroom.group1LastIndex--;
+				if (ionic.Platform.isWebView())
+					hdrlocalstorage.updateClassroom($scope.classroom);
+			}
+		}
 
 
 		if (ionic.Platform.isWebView()) {
 			$scope.classroom = hdrlocalstorage.getStudentClassroom({ id_classroom: $stateParams.classroom_title });
 			//$scope.classroom = $filter('filter')($rootScope.classrooms_view, $stateParams.classroom_title)[0];
 			$scope.countStudent = $scope.classroom.students.length;
+
+			if (!$scope.classroom.group1LastIndex) // for precedent deployed version
+				$scope.classroom.group1LastIndex = Math.trunc($scope.countStudent / 2);
+
+			//$scope.lastNumberForGroupe1 = $scope.classroom.group1LastIndex
+
 			$scope.header_title = "<span>قسم</span> : " + "<span>" + $scope.classroom.title + "</span>" + " <sub>" + $scope.countStudent + "</sub>";
 
 		}
@@ -335,11 +355,17 @@ angular.module('hdrApp')
 				color: "",
 				title: "TCS4",
 				level: "جذع مشترك علمي",
-				students: [{ id: '1', full_name: "عمر فيلالي", queuing_number: "10" }, { id: '2', full_name: "كريم زرهوني", queuing_number: "12" }, { id: '3', full_name: "سفياني بدر", queuing_number: "22" }]
+				students: [{ id: '1', full_name: "عمر فيلالي", queuing_number: "10" },
+				{ id: '2', full_name: "عمر فيلالي", queuing_number: "10" },
+				{ id: '3', full_name: "عمر فيلالي", queuing_number: "10" },
+				{ id: '4', full_name: "عمر فيلالي", queuing_number: "10" },
+				{ id: '5', full_name: "كريم زرهوني", queuing_number: "12" },
+				{ id: '6', full_name: "سفياني بدر", queuing_number: "22" }]
 			}
 
 			$scope.header_title = "<span>قسم</span> : " + "<span>" + $scope.classroom.title + "</span>" + " <sub>" + $scope.classroom.students.length + "</sub>";
-
+			$scope.countStudent = $scope.classroom.students.length;
+			$scope.classroom.group1LastIndex = Math.trunc($scope.countStudent / 2);
 			$scope.removedStudents = $scope.classroom.students;
 		}
 	})

@@ -7,13 +7,14 @@
     }
 
     #hdr-table-teacher td {
-         /*  border: 1px solid red; */
-         text-align: center;
-         vertical-align: middle;
+        /*  border: 1px solid red; */
+        text-align: center;
+        vertical-align: middle;
         font-size: 1.1em;
         padding: 0px 8px 0px 8px;
     }
-    #hdr-table-teacher td div{
+
+    #hdr-table-teacher td div {
         margin-bottom: 4px;
     }
 </style>
@@ -28,23 +29,34 @@
 
             <table id="hdr-table-teacher" class="lined-paper-pattern">
                 <tr>
-                    <td> 
-                       <p style="font-size: 2em">
+                    <td>
+                        <p style="font-size: 2em">
                             {{teacher_view.teacher.full_name}}
-                       </p>
+                        </p>
 
-                       <p style="padding-top: 5px">
+                        <p style="padding-top: 5px">
                             أستاذ مادة {{teacher_view.teacher.subject}}
-                       </p>
+                        </p>
 
-                       <p>
+                        <p>
                             {{teacher_view.school.title}} - {{teacher_view.rd.title}}
-                       </p>
+                        </p>
                     </td>
                 </tr>
             </table>
 
-            <div style="padding: 18px;margin: 8px;text-align: justify;font-size: 12.5px;background-color: rgb(239, 239, 239);border-radius: 4px">
+            <div
+                style="padding: 18px;margin: 8px;text-align: justify;font-size: 12.5px;background-color: rgb(239, 239, 239);border-radius: 4px">
+                <p style="font-size: 15px;font-weight: bolder">تفريغ بيانات التمدرس الصفي:</p>
+                
+                قم بتفريغ بيانات تتبع تمدرس التلاميذ (الغيابات، المكافآت و الملاحظات)، التفريغ سيتم في ملف إكسيل  لكل الأقسام.
+                <button class="button button-block " ng-click="exportAbsences()">
+                    تفريغ البيانات
+                </button>
+            </div>
+
+            <div
+                style="padding: 18px;margin: 8px;text-align: justify;font-size: 12.5px;background-color: rgb(239, 239, 239);border-radius: 4px">
                 <p style="font-size: 15px;font-weight: bolder">العمل بلوائح جديدة:</p>
                 <p>
                     عند بداية سنة دراسية جديدة، يجب إعادة تغذية التطبيق باللوائح الجديدة، و ذلك عبر تبويبة الأقسام
@@ -65,16 +77,19 @@
 
 
             </div>
-            <div style="padding: 18px;margin: 8px;text-align: justify;font-size: 12.5px;background-color: rgb(239, 239, 239);border-radius: 4px">
+            <div
+                style="padding: 18px;margin: 8px;text-align: justify;font-size: 12.5px;background-color: rgb(239, 239, 239);border-radius: 4px">
                 <button class="button button-positive button-outline" ng-click="share()">
                     <i class="icon ion-android-share-alt"></i>
                 </button>
                 <span style="display: inline-block;padding-top: 12px;font-size: 14px;height: 40px">مشاركة التطبيق</span>
 
             </div>
-            <div style="padding: 18px;margin: 8px;text-align: justify;font-size: 12.5px;background-color: rgb(239, 239, 239);border-radius: 4px">
+            <div
+                style="padding: 18px;margin: 8px;text-align: justify;font-size: 12.5px;background-color: rgb(239, 239, 239);border-radius: 4px">
                 <p>
-                    نحاول من خلال هذا التطبيق المساعدة في بعض المهام المتعلقة بمهنة التدريس لذلك نرحب بملاحظات و اقترحات تهم تطوير التطبيق و
+                    نحاول من خلال هذا التطبيق المساعدة في بعض المهام المتعلقة بمهنة التدريس لذلك نرحب بملاحظات و اقترحات
+                    تهم تطوير التطبيق و
                     تعزيزه بوظائف مفيدة للأستاذ(ة) وذلك عبر الرابط التالي:
                 </p>
 
@@ -94,7 +109,8 @@
             </div>
         </div>
         <div ng-show="teacher_view==null">
-            <p class="title" style="text-align: center;font-size: 1.7em;line-height: 2em;padding: 14px;padding-top: 10vmax">
+            <p class="title"
+                style="text-align: center;font-size: 1.7em;line-height: 2em;padding: 14px;padding-top: 10vmax">
                 <i class="icon ion-person" style="font-size: 45vmax;opacity: 0.2"></i>
             </p>
             <div style="padding: 25px;text-align: center;font-size: 20px;line-height: 28px;opacity: 0.4">

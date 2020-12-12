@@ -187,7 +187,8 @@ angular.module('hdrApp')
                         name: kissm.teachername,
                         subject: kissm.teachersubject
                     },
-                    students: []
+                    students: [],
+                    group1LastIndex:0
                 }
 
                 kissm.talaamiid.forEach(function (tilmiid, index) {
@@ -205,6 +206,7 @@ angular.module('hdrApp')
                     }
 
                     cl.students.push(st);
+                    cl.group1LastIndex=Math.trunc(cl.students.length/2);
 
                 });
 

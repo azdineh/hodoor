@@ -1,7 +1,7 @@
 <style>
     #hdr-table-006 td {
         border: 0px;
-        /* border: 1px solid red;  */ 
+        /* border: 1px solid red;  */
         text-align: center;
         vertical-align: middle;
         width: 14.29%
@@ -46,19 +46,29 @@
                 </td>
                 <td style="width: 2%"></td>
                 <td>
-                    <button class="button button-clear" ng-click="goToSessionAlter()" style="padding-left: 4px;padding-top: 4px;width: 45px;height: 45px"
+                    <button class="button button-clear" ng-click="shareSession()"
+                        style="padding-left: 4px;padding-top: 4px;width: 45px;height: 45px"
+                        ng-disabled="sessionsSelected.length==0 || sessionsSelected.length>1">
+                        <i class="icon ion-android-share" style="color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="button button-clear" ng-click="goToSessionAlter()"
+                        style="padding-left: 4px;padding-top: 4px;width: 45px;height: 45px"
                         ng-disabled="sessionsSelected.length==0 || sessionsSelected.length>1">
                         <i class="icon ion-compose" style="color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
                     </button>
                 </td>
                 <td>
-                    <button class="button button-clear" ng-click="showConfirm()" style="padding-left: 4px;padding-top: 4px;width: 45px;height: 45px"
+                    <button class="button button-clear" ng-click="showConfirm()"
+                        style="padding-left: 4px;padding-top: 4px;width: 45px;height: 45px"
                         ng-disabled="!sessionsSelected.length>0">
                         <i class="icon ion-trash-b" style="color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
                     </button>
                 </td>
                 <td style="background-color: rgba(93, 202, 197, 0.185);width: 45px">
-                    <button class="button button-clear" ng-click="refresh()" style="padding-left: 5px;padding-top: 4px;width: 45px;height: 45px">
+                    <button class="button button-clear" ng-click="refresh()"
+                        style="padding-left: 5px;padding-top: 4px;width: 45px;height: 45px">
                         <i class="icon ion-refresh"
                             style="color: rgba(25, 24, 29,0.8);filter: saturate(0.3);zoom: 0.9;"></i>
                     </button>
@@ -68,6 +78,14 @@
     </div>
 
     <ion-content scroll="true" dir="rtl" style="margin-top: 45px;padding-top: 10px">
+
+        <div class="assertive-bg"
+            style="margin: auto;text-align: center;width:fit-content;border-radius: 8px;padding:1px 6px 1px 6px">
+            <span style="color:white">COVID-19 alert</span>
+            <span style="font-size: 1.2em;color: white;" class="icon ion-alert-circled"></span>
+        </div>
+
+
         <div ng-repeat="session_view in sessions_view track by $index" dir="rtl"
             style="margin-bottom: 1vmax;width: 94%;margin: auto;margin-top: 4px">
 

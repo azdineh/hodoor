@@ -185,8 +185,6 @@ angular.module('hdrApp').controller('ClassroomsController',
         };
 
 
-
-
         $scope.importClassrooms = function () {
 
             ionic.Platform.ready(function () {
@@ -331,14 +329,32 @@ angular.module('hdrApp').controller('ClassroomsController',
             // Show the action sheet
             var hideSheet = $ionicActionSheet.show({
                 buttons: [
-                    { text: '<div class="list"><a class="item hdr-to-right" href="#">حضر الجميع</a></div>' },/* 
+                    /* 
+                    { text: '<div class="list"><a class="item hdr-to-right" href="#">حضر الجميع</a></div>' },
                     { text: '<div class="list"><a class="item hdr-to-right" href="#">حضر الجميع إلا</a></div>' },
- */                    { text: '<div class="list"><a class="item hdr-to-right" href="#">تغيب الجميع</a></div>' },
+                    { text: '<div class="list"><a class="item hdr-to-right" href="#">تغيب الجميع</a></div>' }, */
+                    { text: '<div class="list"><a class="item hdr-to-right" href="#">تحديث الفصل</a></div>' },
+                    { text: '<div class="list"><a class="item hdr-to-right" href="#">حذف الفصل</a></div>' }
                     /*                     { text: '<div class="list"><a class="item hdr-to-right" href="#">تغيب الجميع إلا</a></div>' }, */
                 ],
-                titleText: '<div><div class="hdr-to-right positive hdr-main-text">' + classroom.title + ' : القسم </div><div class="hdr-to-right hdr-sub-text">: تحديد المتغيبين بطريقة مختصرة حسب الحالات التالية </div></div>',
+                /*                 titleText: '<div><div class="hdr-to-right positive hdr-main-text">' + classroom.title +
+                                    ' : القسم </div><div class="hdr-to-right hdr-sub-text">: تحديد المتغيبين بطريقة مختصرة حسب الحالات التالية </div></div>', */
+                titleText: '<div><div class="hdr-to-right positive hdr-main-text">' + classroom.title +
+                    ' : القسم </div><div class="hdr-to-right hdr-sub-text"></div></div>',
                 buttonClicked: function (index) {
-                    $scope.startAttendanceCall(classroom, index);
+                    switch (index) {
+                        case 0: console.log("Update classroom..");
+                            hdrlocalstorage.attachOldStudents_To_recentStudents(classroom);
+                            break;
+                        case 1:
+                            console.log("Remove classroom " + classroom.title + "..");
+                            //$scope.showConfirm_removeClassroom(classroom);
+                            azdutils.showConfirmation(function () {
+                                $scope.removeClassroom(classroom)
+                            }, "هل أنت متأكد(ة) من حذف القسم ؟" + "<b>" + classroom.title + "</b>");
+                            break;
+                    }
+                    //$scope.startAttendanceCall(classroom, index);
                     return true;
                 }
             });
@@ -351,8 +367,8 @@ angular.module('hdrApp').controller('ClassroomsController',
 
             console.log("selectExcelFiles")
 
-            
-            if(ionic.Platform.isWebView()){
+
+            if (ionic.Platform.isWebView()) {
                 filehandler = shaggy.filehandler;
                 function success(files) {
                     $scope.show()
@@ -361,7 +377,7 @@ angular.module('hdrApp').controller('ClassroomsController',
                     //You can now work with the uris, to access the selected files.
                     var j = 0;
                     $interval(function () {
-    
+
                         window.resolveLocalFileSystemURL(uris[j], function (entry) {
                             console.log(entry)
                             hdrFileSystem.isHdrFile(entry)
@@ -376,11 +392,11 @@ angular.module('hdrApp').controller('ClassroomsController',
                                         alert(msg)
                                     }
                                     else {
-    
+
                                         //set classrooms colors
-    
+
                                         var itecolor = hdrlocalstorage.classrooms.length;
-    
+
                                         //for to garanty colors for all classrooms
                                         if (itecolor >= 9) {
                                             itecolor = (itecolor % 9) + 1;
@@ -388,22 +404,22 @@ angular.module('hdrApp').controller('ClassroomsController',
                                         else {
                                             itecolor++;
                                         }
-    
+
                                         //$rootScope.classrooms_view = hdrdbx.classrooms_view;
                                         new_classroom.color = classrooms_colors[itecolor - 1];
-    
+
                                         hdrlocalstorage.classrooms.push(new_classroom);
                                         $rootScope.students_count_global += new_classroom.students.length;
-    
+
                                         hdrlocalstorage.save('classrooms', null);
-                                        if (j == uris.length){
+                                        if (j == uris.length) {
                                             $scope.hide();
                                             $ionicScrollDelegate.scrollBottom(true);
                                         }
                                     }
-    
-    
-    
+
+
+
                                 }, function (error) {
                                     $scope.hide();
                                     alert(error);
@@ -413,17 +429,17 @@ angular.module('hdrApp').controller('ClassroomsController',
                             console.log("resolveLocalFileSystemURL error :");
                             console.log(error);
                         });
-    
+
                         j++;
                     }, 250, uris.length)
-    
+
                 }
-    
+
                 function error(message) {
                     console.log("Got the following error: " + message);
                     $scope.hide();
                 }
-    
+
                 options =
                 {
                     types: ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"], //array of strings
@@ -432,10 +448,10 @@ angular.module('hdrApp').controller('ClassroomsController',
                     title: "Choose files(s)"
                 };
                 filehandler.choose(success, error, options);
-            }else{
+            } else {
                 //browser view
                 console.log("classrooms page");
-                $rootScope.classrooms_view=[];
+                $rootScope.classrooms_view = [];
                 $rootScope.classrooms_view.push({ id: "1", color: classrooms_colors[0], title: "TCS4", level: "جذع م fd dfdبيب يبيب شيشسي صثصث سؤؤشترك علمي  بيس ", 'students': [{ id: '1', full_name: "عمر فيلالي", queuing_number: "10" }, { id: '2', full_name: "كريم زرهوني", queuing_number: "12" }, { id: '3', full_name: "سفياني بدر", queuing_number: "22" }] });
                 $rootScope.classrooms_view.push({ id: "2", color: classrooms_colors[1], title: "TCLSH2", level: "جذع مشترك أداب و علوم إنسانية", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
                 $rootScope.classrooms_view.push({ id: "3", color: classrooms_colors[2], title: "1BacSM4", level: "أولى باك علوم رياضية", 'students': [{ full_name: "زيد فيلالي", queuing_number: "17" }, { full_name: "كريم جلول", queuing_number: "33" }, { full_name: "سفياني حنان", queuing_number: "5" }] });
@@ -512,23 +528,43 @@ angular.module('hdrApp').controller('ClassroomsController',
         }
 
 
-        $scope.showHelpPopup = function () {
-            var helpPopup = $ionicPopup.show({
-                templateUrl: "views/classrooms/helpclassroomsview.html",
-                title: '<h3 class="title positive-bg padding light" >دليل استعمال</h3>',
-                subTitle: '',
-                scope: $scope,
-                buttons: [
-                    {
-                        text: 'رجوع ',
-                        type: 'button',
-                        onTap: function (e) {
-                            //e.preventDefault();
-                        }
-                    }
-                ]
+
+
+        $scope.removeClassroom = function (classroom) {
+            if (ionic.Platform.isWebView()) {
+                hdrlocalstorage.removeClassroom(classroom);
+                $rootScope.students_count_global -= classroom.students.length;
+            }
+            else {
+
+            }
+        }
+
+
+        $scope.showConfirm_removeClassroom = function (classroom) {
+            var template = "";
+            template = '<p dir="rtl"></p>';
+
+
+            var confirmPopup = $ionicPopup.confirm({
+                title: 'تأكيد',
+                template: template,
+                cancelText: 'إلغاء',
+                okText: 'نعم'
+            });
+
+            confirmPopup.then(function (res) {
+                if (res) {
+                    console.log('You are sure');
+                    //$scope.removeSeveralSessions($scope.sessionsSelected);
+                    $scope.removeClassroom(classroom);
+                } else {
+                    console.log('You are not sure');
+                }
             });
         };
+
+
 
 
     });

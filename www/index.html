@@ -3,7 +3,8 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" viewport-fit="cover" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <meta name="viewport" viewport-fit="cover"
+    content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
   <title></title>
 
   <!--  <link href="fontawesome/css/font-awesome.min.css" rel="stylesheet"> -->
@@ -17,14 +18,14 @@
 
 
   <!-- ionic/angularjs js -->
+
   <script src="lib/jquery/dist/jquery.min.js"></script>
   <script src="lib/ionic/js/ionic.bundle.js"></script>
   <script src="lib/angular/angular-local_ar-ma.js"></script>
-  <script src="lib/js-xlsx/dist/xlsx.full.min.js"></script>
+  <script src="lib/js-xlsx/dist/xlsx.core.min.js"></script>
   <script src="lib/moment/min/moment.min.js"></script>
   <script src="lib/moment/locale/ar-ma.js"></script>
   <script src="lib/random-colors/randomcolors.js"></script>
-
 
   <!-- cordova script (this will be a 404 during development) -->
   <script src="cordova.js"></script>
@@ -35,6 +36,7 @@
 
   <!-- Controllers -->
   <script src="js/controllers/home.js"></script>
+  <script src="js/controllers/overview.js"></script>
   <script src="js/controllers/classrooms.js"></script>
   <script src="js/controllers/classroom.js"></script>
   <script src="js/controllers/student.js"></script>
@@ -51,7 +53,7 @@
   <script src="js/services/azdutils.js"></script>
   <script src="js/services/hdrlocalstorage.js"></script>
   <script src="js/services/smartxlsreader.js"></script>
-  
+
   <!-- Directives -->
   <script src="js/directives/hdrclassroom.js"></script>
   <script src="js/directives/hdrstudentcardappeal.js"></script>
@@ -61,8 +63,8 @@
 
 </head>
 
-<body ng-app="hdrApp" class="platform-android platform-cordova platform-webview">
-  <ion-nav-bar class="bar-positive" dir="rtl">
+<body ng-app="hdrApp" class="platform-android platform-cordova platform-webview" >
+  <ion-nav-bar class="bar-positive" dir="rtl" >
 
     <ion-nav-back-button class="button-clear">
       <i class="ion-chevron-right"></i> رجوع

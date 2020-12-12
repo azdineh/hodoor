@@ -38,7 +38,18 @@ angular.module('hdrApp', ['ionic', 'hdrFilters', 'ngCordova'])
                         controller: 'HomeController'
                     }
                 }
-            }).state('tab.classrooms', {
+            })
+            .state('tab.overview', {
+                url: '/home/overview',
+                params: { 'rubric': null },
+                views: {
+                    'tab-home': {
+                        templateUrl: 'views/home/overview/view.html',
+                        controller: 'OverviewController'
+                    }
+                }
+            })
+            .state('tab.classrooms', {
                 url: '/classrooms',
                 views: {
                     'tab-classrooms': {

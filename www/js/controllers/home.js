@@ -1,10 +1,52 @@
 angular.module('hdrApp')
-    .controller('HomeController', function ($scope, hdrlocalstorage, $rootScope,
-        $ionicPlatform) {
+    .controller('HomeController', function ($scope, $rootScope, hdrlocalstorage, $rootScope, $ionicScrollDelegate, $ionicPlatform, $state) {
 
         $scope.page = "home";
         $scope.isthereNewVersion = false;
+        $scope.areThereSessions = false;
+        $scope.observationUpdateMode = false;
+
         hdrlocalstorage.init();
+
+        $scope.teacher = hdrlocalstorage.teacher;
+        $scope.saveTeacherDiary = function () {
+            hdrlocalstorage.updateTeaherDiary($scope.teacher.diary);
+            $scope.switchObservationUpateMode();
+        }
+
+        $rootScope.rubrics = {
+            'most_absent_students': "التلاميذ الأكثر تغيبا",
+            'remarked_students': "التلاميذ المُلاحظ عليهم",
+            'remarked_sessions': "الحصص المُلاحظ عليها",
+            'rewarded_students': ' التلاميذ المكآفؤون'
+        }
+
+        $scope.goToOverview = function (rubric) {
+            $state.go("tab.overview", { 'rubric': rubric });
+        }
+
+        var scrollposition = {};
+
+        $scope.switchObservationUpateMode = function () {
+
+            if ($scope.observationUpdateMode == true) {
+                $scope.observationUpdateMode = false
+                $ionicScrollDelegate.scrollTo(scrollposition.left, scrollposition.top, true);
+            }
+            else {
+                $scope.observationUpdateMode = true;
+
+                setTimeout(function () {
+                    document.getElementById('hdr-textarea-observation').focus();
+                    scrollposition = $ionicScrollDelegate.getScrollPosition()
+                    //$ionicScrollDelegate.resize();
+                    $ionicScrollDelegate.scrollTop(true);
+                }, 20);
+
+            }
+
+        }
+
 
 
 
@@ -53,6 +95,16 @@ angular.module('hdrApp')
                 });
 
 
+                // cordova.plugin.http.get('https://ecommercebackendd.herokuapp.com/api/produits', {
+                //     start: '2',
+                //     count:  '6'
+                // }, { Authorization: 'OAuth2: token' }, function (response) {
+                //     console.log(response);
+                // }, function (response) {
+                //     console.error(response.error);
+                // });
+
+
             })
         }
 
@@ -63,8 +115,6 @@ angular.module('hdrApp')
 
 
         $rootScope.hideTab = false;
-        $scope.thereAreSessions = false;
-        $scope.isthereNewVersion = false;
         // if($state.current.name==""
 
         window.addEventListener('keyboardDidShow', function (event) {
@@ -90,6 +140,7 @@ angular.module('hdrApp')
 
         $scope.$on('$ionicView.enter', function () {
             $rootScope.today = Date.now();
+            //$scope.areThereSessions=hdrlocalstorage.
         })
         $scope.$on('$ionicView.afterEnter', function () {
 
@@ -100,7 +151,7 @@ angular.module('hdrApp')
                 $rootScope.school = $window.localStorage['hdr.school'] ? angular.fromJson($window.localStorage['hdr.school']) : {};
                 $rootScope.teacher = $window.localStorage['hdr.teacher'] ? angular.fromJson($window.localStorage['hdr.teacher']) : {}; */
 
-        $scope.isthereAreAbsent = false;
+        $scope.isthereAreAbsent = true;
         $scope.remarkableStudents = [];
 
         var wind;
@@ -202,7 +253,7 @@ angular.module('hdrFilters', [])
 
             if (azdutils.isBirthday(dateSimpleStringFormat)) {
                 //age = ageYear + "سنة كاملة"
-                age = ageYear + 1 + "عام";
+                age = ageYear + "عام";
             }
             else {
                 if (ageMonth <= 6) {

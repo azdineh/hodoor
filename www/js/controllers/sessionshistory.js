@@ -105,7 +105,7 @@ angular.module('hdrApp')
 
         $scope.refresh = function () {
             $ionicScrollDelegate.scrollTop(true);
-            $rootScope.sessions_view = [];            
+            $rootScope.sessions_view = [];
             $scope.settings.classroomsfilteredBy = "all";
             $scope.settings.sessionsfiltredBy = "all";
             sesseions_view_initial = hdrlocalstorage.sessions.slice();
@@ -177,7 +177,7 @@ angular.module('hdrApp')
             $rootScope.sessions_view = [
                 {
                     id: 1,
-                    classroom_title: "TCS-2",
+                    classroom_title: "2BACSH-1",
                     unix_time: 1569149296002,
                     title: "14-18",
                     absents_students: [{ id: '1', full_name: "عمر فيلالي", queuing_number: "10" }, { id: '2', full_name: "كريم زرهوني", queuing_number: "12" }, { id: '3', full_name: "سفياني بدر", queuing_number: "22" }],
@@ -330,5 +330,74 @@ angular.module('hdrApp')
                 ]
             });
         };
+
+
+        $scope.share = function (session_view) {
+            /* 
+                        id: 1,
+                        classroom_title: "TCS-2",
+                        unix_time: 1569149296002,
+                        title: "14-18",
+                        absents_students: [{ id: '1', full_name: "عمر فيلالي", queuing_number: "10" }, { id: '2', full_name: "كريم زرهوني", queuing_number: "12" }, { id: '3', full_name: "سفياني بدر", queuing_number: "22" }],
+                        parity: "all",
+                        students_count: 32,
+                        isExamSession: 0,
+                        observation: "سشي شسي محجمق فقخحلنتبي سنسيتبنسيعي ينبتي نيتبهيتب ثهعبيو نتيبمهيب نيتب" */
+
+            if (ionic.Platform.isWebView()) {
+
+                var number = "212653540286";
+                var classname = "القسم :" + session_view.classroom_title;
+                var sessionname = "الحصة :" + session_view.title;
+                var sdate = $filter('date')(session_view.unix_time, "fullDate");
+                var absentstudents = "";
+                if (session_view.absents_students.length > 0) {
+
+                    session_view.absents_students.forEach(student => {
+                        absentstudents += student.full_name + " " + student.queuing_number + "\n";
+                    });
+                }
+                else {
+                    absentstudents = "لا يوجد غياب";
+                }
+               
+
+                var message = "*" + classname + "*" + "\n" + sessionname + "\n" + sdate + "\n" + "*المتغيبون*" + "\n" + absentstudents;
+
+
+                cordova.InAppBrowser.open("https://api.whatsapp.com/send?&text=" + encodeURIComponent(message), '_system');
+            }
+            else {
+                alert("it is good")
+            }
+
+        }
+
+        $scope.shareSession=function(){
+            //var ItemSelected=
+            $scope.share($scope.sessionsSelected[0]);
+        }
+
+        $scope.shareWithStudent=function(session_view){
+            
+            if (ionic.Platform.isWebView()) {
+
+                var number = "212653540286";
+                var classname = "القسم :" + session_view.classroom_title;
+                var sessionname = "الحصة :" + session_view.title;
+                var sdate = $filter('date')(session_view.unix_time, "fullDate");
+
+                var observation = session_view.observation == "" ? "" : "*مرفقات الحصة:*" + "\n" + session_view.observation;
+
+                var message = "*" + classname + "*" + "\n" + sessionname + "\n" + sdate + "\n" + observation;
+
+
+                //cordova.InAppBrowser.open("https://api.whatsapp.com/send?phone=" + number + "&text=" + encodeURIComponent(message), '_system');
+                cordova.InAppBrowser.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(message), '_system');
+            }
+            else {
+                alert("Share to students...")
+            }
+        }
 
     });

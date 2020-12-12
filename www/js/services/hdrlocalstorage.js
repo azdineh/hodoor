@@ -16,7 +16,8 @@ angular.module('hdrApp')
                 name: "",
                 subject: ""
             },
-            students: []
+            students: [],
+            lastNumberForGroupe1: 0
         }
 
         var student = {
@@ -73,6 +74,12 @@ angular.module('hdrApp')
             vm.classrooms = [];
             vm.sessions = [];
             vm.removed_students = [];
+            vm.removed_classrooms = [];
+            vm.teacher = {
+                name: "",
+                diary: ""
+            }
+
             //hdr.helpPopupShown
 
             vm.filename = "data.hdr"
@@ -82,6 +89,8 @@ angular.module('hdrApp')
                 vm.classrooms = $window.localStorage['hdr.classrooms'] ? angular.fromJson($window.localStorage['hdr.classrooms']) : [];
                 vm.sessions = $window.localStorage['hdr.sessions'] ? angular.fromJson($window.localStorage['hdr.sessions']) : [];
                 vm.removed_students = $window.localStorage['hdr.removed_students'] ? angular.fromJson($window.localStorage['hdr.removed_students']) : [];
+                vm.removed_classrooms = $window.localStorage['hdr.removed_classrooms'] ? angular.fromJson($window.localStorage['hdr.removed_classrooms']) : [];
+                vm.teacher = $window.localStorage['hdr.teacher'] ? angular.fromJson($window.localStorage['hdr.teacher']) : vm.teacher;
 
                 $rootScope.classrooms_view = vm.classrooms; // classrooms_view point on hdrlocalstorage
                 //$rootScope.sessions_view = []  //on affecte pas vm.sessions ms progressivement dans sessionhistory ctrl
@@ -93,6 +102,8 @@ angular.module('hdrApp')
                 $window.localStorage.removeItem("hdr.classrooms");
                 $window.localStorage.removeItem("hdr.sessions");
                 $window.localStorage.removeItem("hdr.removed_students");
+                $window.localStorage.removeItem("hdr.removed_classrooms");
+                //$window.localStorage.removeItem("hdr.teacher");
 
                 vm.removeFile();
 
@@ -104,6 +115,8 @@ angular.module('hdrApp')
                 $window.localStorage['hdr.classrooms'] = angular.toJson(vm.classrooms);
                 $window.localStorage['hdr.sessions'] = angular.toJson(vm.sessions);
                 $window.localStorage['hdr.removed_students'] = angular.toJson(vm.removed_students);
+                $window.localStorage['hdr.removed_classrooms'] = angular.toJson(vm.removed_classrooms);
+                $window.localStorage['hdr.teacher'] = angular.toJson(vm.teacher);
 
                 vm.saveInFile();
             }
@@ -132,10 +145,10 @@ angular.module('hdrApp')
                         val.absents_students.forEach(function (absentStudent) {
                             vm.addAbsentSessionToStudent(val, absentStudent);
                         });
-
-
                         break;
-
+                    case 'teacher':
+                        $window.localStorage['hdr.teacher'] = angular.toJson(vm.teacher);
+                        break;
 
                     default:
                         break;
@@ -144,7 +157,7 @@ angular.module('hdrApp')
                 //update object
                 vm.init();
                 vm.saveInFile();
-                
+
             }
 
 
@@ -190,7 +203,12 @@ angular.module('hdrApp')
                 var i_classroom = vm.findIndexOf('classrooms', { id: student.id_classroom });
                 var i_student = vm.findIndexOf('students', student);
                 var recentstudent = angular.copy(vm.classrooms[i_classroom].students[i_student]);
-                recentstudent.is_student_fix_problem = student.is_student_fix_problem;
+                if (recentstudent)
+                    recentstudent.is_student_fix_problem = student.is_student_fix_problem;
+                else {
+                    // if the student is not still exist in the classroom
+                    recentstudent = student;
+                }
 
                 return angular.copy(recentstudent);
 
@@ -255,6 +273,64 @@ angular.module('hdrApp')
 
             }
 
+
+            vm.updateClassroom = function (clasroom) {
+
+                var ind = vm.findIndexOf('classrooms', clasroom);
+                vm.classrooms[ind] = clasroom;
+                vm.updateStorage();
+
+            }
+
+            vm.removeClassroom = function (classroom) {
+
+                /**
+                * save it in removed_classrooms, in order to keep the history of students absence, if they will be reused by teacher.
+                * Remove classroom from classrooms_object.
+                * update storage.
+                */
+
+                var ind = vm.findIndexOf('classrooms', classroom);
+                classroom_to_remove = vm.classrooms[ind];
+                vm.removed_classrooms.push(classroom_to_remove);
+                vm.classrooms.splice(ind, 1);
+                vm.updateStorage();
+
+                console.log("Classroom " + classroom.title + " is removed.");
+            }
+
+            vm.attachOldStudents_To_recentStudents = function (recent_classroom) {
+                /**
+                 * the teacher can readd the same classroom. (or he updates it)
+                 * In this case, we have attach old students (in removed_classrooms) to the recent students newly added (in classrooms),
+                 * if there was the same students in both classrooms.
+                 */
+
+                vm.init();
+                var allRemovedStudents = [];
+                vm.removed_classrooms.forEach(function (classroom, index) {
+                    allRemovedStudents = allRemovedStudents.concat(classroom.students);
+                });
+
+                vm.removed_students.forEach(function (student) {
+                    allRemovedStudents.push(student);
+                })
+
+                console.log("All removed students");
+                console.log(allRemovedStudents);
+
+                var getOldStudent = function (recentStudent) {
+                    //find it in allRemovedStudents by : codemassar,fullname(not exact).
+                }
+
+                var replaceRecentStudent = function (recentStudent, oldStudent) {
+                    var indRecent = recent_classroom.indexOf(recentStudent);
+                    recent_classroom[indRecent] = oldStudent;
+                }
+
+
+            }
+
             vm.removeSession = function (session) {
                 var ind = vm.findIndexOf('sessions', session);
                 //console.log("index of current session :" + ind);
@@ -265,10 +341,9 @@ angular.module('hdrApp')
                     vm.removeAbsentSession(session, absentStudent);
                 })
 
-
                 vm.updateStorage();
             }
-            hdrlocalstorage
+
             vm.removeAbsentSession = function (session, student) {
                 var i_classroom = vm.findIndexOf('classrooms', { id: student.id_classroom });
                 var i_student = vm.findIndexOf('students', student);
@@ -317,6 +392,10 @@ angular.module('hdrApp')
             }
 
 
+            vm.updateTeaherDiary = function (diary) {
+                vm.teacher.diary = diary;
+                vm.updateStorage();
+            }
 
             vm.updateStudent = function (student) {
                 var ind_student = vm.findIndexOf('students', student);
@@ -372,9 +451,6 @@ angular.module('hdrApp')
             }
 
 
-
-
-
             vm.calculateStudentsCount = function () {
                 var count = 0;
                 vm.classrooms.forEach(function (classroom) {
@@ -389,7 +465,9 @@ angular.module('hdrApp')
                 var hdr = {
                     classrooms: $window.localStorage['hdr.classrooms'] ? angular.fromJson($window.localStorage['hdr.classrooms']) : [],
                     sessions: $window.localStorage['hdr.sessions'] ? angular.fromJson($window.localStorage['hdr.sessions']) : [],
-                    removed_students: $window.localStorage['hdr.removed_students'] ? angular.fromJson($window.localStorage['hdr.removed_students']) : []
+                    removed_students: $window.localStorage['hdr.removed_students'] ? angular.fromJson($window.localStorage['hdr.removed_students']) : [],
+                    removed_classrooms: $window.localStorage['hdr.removed_classrooms'] ? angular.fromJson($window.localStorage['hdr.removed_classrooms']) : [],
+                    teacher: window.localStorage['hdr.teacher'] ? angular.fromJson($window.localStorage['hdr.teacher']) : vm.teacher
 
                 }
                 azdutils.saveInFile(vm.filename, angular.toJson(hdr));
@@ -405,6 +483,8 @@ angular.module('hdrApp')
                 vm.classrooms = hdr.classrooms;
                 vm.sessions = hdr.sessions;
                 vm.removed_students = hdr.removed_students;
+                vm.removed_classrooms = hdr.removed_classrooms;
+                vm.teacher = hdr.teacher;
 
                 vm.updateStorage();
                 vm.init();

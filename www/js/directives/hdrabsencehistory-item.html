@@ -1,11 +1,11 @@
 <style>
-    /*  #gg td {
-        border: 1px solid red;
+    #gg td {
+        /*  border: 1px solid red; */
         text-align: right;
         vertical-align: top;
         font-size: 0.9em;
     }
- */
+
     #gg td div {
         float: right
     }
@@ -15,68 +15,82 @@
 
 
 
-<div class="item item-text-wrap" ng-class="session_view.isExamSession==1?'hdr-card-exam':'hdr-card-normal'"      style="padding:4px;border:0;background-color:inherit;margin: auto;">
+<div class="item item-text-wrap" ng-class="session_view.isExamSession==1?'hdr-card-exam':'hdr-card-normal'"
+    style="padding:4px;border:0px;background-color:inherit;margin: auto;">
 
 
-    <div class="card hdr-card"  style="color:rgba(0, 0, 0, 0.6);margin: 0px;"
+    <div class="card hdr-card" style="position: relative;color:rgba(0, 0, 0, 0.6);margin: 0px;"
         id="hdr-session-card{{session_view.id}}" on-double-tap="selectElement(session_view)">
 
-        <table id="gg"  
+        <table id="gg"
             style="position: relative;text-align: right;width: 100%; border-collapse:separate;padding: 8px;font-size: 0.9em">
 
-            <!--             <img src="img/session-icon.png" ng-show="session_view.isExamSession==0" 
-            style="height: 95px;position: absolute;left:5%;bottom: 8%;opacity: 0.08;"
-                alt=""> -->
 
-            <div style="font-size: 3em;position: absolute;left:12px;bottom: 26px; opacity: 0.15; ">
-                {{session_view.classroom_title}}</div>
+            <!-- 
+            <button class="button button-clear" ng-click="share(session_view)"
+                style="z-index: 7000;font-size: 1.8em;position: absolute;left:-4px;top: 0px;">
+                <i class="icon ion-share" style="color: rgba(25, 24, 29,0.8);filter: saturate(0.3)"></i>
+            </button> -->
+            <!-- 
+            <div style="font-size: 2.2em;position: absolute;left:8px;top: 20px;opacity: 0.15; ">
+                {{session_view.classroom_title}}</div> -->
             <tr>
-                <td class="hdr-card-date" style="text-align: right;width: 90%;padding:0px;">
+                <td class="hdr-card-date" style="text-align: right;width:fit-content;padding:0px;">
 
-                    <div >
-                        <div style="margin-left: 4px">
-                                <img src="img/exam-icon.png" ng-show="session_view.isExamSession==1"
-                                style="height: 20px;margin: 0px;opacity: 0.6;" alt="">
-                        </div>
+                    <div dir="rtl">
+                        <table>
+                            <tr>
+                                <td>
+                                    <p style="font-weight: bolder" ng-show="session_view.isExamSession==1">حصة اختبار
+                                    </p>
+                                    <p style="font-weight: bolder" ng-show="session_view.isExamSession==0">حصة درس
+                                    </p>
+                                </td>
 
-                        <div>
-                            <span ng-show="session_view.isExamSession==0">حصة
-                            </span> <span style="font-weight: bolder" ng-show="session_view.isExamSession==1">حصة امتحان
-                            </span>ليوم<span>:
-                                {{session_view.unix_time|date:'fullDate'}}</span>
-                        </div>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>
+                                        {{session_view.unix_time|date:'fullDate'}}
+                                    </span>
+                                </td>
+
+                            </tr>
+                        </table>
                     </div>
+
+
+                </td>
+                <td
+                    style="width: 60%;text-align: left;font-size: 1.8em;opacity: 0.4;padding-top: 2px;line-height: 1em;">
+                    <span style="text-align: left;">
+                        {{session_view.classroom_title}}
+                    </span>
+
                 </td>
 
             </tr>
             <tr>
-                <td><span>مدة الحصة</span> <span dir="rtl">: {{session_view.title}}</span></td>
-            </tr>
-            <tr>
-                <td><span>القسم</span> <span>: {{session_view.classroom_title}}</span> <span
-                        ng-show="session_view.parity!='all'">فوج : </span><span
-                        style="color: rgb(253, 0, 0)">{{session_view.parity|hdrparity}}</span></td>
-            </tr>
-            <tr>
+                <td colspan="2" style="vertical-align: middle;">
+                    <span>الحصة</span> <span dir="rtl">: {{session_view.title}}</span>
+                    <span style="font-weight: bolder;"> | </span>
+                    <span>{{session_view.classroom_title}}</span> <span ng-show="session_view.parity!='all'">
+                        (<span style="color: rgb(253, 0, 0)">{{session_view.parity|hdrparity}}</span>)
 
-                <td
-                    ng-show="session_view.observation!='' || session_view.students_count==session_view.absents_students.length || session_view.absents_students.length==0 ">
+                </td>
+            </tr>
+
+            <tr ng-show="session_view.attachments!='' && session_view.attachments!=null">
+
+                <td colspan="2">
+
                     <div style="width: 100%;margin-top: 12px;">
-                        <b>ملاحظات</b> :
+                        <b>مرفقات</b> :
                     </div>
-                    <div>
-                        <div style="width: 100%"
-                            ng-show="session_view.students_count==session_view.absents_students.length">
-                            <div>غياب جماعي</div> : <span
-                                dir="rtl">({{session_view.absents_students.length}}/{{session_view.students_count}})</span>
-                        </div>
-
-                        <div style="width: 100%" ng-show="session_view.absents_students.length==0">
-                            <div>حضور كلي</div> : <span
-                                dir="rtl">({{session_view.students_count}}/{{session_view.students_count}})</span>
-                        </div>
-                        <div dir="rtl" style="line-height: 1.3em;width: 100%" ng-show="session_view.observation!=''"
-                            ng-bind-html="session_view.observation">
+                    <div class="hdr-student-observation lined-paper-pattern" style="width: 100%;">
+                        <div lass="hdr-student-observation-content" dir="rtl"
+                            style="line-height: 1.3em;width: 100%;white-space: pre-line;"
+                            ng-show="session_view.attachments!=''" ng-bind-html="session_view.attachments">
 
                         </div>
                         <br />
@@ -86,14 +100,15 @@
                 </td>
             </tr>
             <tr>
-                <td ng-show="session_view.absents_students.length>0 && session_view.students_count > session_view.absents_students.length"
+                <td colspan="2" ng-show="session_view.students_count > session_view.absents_students.length"
                     style="width: 42%;">
                     <table style="width: 100%;margin-top: 12px">
                         <tr>
                             <td>
                                 <div style="width: 100%;margin-top: 2px">
-                                    <b>المتغيبون</b> : <span
-                                        dir="rtl">({{session_view.absents_students.length}}/{{session_view.students_count}})</span>
+                                    <b>المتغيبون</b> :
+                                    <!-- <span dir="rtl">({{session_view.absents_students.length}}/{{session_view.students_count}})</span> -->
+                                    <span dir="rtl">({{session_view.absents_students.length}})</span>
                                 </div>
                             </td>
                             <!--  <td ng-show="session_view.students_not_absents.length<10">
@@ -105,7 +120,17 @@
                         <tr>
                             <td style="width: 50%">
                                 <div style="width: fit-content;"
-                                    ng-show="session_view.absents_students.length>0 && session_view.students_count > session_view.absents_students.length">
+                                    ng-show="session_view.students_count > session_view.absents_students.length">
+
+                                    <div style="width: 100%"
+                                        ng-show="session_view.students_count==session_view.absents_students.length">
+                                        <div>غياب جماعي</div>
+                                    </div>
+
+                                    <div style="width: 100%" ng-show="session_view.absents_students.length==0">
+                                        <div>حضر الجميع</div>
+                                    </div>
+
                                     <div style="display: block;padding-right:0px ;list-style-type:none"
                                         ng-show="session_view.students_count > session_view.absents_students.length">
                                         <div ng-repeat="student in session_view.absents_students|limitTo:limitstudent:0 track by $index"
@@ -116,24 +141,31 @@
                                         </div>
                                         <button class="button button-clear button-positive"
                                             style="font-size: 0.8em;padding: 0px;" ng-click="moreStudent()"
-                                            ng-hide="limitstudent>=session_view.absents_students.length">إظهار
+                                            ng-if="session_view.absents_students.length>limitstudent">إظهار
                                             المزيد..</button>
                                     </div>
                                 </div>
                             </td>
-                            <!--   <td style="width: 50%" ng-show="session_view.students_not_absents.length<10">
-                                <div style="width: fit-content;" ng-show="session_view.students.length>0 && session_view.students_count > session_view.students.length">
-                                    <div style="display: block;padding-right:0px ;list-style-type:none" ng-show="session_view.students_count > session_view.students.length">
-                                        <div ng-repeat="student in session_view.students_not_absents track by $index" style="width: 100%">
-
-                                            <hdr-student ng-init="mode='m3'"></hdr-student>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </td> -->
                         </tr>
                     </table>
+                </td>
+            </tr>
+            <tr ng-show="session_view.observation!=''">
+
+                <td colspan="2">
+
+                    <div style="width: 100%;margin-top: 12px;">
+                        <b>ملاحظات</b> :
+                    </div>
+                    <div class="hdr-student-observation lined-paper-pattern" style="width: 100%;">
+                        <div dir="rtl" style="line-height: 1.3em;width: 100%;white-space: pre-line;"
+                            ng-show="session_view.observation!=''" ng-bind-html="session_view.observation">
+
+                        </div>
+                        <br />
+
+                    </div>
+
                 </td>
             </tr>
         </table>

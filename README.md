@@ -82,3 +82,5 @@ Pour chaque élève absent, on ajoute un champs suplémentaire (is_student_fix_p
 <br>
 
 removed_students est un array où on garde les élèves supprimés pour une éventuelle utilisation ultérieure..
+
+<br>

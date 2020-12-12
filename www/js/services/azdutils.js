@@ -1,5 +1,5 @@
 angular.module('hdrApp')
-    .factory('azdutils', function ($q) {
+    .factory('azdutils', function ($q, $ionicPopup, $timeout) {
         // Service logic
         // ...
         var fct = function () {
@@ -28,6 +28,7 @@ angular.module('hdrApp')
 
             /**
              * data in text
+             * and reslove file URL
              */
             that.saveInFile = function (filename, dataAsText) {
                 var q = $q.defer();
@@ -50,7 +51,7 @@ angular.module('hdrApp')
                             fileWriter.onwriteend = function () {
                                 //console.log("Successful file write...");
                                 console.log("Data has saved in  : " + filename)
-                                q.resolve(1);
+                                q.resolve(fileEntry.toURL());
                             };
 
                             fileWriter.onerror = function (e) {
@@ -78,6 +79,65 @@ angular.module('hdrApp')
 
 
                 return q.promise;
+
+            }
+            that.saveAndOpen = function (filename, data, mimeType) {
+                var blob = new Blob([data], { type: mimeType });
+                that.saveInFile(filename, blob)
+                    .then(function (fileurl) {
+                        //open file
+                        cordova.plugins.fileOpener2.open(fileurl, mimeType, {
+                            error: function error(err) {
+                                console.error(err);
+                                alert("Unable to download file");
+                            },
+                            success: function success() {
+                                console.log("success with opening the file");
+                            }
+                        });
+
+                    }, function (err) {
+                        console.log(err)
+                    });
+
+            }
+
+            that.createNewExcelFile = function (sheets_array, sheets_names_aray) {
+                //var tbl = document.getElementById(ws id_table);
+                //var sheet = XLSX.utils.table_to_sheet(tbl);
+
+                var wb = XLSX.utils.book_new();
+
+                //right to left orientation
+                if (!wb.Workbook) wb.Workbook = {};
+                if (!wb.Workbook.Views) wb.Workbook.Views = [];
+                if (!wb.Workbook.Views[0]) wb.Workbook.Views[0] = {};
+                wb.Workbook.Views[0].RTL = true;
+
+
+                sheets_array.forEach(function (sheet, index) {
+                    XLSX.utils.book_append_sheet(wb, sheet, sheets_names_aray[index]);
+                })
+
+
+                /* XLSX.write(wb, 'out.xls'); */
+
+                /* bookType can be 'xlsx' or 'xlsm' or 'xlsb' */
+                var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
+
+                var wbout = XLSX.write(wb, wopts);
+
+                function s2ab(s) {
+                    var buf = new ArrayBuffer(s.length);
+                    var view = new Uint8Array(buf);
+                    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                    return buf;
+                }
+                data = s2ab(wbout);
+                mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+
+                that.saveAndOpen("test.xlsx", data, mimetype);
 
             }
 
@@ -129,6 +189,45 @@ angular.module('hdrApp')
                 return classroom = classrooms_array.find(function (classroom) {
                     return classroom_name == classroom.title;
                 })
+            }
+
+
+            that.showConfirmation = function (callback, message) {
+                var template = "";
+                template = '<p dir="rtl">' + message + '</p>';
+
+
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'تأكيد',
+                    template: template,
+                    cancelText: 'إلغاء',
+                    okText: 'نعم'
+                });
+
+                confirmPopup.then(function (res) {
+                    if (res) {
+                        console.log('You are sure');
+                        //$scope.removeSeveralSessions($scope.sessionsSelected);
+                        $timeout(function () {
+                            callback();
+                        }, 350)
+                    } else {
+                        console.log('You are not sure');
+                    }
+                });
+            }
+
+            that.sumMarks = function (student) {
+                var sum = 0;
+                if (student.marks) {
+                    student.marks.forEach(function (mark) {
+                        sum += mark.value;
+                    });
+                }
+                else {
+                    sum = 0;
+                }
+                return sum;
             }
 
 

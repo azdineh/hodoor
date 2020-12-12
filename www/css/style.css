@@ -6,8 +6,7 @@
 html, body {
   height: 100%;
   width: 100%;
-  /*background-color: #E9E9E9*/
-  background-color: #f7f7f7;
+ 
   font-family: hdrFont;
   color: rgb(22, 21, 33)
 }
@@ -19,7 +18,9 @@ div, p, button, li, span, input, i, h1, h2, h3, textarea {
 ion-content {
   /*  background-image: url("../img/hdr-texture.jpg");*/
   font-family: hdrFont;
-  background-color: #f9f9f9;
+  background: url("../img/pattern.png") repeat;
+  background-color: rgba(67, 73, 79, 0.068);
+  background-size: 200px 200px;
 }
 
 .card-red div {
@@ -207,22 +208,24 @@ body {
 }
 
 .lined-paper-pattern {
-  background-color: white !important;
+  background-color: rgba(255, 255, 255, 0.66) !important;
   background-image: linear-gradient(90deg, transparent 95%, #abced4 95%, #abced4 95.4%, transparent 95.4%), linear-gradient(#eee .1em, transparent .1em) !important;
-  background-size: 100% 1em !important;
+  background-size: 100% 1.2em !important;
+  padding: 2px !important;
   padding-right: 7% !important;
 }
 
-.hdr-student-observation{
-  padding-top: 0.4em;
+.hdr-student-observation {
+  padding-top: 0.10em;
   padding-bottom: 6px;
   font-size: 0.9em;
-  padding-right: 24px !important;
-  background-image:linear-gradient(to bottom, rgba(249, 234, 185, 0.315),rgba(247, 242, 201, 0.239));
+  padding-right: 6.5% !important;
+  background-image: linear-gradient(to bottom, rgba(249, 234, 185, 0.315), rgba(247, 242, 201, 0.239));
 }
 
-.hdr-student-observation-content{
-  white-space: pre-line;line-height: 1.1em;
+.hdr-student-observation-content {
+  white-space: pre-line;
+  line-height: 1.3em;
   color: rgb(190, 35, 35)
 }
 
@@ -289,16 +292,20 @@ body {
 }
 
 .hdr-title {
-  font-size: 3vmax;
+  font-size: 15px;
+  font-weight: bolder;
   line-height: 2vmax;
-  margin-bottom: 1.5vmax;
+  margin-bottom: 1.8vmax;
+  color: rgba(5, 5, 25, 0.789);
+  padding: 10px;
+  border-bottom: 1px solid rgba(39, 17, 8, 0.367);
+  background-color: rgba(69, 59, 59, 0.031);
 }
 
 .hdr-parag {
-  font-size: 2.3vmax;
+  font-size: 15px;
   line-height: 3.25vmax;
   text-align: justify;
-  padding-bottom: 2.0vmax;
 }
 
 .hdr-second-txt {
@@ -317,15 +324,16 @@ body {
 }
 
 .hdr-card-exam .hdr-card-date {
-   /* border-bottom: 2px solid rgba(255, 2, 2, 0.65);  */
+  /* border-bottom: 2px solid rgba(255, 2, 2, 0.65);  */
 }
 
-.hdr-card-normal .card{
+.hdr-card-normal .card {
   border: 1px solid rgba(2, 99, 255, 0.5);
   border-right: 5px solid rgba(2, 99, 255, 0.828);
   background-image: linear-gradient(to right, rgba(138, 160, 180, 0.030), rgba(255, 255, 255, 0.452));
 }
-.hdr-card-exam .card{
+
+.hdr-card-exam .card {
   border: 1px solid rgba(255, 2, 2, 0.5);
   border-right: 5px solid rgba(255, 2, 2, 0.828);
   background-image: linear-gradient(to right, rgba(180, 138, 138, 0.030), rgba(255, 255, 255, 0.452));
@@ -408,11 +416,15 @@ body {
 }
 
 .hdr-bg {
-  background-image: linear-gradient(to top, rgba(138, 120, 80, 0.104), rgba(230, 205, 173, 0.083)) !important;
+  background-image: linear-gradient(to top, rgba(142, 154, 159, 0.104), rgba(205, 205, 220, 0.083)) !important;
 }
 
 .hdr-bg-second {
   border-bottom: 1px solid rgba(57, 57, 77, 0.309);
+}
+
+.bg-transparent {
+  background: transparent;
 }
 
 #hdr-session-time-picker {
@@ -467,8 +479,17 @@ body {
   font-size: 12px;
 }
 
-.hdr-birthday{
+.hdr-birthday {
   width: 23px;
   position: relative;
   top: 4px;
+}
+
+#covid-alert {
+  width: 100%;
+}
+
+#covid-alert td {
+  vertical-align: middle;
+  text-align: center;
 }

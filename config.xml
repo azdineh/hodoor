@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="20016" id="com.ionicframework.chapter5978610" version="1.7.2" 
-xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" >
+<widget android-versionCode="20020" id="com.ionicframework.chapter5978610" version="1.7.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Hodoor</name>
     <description>
        Application pour les enseignants aidant à marquer et garder l'historique des absences des élèves. 
@@ -24,6 +23,7 @@ xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0
     </feature>
     <allow-navigation href="*" />
     <allow-intent href="mailto:*" />
+    <allow-intent href="whatsapp:*" />
     <platform name="android">
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
@@ -47,12 +47,94 @@ xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <engine name="browser" spec="^4.1.0" />
-    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.4" />
     <plugin name="cordova-plugin-filechooser" spec="^1.2.0" />
-    <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
-    <plugin name="cordova-plugin-ionic-keyboard" spec="^2.1.3" />
-    <plugin name="cordova-plugin-ionic-webview" spec="^2.1.3" />
-    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-zip" spec="^3.1.0" />
+    <plugin name="cordova-plugin-ionic-keyboard" spec="^2.2.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^3.1.0" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^2.5.3">
+        <variable name="ANDROID_SUPPORT_ANNOTATIONS_VERSION" value="27.+" />
+    </plugin>
+    <plugin name="cordova-plugin-splashscreen" spec="^5.0.3" />
+    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
+    <plugin name="cordova-plugin-androidx" spec="^1.0.2" />
+    <plugin name="cordova-plugin-androidx-adapter" spec="^1.1.0" />
+    <plugin name="cordova-plugin-firebasex" spec="^6.1.0">
+        <variable name="FIREBASE_ANALYTICS_COLLECTION_ENABLED" value="true" />
+        <variable name="FIREBASE_PERFORMANCE_COLLECTION_ENABLED" value="true" />
+        <variable name="FIREBASE_CRASHLYTICS_COLLECTION_ENABLED" value="true" />
+        <variable name="ANDROID_ICON_ACCENT" value="#FF00FFFF" />
+        <variable name="ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION" value="17.0.0" />
+        <variable name="ANDROID_PLAY_SERVICES_AUTH_VERSION" value="17.0.0" />
+        <variable name="ANDROID_FIREBASE_ANALYTICS_VERSION" value="17.2.1" />
+        <variable name="ANDROID_FIREBASE_MESSAGING_VERSION" value="20.0.0" />
+        <variable name="ANDROID_FIREBASE_CONFIG_VERSION" value="19.0.3" />
+        <variable name="ANDROID_FIREBASE_PERF_VERSION" value="19.0.1" />
+        <variable name="ANDROID_FIREBASE_AUTH_VERSION" value="19.1.0" />
+        <variable name="ANDROID_FIREBASE_INAPPMESSAGING_VERSION" value="19.0.3" />
+        <variable name="ANDROID_FIREBASE_FIRESTORE_VERSION" value="21.4.0" />
+        <variable name="ANDROID_CRASHLYTICS_VERSION" value="2.10.1" />
+        <variable name="ANDROID_CRASHLYTICS_NDK_VERSION" value="2.1.1" />
+        <variable name="ANDROID_GSON_VERSION" value="2.8.6" />
+        <variable name="ANDROID_FIREBASE_CORE_VERSION" value="17.0.0" />
+        <variable name="ANDROID_SHORTCUTBADGER_VERSION" value="1.1.22" />
+    </plugin>
+    <plugin name="cordova-plugin-filepath" spec="^1.5.6" />
+    <plugin name="cordova-android-play-services-gradle-release" spec="^4.0.0">
+        <variable name="PLAY-SERVICES-ADS" value="18.0.0" />
+        <variable name="PLAY-SERVICES-ADS-IDENTIFIER" value="17.0.0" />
+        <variable name="PLAY-SERVICES-ADS-LITE" value="18.0.0" />
+        <variable name="PLAY-SERVICES-AFS-NATIVE" value="17.0.0" />
+        <variable name="PLAY-SERVICES-ANALYTICS" value="17.0.0" />
+        <variable name="PLAY-SERVICES-ANALYTICS-IMPL" value="17.0.0" />
+        <variable name="PLAY-SERVICES-APPINVITE" value="18.0.0" />
+        <variable name="PLAY-SERVICES-AUDIENCE" value="17.0.0" />
+        <variable name="PLAY-SERVICES-AUTH" value="17.0.0" />
+        <variable name="PLAY-SERVICES-AUTH-API-PHONE" value="17.0.0" />
+        <variable name="PLAY-SERVICES-AWARENESS" value="17.0.0" />
+        <variable name="PLAY-SERVICES-BASE" value="17.0.0" />
+        <variable name="PLAY-SERVICES-BASEMENT" value="17.0.0" />
+        <variable name="PLAY-SERVICES-CAST" value="17.0.0" />
+        <variable name="PLAY-SERVICES-CAST-FRAMEWORK" value="17.0.0" />
+        <variable name="PLAY-SERVICES-CLEARCUT" value="17.0.0" />
+        <variable name="PLAY-SERVICES-CRONET" value="17.0.0" />
+        <variable name="PLAY-SERVICES-DRIVE" value="17.0.0" />
+        <variable name="PLAY-SERVICES-FIDO" value="18.0.0" />
+        <variable name="PLAY-SERVICES-FITNESS" value="17.0.0" />
+        <variable name="PLAY-SERVICES-FLAGS" value="17.0.0" />
+        <variable name="PLAY-SERVICES-GAMES" value="18.0.0" />
+        <variable name="PLAY-SERVICES-GASS" value="18.0.0" />
+        <variable name="PLAY-SERVICES-GCM" value="17.0.0" />
+        <variable name="PLAY-SERVICES-IDENTITY" value="17.0.0" />
+        <variable name="PLAY-SERVICES-IID" value="17.0.0" />
+        <variable name="PLAY-SERVICES-INSTANTAPPS" value="17.0.0" />
+        <variable name="PLAY-SERVICES-LOCATION" value="17.0.0" />
+        <variable name="PLAY-SERVICES-MAPS" value="17.0.0" />
+        <variable name="PLAY-SERVICES-MEASUREMENT" value="17.0.0" />
+        <variable name="PLAY-SERVICES-MEASUREMENT-API" value="17.0.0" />
+        <variable name="PLAY-SERVICES-MEASUREMENT-IMPL" value="17.0.0" />
+        <variable name="PLAY-SERVICES-MEASUREMENT-SDK" value="17.0.0" />
+        <variable name="PLAY-SERVICES-MEASUREMENT-SDK-API" value="17.0.0" />
+        <variable name="PLAY-SERVICES-NEARBY" value="17.0.0" />
+        <variable name="PLAY-SERVICES-OSS-LICENSES" value="17.0.0" />
+        <variable name="PLAY-SERVICES-PANORAMA" value="17.0.0" />
+        <variable name="PLAY-SERVICES-PHENOTYPE" value="17.0.0" />
+        <variable name="PLAY-SERVICES-PLACES" value="17.0.0" />
+        <variable name="PLAY-SERVICES-PLACES-PLACEREPORT" value="17.0.0" />
+        <variable name="PLAY-SERVICES-PLUS" value="17.0.0" />
+        <variable name="PLAY-SERVICES-SAFETYNET" value="17.0.0" />
+        <variable name="PLAY-SERVICES-STATS" value="17.0.0" />
+        <variable name="PLAY-SERVICES-TAGMANAGER" value="17.0.0" />
+        <variable name="PLAY-SERVICES-TAGMANAGER-API" value="17.0.0" />
+        <variable name="PLAY-SERVICES-TAGMANAGER-V4-IMPL" value="17.0.0" />
+        <variable name="PLAY-SERVICES-TASKS" value="17.0.0" />
+        <variable name="PLAY-SERVICES-VISION" value="18.0.0" />
+        <variable name="PLAY-SERVICES-VISION-COMMON" value="18.0.0" />
+        <variable name="PLAY-SERVICES-VISION-IMAGE-LABEL" value="18.0.0" />
+        <variable name="PLAY-SERVICES-WALLET" value="17.0.0" />
+        <variable name="PLAY-SERVICES-WEARABLE" value="17.0.0" />
+    </plugin>
+    <plugin name="cordova-plugin-shaggy.filehandler" spec="~1.0.0" />
+    <plugin name="cordova-plugin-firebase" spec="^2.0.5" />
+    <plugin name="cordova-plugin-advanced-http" spec="~3.0.1" />
 </widget>

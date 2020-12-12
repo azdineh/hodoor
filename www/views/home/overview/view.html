@@ -1,0 +1,32 @@
+<ion-view view-title={{page}}>
+    <div class="bar bar-subheader">
+        <h2 class="title">{{rubric}}</h2>
+    </div>
+    <ion-content class="has-subheader">
+
+
+        <div ng-if="rubricItems.length==0">
+            <div dir="rtl"
+                style="font-size: 2.6vmax;padding: 2vmax;text-align: justify;line-height: 4.2vmax;color: rgba(24, 60, 71, 0.53)">
+                <p style="border: 1px solid dimgray;padding:20px;">
+                    لم يتم تسجيل مثل هذه المعلومات بعد.
+                </p>
+            </div>
+        </div>
+
+
+        <div dir="rtl">
+            <ul class="list" ng-if="rubricCategorie=='student'">
+                <li class="item" ng-repeat="student in rubricItems">
+                    <hdr-student ng-init="showabsences=true;showborder=false;page='search';mode='m2'"></hdr-student>
+                </li>
+            </ul>
+
+            <ul class="list" ng-if="rubricCategorie=='session'">
+                <li class="item" ng-repeat="session_view in rubricItems">
+                    <hdrabsencehistoryitem></hdrabsencehistoryitem>
+                </li>
+            </ul>
+        </div>
+    </ion-content>
+</ion-view>

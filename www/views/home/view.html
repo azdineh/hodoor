@@ -1,79 +1,171 @@
 <ion-view view-title="الصفحة الرئيسة">
-  <ion-content>
+  <ion-content style="padding: 4px;padding-top: 12px;">
 
-    <ul>
+    <!--     <ul>
       <li style="height:10;" ng-repeat="color in colors">
         <p ng-style="{'background-color': color}" style="height: 30px ">{{color}}</p>
       </li>
-    </ul>
+    </ul> -->
+
+    <div class="" dir="rtl" ng-show="observationUpdateMode==false">
+
+      <div>
+        <table id="covid-alert">
+          <tr>
+            <td>
+              <div><img src="img/wachhand.png" width="15%" /></div>
+              <div style="margin: 10px;">
+                حافظ(ي) على روتين صحي
+              </div>
+              <div
+                style="margin: auto;background-color: rgba(255, 0, 0, 0.898);width: fit-content;text-align: center;border-radius: 8px;padding:1px 6px 1px 6px">
+                <span style="color:white">COVID-19 alert</span>
+                <span style="font-size: 1.2em;color: white;" class="icon ion-alert-circled"></span>
+              </div>
+            </td>
+
+          </tr>
+        </table>
+      </div>
+
+    </div>
 
 
-    <div class="card" dir="rtl" ng-if="isthereNewVersion">
-      <div class="item item-text-wrap" style="background-color: rgba(226, 230, 12, 0.671)">
-        <div class="hdr-parag">
-          <div class="hdr-title" style="margin-bottom: 12px;">
-            <span class="icon ion-loop assertive"> </span>تحديث جديد :</span>
+    <div class="card " dir="rtl" ng-show="observationUpdateMode==false" ng-if="isthereNewVersion">
+      <div class="item item-text-wrap hdr-bg" style="border:3px solid rgba(255, 187, 0, 0.435) ;">
+        <div>
+          <div class="hdr-title">
+            تحديث جديد
           </div>
-          <div style="padding: 4px;">
-            تحديث جديد بمزايا إضافية.. مزيد من المعلومات على هذا الرابط :
-            <br />
+          <div class="hdr-parag">
+            تحديث جديد بمزايا إضافية.. مزيد من المعلومات على الرابط التالي :
+          </div>
+          <div style="text-align: center;margin-top: 8px;">
+            <a href="#" on-tap="goToPlayStore()" target="_blank">
+              https://goo.gl/bZz1sD
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="card " dir="rtl">
+      <div class="item item-text-wrap hdr-bg">
+
+        <div class="hdr-title">
+          مذكرات العمل
+        </div>
+
+        <table ng-show="observationUpdateMode==true"
+          style="margin-top: 4px;width: 100%;background: linear-gradient(to bottom,rgba(235, 235, 235, 0.325),rgba(255, 255, 255, 0));">
+          <tr>
+            <td style="width: 80%;padding:0px">
+              <textarea placeholder="قم بالنقر هنا، لإضافة مذكرات العمل." id="hdr-textarea-observation"
+                ng-model="teacher.diary"
+                style="width: 100%;background-color: inherit;padding: 2px;font-size: 14px;font-family: hdrFont"
+                rows="6"></textarea>
+            </td>
+          </tr>
+        </table>
+        <table ng-show="observationUpdateMode==false" style="margin-top: 4px;width: 100%;
+    background: linear-gradient(to bottom,rgba(235, 235, 235, 0.325),rgba(255, 255, 255, 0));">
+          <tr>
+            <td style="width: 80%;padding:0px;">
+              <textarea disabled on-tap="switchObservationUpateMode()" placeholder="قم بالنقر هنا، لإضافة مذكرات العمل."
+                ng-model="teacher.diary" style="width: 100%;;padding: 2px;font-size: 14px;font-family: hdrFont"
+                rows="10"></textarea>
+            </td>
+          </tr>
+        </table>
+
+        <div class="hdr-session-alter-observation" style="position: relative;">
+
+          <div class="">
             <table style="width: 100%">
               <tr>
-                <td style="vertical-align: middle;text-align: center;padding: 8px">
-                  <a href="#" on-tap="goToPlayStore()" target="_blank">
-                    https://goo.gl/bZz1sD
-                  </a>
+                <td style="vertical-align: middle" ng-show="observationUpdateMode==false">
+                  <!--  <button class="button button-small" ng-click=""
+                    style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">تعديل</button> -->
+                </td>
+                <td style="vertical-align: middle" ng-show="observationUpdateMode==true">
+                  <button class="button button-small" ng-click="saveTeacherDiary()"
+                    style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">حفظ</button>
+                </td>
+                <td style="vertical-align: middle" ng-show="observationUpdateMode==true">
+                  <button class="button button-small" ng-click="switchObservationUpateMode()"
+                    style="background-color: transparent;width: 70px;border:1px solid black;color: rgb(8, 14, 54)">إلغاء</button>
+                </td>
+                <td style="width: 100%;vertical-align: middle">
+
                 </td>
               </tr>
             </table>
           </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="card " dir="rtl" ng-if="remarkableStudents.lenght>0">
-      <div class="item item-text-wrap  hdr-bg">
-        <div class="hdr-parag">
-          <div class="hdr-title" style="margin-bottom: 12px;"> الملاحظات المدونة:</div>
-          <div style="padding: 4px;zoom: 0.88">
-            <div ng-repeat="student in remarkableStudents" ng-class="'hdr-bg-second'">
-              <hdr-student ng-init="showborder=false;page='search';mode='m2'">
-              </hdr-student>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="card " dir="rtl" ng-if="isthereAreAbsent">
-      <div class="item item-text-wrap  hdr-bg">
-        <div class="hdr-parag">
-          <div class="hdr-title" style="margin-bottom: 12px;"> التلاميذ الأكثر غيابا:</div>
-          <div style="padding: 4px;zoom: 0.88">
-            <div ng-repeat="student in mostabsentStudents" ng-class="'hdr-bg-second'">
-              <hdr-student ng-init="showborder=false;page='search';mode='m2'">
-              </hdr-student>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
 
     <div class="card " dir="rtl">
+      <div class="item item-text-wrap hdr-bg">
+
+        <div class="hdr-title">معلومات عامة</div>
+        <div>
+          <div class="list" style="text-align: center;">
+            <!-- 
+            <a href="#" class="item item-icon-right">
+              <i class="icon ion-home"></i>
+              Enter home address
+            </a> -->
+
+            <a href="#" class="item bg-transparent" ng-click="goToOverview(rubrics.most_absent_students)">
+              {{rubrics.most_absent_students}}
+            </a>
+
+            <a href="#" class="item bg-transparent" ng-click="goToOverview(rubrics.remarked_students)">
+              {{rubrics.remarked_students}}
+            </a>
+
+            <a href="#" class="item bg-transparent" ng-click="goToOverview(rubrics.remarked_sessions)">
+              {{rubrics.remarked_sessions}}
+            </a>
+
+            <a href="#" class="item bg-transparent" ng-click="goToOverview(rubrics.rewarded_students)">
+              {{rubrics.rewarded_students}}
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="card " dir="rtl">
+
       <div class="item item-text-wrap  hdr-bg">
 
         <div class="hdr-parag">
           <div class="hdr-title" style="margin-bottom: 12px;"> نُبذة عن التطبيق</div>
+
+
+
           <div>
 
-              <p>
-                يقدم تطبيق المساعد التربوي الرقمي الذكي  (أو اختصارا HODOOR ) طريقة مبتكرة للاستثمار البيداغوجي و التربوي لعملية أخذ الغياب بين صفوف التلاميذ خلال الحصص الدراسية، وذلك باستعمال الهاتف الذكي.
+            <p>
+              يقدم تطبيق المساعد التربوي الرقمي الذكي (أو اختصارا HODOOR) طريقة مبتكرة للاستثمار البيداغوجي و التربوي
+              لعملية أخذ الغياب بين صفوف التلاميذ خلال الحصص الدراسية، وذلك باستعمال الهاتف الذكي.
 
-              </p>
-              <p>
-                يأتي هذا التطبيق ضمن الأدوات الرقمية المحمولة المُعينة للمدرسين خلال الممارسة الصفية، حيث يوظف إمكانات تكنلوجيا المعلومات والاتصال ليبسط و يرقمن تتبع حضور و مواظبة المتمدرسين، كما يوفر كذلك اقتراحات بيداغوجية مساعدة لعلملهم .
-              </p>
+            </p>
+            <p>
+              يأتي هذا التطبيق ضمن الأدوات الرقمية المحمولة المُعينة للمدرسين خلال الممارسة الصفية، حيث يوظف إمكانات
+              تكنلوجيا المعلومات والاتصال ليبسط و يرقمن تتبع حضور و مواظبة المتمدرسين، كما يوفر كذلك اقتراحات بيداغوجية
+              مساعدة لعملهم .
+            </p>
           </div>
           <br />
           <p style="text-align: center">
@@ -87,8 +179,8 @@
             <br>
             <div class="hdr-title" style="margin-bottom: 12px;">كيف يعمل التطبيق؟</div>
             يقوم التطبيق بملء قاعدة بياناته من ملفات Excel التي تتضمن لوائح التلاميذ و التي يمكن تحميلها إنطلاقا من موقع
-            مسار.<br/>
-            قم بتنزيل لوائح الأقسام المستدة.
+            مسار.<br />
+            قم بتنزيل لوائح الأقسام المسندة.
             بعد ذلك، قم بتزويد التطبيق بلوائح التلاميذ عن طريق تبويبة الأقسام
             <span class="icon ion-android-contacts"></span>
             أسفله.
